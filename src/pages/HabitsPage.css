@@ -1,0 +1,151 @@
+.habits-page {
+  padding: 24px 28px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: var(--text3);
+  margin-top: 3px;
+}
+
+/* Stats row */
+.habits-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.habits-stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s var(--ease);
+}
+
+.habits-stat-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-1px);
+}
+
+.habits-stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.habits-stat-icon.green {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.habits-stat-icon.amber {
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+
+.habits-stat-icon.accent {
+  background: rgba(108, 99, 255, 0.12);
+  color: var(--accent);
+}
+
+.habits-stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  display: block;
+}
+
+.habits-stat-label {
+  font-size: 11px;
+  color: var(--text3);
+  display: block;
+  margin-top: 1px;
+}
+
+/* Categories */
+.habits-categories {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.habits-cat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.habits-cat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.habits-cat-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.habits-cat-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  text-transform: capitalize;
+}
+
+.habits-cat-count {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.habits-cat-bar {
+  height: 5px;
+  background: var(--surface3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.habits-cat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+  .habits-stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .habits-page {
+    padding: 20px 18px 40px;
+  }
+}

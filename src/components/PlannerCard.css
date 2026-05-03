@@ -1,0 +1,145 @@
+.planner-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.card-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.card-action.add-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.card-action.add-btn:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  transform: scale(1.05);
+}
+
+.planner-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.planner-item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.planner-time-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 32px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.planner-time-hr {
+  font-size: 13px;
+  color: var(--text3);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.planner-time-min {
+  font-size: 18px;
+  color: var(--text);
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 3px;
+  letter-spacing: -0.5px;
+}
+
+.planner-pill {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  transition: all 0.2s var(--ease);
+}
+
+.planner-item:hover .planner-pill {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.planner-item.is-active .planner-pill {
+  background: #9353d3; /* vibrant purple */
+}
+
+.planner-item.is-active:hover .planner-pill {
+  background: #a666e6; 
+}
+
+.planner-pill-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.planner-pill-time {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.planner-item.is-active .planner-pill-title {
+  color: #ffffff;
+}
+
+.planner-item.is-active .planner-pill-time {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.planner-show-all {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: none;
+  border: none;
+  color: var(--text3);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 16px 0 0;
+  margin-top: 4px;
+  transition: color 0.15s;
+  cursor: pointer;
+}
+
+.planner-show-all:hover {
+  color: var(--text);
+}

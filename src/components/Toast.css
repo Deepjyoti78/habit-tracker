@@ -1,0 +1,25 @@
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  z-index: 1000;
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-md);
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+}
+
+
+
+.toast-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}

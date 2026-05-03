@@ -1,0 +1,257 @@
+.analytics-page {
+  padding: 24px 28px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Overall Progress Card */
+.overall-progress-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.opc-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.opc-subtitle {
+  font-size: 13px;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+.opc-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.opc-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.opc-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface2);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.opc-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 12px;
+}
+
+.opc-body {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.opc-gauge-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.opc-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.opc-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.opc-label {
+  font-size: 14px;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+/* Charts */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.analytics-chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.analytics-chart-label {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.analytics-chart-container {
+  margin-top: 8px;
+}
+
+.mini-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 120px;
+  padding: 0 4px;
+}
+
+.mini-bar {
+  flex: 1;
+  background: var(--bar-color, var(--accent));
+  border-radius: 3px 3px 0 0;
+  min-height: 2px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.mini-bar:hover {
+  opacity: 1;
+}
+
+.analytics-chart-x-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 4px 0;
+  font-size: 9px;
+  color: var(--text3);
+}
+
+.analytics-chart-x-labels.wide span {
+  font-size: 8px;
+}
+
+/* Category rings */
+.analytics-categories-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.analytics-cats-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.analytics-cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.analytics-cat-ring {
+  position: relative;
+  width: 68px;
+  height: 68px;
+}
+
+.analytics-cat-ring svg {
+  display: block;
+}
+
+.analytics-cat-ring-val {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.analytics-cat-name {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .analytics-quick-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-page {
+    padding: 20px 18px 40px;
+  }
+}
+
+.mood-chart-card {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--border);
+  width: 100%;
+}
+
+.mood-chart-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mood-chart-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.mood-chart-date {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.mood-chart-body {
+  width: 100%;
+  position: relative;
+}
+
+.mood-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
