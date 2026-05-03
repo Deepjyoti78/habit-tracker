@@ -116,6 +116,15 @@
   font-weight: 500;
 }
 
+.active-date {
+  font-size: 13px;
+  color: #000000;
+  font-weight: 700;
+  z-index: 1;
+  position: relative;
+  letter-spacing: -0.5px;
+}
+
 /* Month Expanded View */
 .calendar-month-view {
   display: flex;

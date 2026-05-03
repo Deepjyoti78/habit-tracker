@@ -24,8 +24,8 @@ export default function Heatmap() {
       transition={{ delay: 0.3 }}
     >
       <div className="card-header">
-        <span className="card-title">Weekly Consistency</span>
-        <span className="heatmap-period">Last 12 weeks</span>
+        <span className="card-title">progress</span>
+        <span className="heatmap-period">last 52 weeks</span>
       </div>
 
       <div className="heatmap-container">
@@ -50,7 +50,7 @@ export default function Heatmap() {
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{
-                    delay: 0.4 + wi * 0.03 + di * 0.01,
+                    delay: 0.1 + wi * 0.008 + di * 0.005,
                     type: 'spring',
                     stiffness: 300,
                     damping: 20,

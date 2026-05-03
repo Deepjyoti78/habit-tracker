@@ -182,7 +182,7 @@ export const analyticsData = {
 };
 
 export function generateHeatmapData() {
-  const weeks = 12;
+  const weeks = 52;
   const data = [];
   for (let w = 0; w < weeks; w++) {
     const week = [];

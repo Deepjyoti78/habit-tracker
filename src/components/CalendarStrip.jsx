@@ -42,14 +42,14 @@ export default function CalendarStrip() {
   };
 
   const today = new Date();
-  
+
   // Generate 180 days for horizontal scrolling (from 30 days ago to 150 days future)
   const days = Array.from({ length: 180 }).map((_, i) => {
     const d = new Date();
     d.setDate(today.getDate() - 30 + i);
     const isToday = d.toDateString() === today.toDateString();
     const isPast = d < today && !isToday;
-    
+
     let status = 'upcoming';
     if (isToday) status = 'active';
     else if (isPast) status = 'partial';
@@ -66,20 +66,20 @@ export default function CalendarStrip() {
   // Mock month data for expanded view based on baseDate
   const daysInMonth = new Date(baseDate.getFullYear(), baseDate.getMonth() + 1, 0).getDate();
   const firstDay = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1).getDay();
-  
+
   const monthDays = Array.from({ length: daysInMonth }).map((_, i) => {
     const date = new Date(baseDate.getFullYear(), baseDate.getMonth(), i + 1);
     const isPast = date < today && date.toDateString() !== today.toDateString();
     const isToday = date.toDateString() === today.toDateString();
-    
+
     let completion = 0;
     if (isPast) {
       // Mock progression: earlier days in the month have higher completion
-      completion = Math.floor(Math.random() * 80) + 20; 
+      completion = Math.floor(Math.random() * 80) + 20;
       // If it's more than 20 days ago, make it 100% mostly
       if (today.getDate() - (i + 1) > 10) completion = 100;
     }
-    
+
     return { date: i + 1, status: isPast ? 'past' : 'upcoming', completion, isToday };
   });
 
@@ -99,8 +99,8 @@ export default function CalendarStrip() {
     <div className={`calendar-strip-card ${isExpanded ? 'expanded' : ''}`}>
       <div className="calendar-strip-header">
         <button className="calendar-nav-btn" onClick={handlePrevClick}><ChevronLeft size={16} /></button>
-        <div 
-          className="calendar-date-text" 
+        <div
+          className="calendar-date-text"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded ? monthLabel : `Today, ${today.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}`}
@@ -114,15 +114,24 @@ export default function CalendarStrip() {
             <div key={i} className={`calendar-day-col ${day.status === 'active' ? 'active-day' : ''}`}>
               <span className="calendar-day-label">{day.label}</span>
               <div className="calendar-day-circle">
-                {day.status === 'active' && day.icon ? (
-                  <day.icon size={18} color="var(--bg)" fill="currentColor" />
-                ) : day.status === 'partial' ? (
+                {day.status === 'active' ? (
                   <div 
-                    className="partial-day-wrapper" 
+                    className="active-day-wrapper"
+                    style={{ position: 'relative', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <svg width="28" height="28" viewBox="0 0 28 28" style={{ position: 'absolute', transform: 'rotate(-90deg)' }}>
+                      <circle cx="14" cy="14" r="12" fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="2.5" />
+                      <circle cx="14" cy="14" r="12" fill="none" stroke="#000000" strokeWidth="2.5" strokeDasharray="75.39" strokeDashoffset={75.39 * 0.4} strokeLinecap="round" />
+                    </svg>
+                    <span className="active-date">{day.date}</span>
+                  </div>
+                ) : day.status === 'partial' ? (
+                  <div
+                    className="partial-day-wrapper"
                     onClick={() => toggleDayDisplay(day.fullDate.toDateString())}
                     style={{ position: 'relative', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                   >
-                    <svg width="28" height="28" viewBox="0 0 28 28" style={{position: 'absolute', transform: 'rotate(-90deg)'}}>
+                    <svg width="28" height="28" viewBox="0 0 28 28" style={{ position: 'absolute', transform: 'rotate(-90deg)' }}>
                       <circle cx="14" cy="14" r="12" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="2" />
                       <circle cx="14" cy="14" r="12" fill="none" stroke="#d94a26" strokeWidth="2" strokeDasharray="75.39" strokeDashoffset={75.39 * 0.25} strokeLinecap="round" />
                     </svg>
@@ -149,28 +158,22 @@ export default function CalendarStrip() {
             {monthDays.map((day, i) => {
               let circleStyle = {};
               if (day.status === 'past') {
-                const scale = 0.5 + (day.completion / 100) * 0.7; // 0.5 to 1.2 (overlaps slightly if 100%)
-                let color = 'var(--red)'; // default bad
-                if (day.completion >= 40 && day.completion < 80) color = 'var(--amber)';
-                if (day.completion >= 80) color = '#1db890'; // Use a nice teal/green like google fit
-
                 circleStyle = {
-                  width: `${scale * 100}%`,
-                  height: `${scale * 100}%`,
+                  width: '85%',
+                  height: '85%',
                   borderRadius: '50%',
-                  background: color, // Solid filled circle
+                  background: 'rgba(255, 255, 255, 0.08)',
                   position: 'absolute',
                   top: '50%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
-                  opacity: day.completion > 0 ? 0.9 : 0
                 };
               }
 
               return (
                 <div key={i} className={`month-grid-cell ${day.status} ${day.isToday ? 'active-today' : ''}`} style={{ position: 'relative' }}>
                   {day.status === 'past' && <div style={circleStyle} />}
-                  <span style={{ zIndex: 1, position: 'relative', color: day.status === 'past' && day.completion >= 80 ? '#fff' : '' }}>
+                  <span style={{ zIndex: 1, position: 'relative' }}>
                     {day.date}
                   </span>
                 </div>

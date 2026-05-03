@@ -28,4 +28,7 @@
   .app-shell {
     flex-direction: column;
   }
+  .app-content-area {
+    padding-bottom: 90px;
+  }
 }
