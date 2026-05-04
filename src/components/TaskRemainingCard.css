@@ -1,0 +1,41 @@
+.task-remaining-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 12px;
+  width: 100%;
+}
+
+.trc-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trc-icon-container {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.trc-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.trc-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.trc-sublabel {
+  font-size: 10px;
+  color: var(--text3);
+}

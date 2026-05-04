@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Target, Trophy, Zap } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import HabitCard from '../components/HabitCard';
+import HabitGridCard from '../components/HabitGridCard';
 import './HabitsPage.css';
 
 export default function HabitsPage() {
@@ -25,93 +25,21 @@ export default function HabitsPage() {
         </div>
       </div>
 
-      {/* Stats row */}
-      <div className="habits-stats-row">
-        <motion.div
-          className="habits-stat-card"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <div className="habits-stat-icon green">
-            <Target size={16} />
-          </div>
-          <div>
-            <span className="habits-stat-value">{doneCount}/{habits.length}</span>
-            <span className="habits-stat-label">Completed Today</span>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="habits-stat-card"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-        >
-          <div className="habits-stat-icon amber">
-            <Trophy size={16} />
-          </div>
-          <div>
-            <span className="habits-stat-value">{bestStreak}</span>
-            <span className="habits-stat-label">Best Streak</span>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="habits-stat-card"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="habits-stat-icon accent">
-            <Zap size={16} />
-          </div>
-          <div>
-            <span className="habits-stat-value">{categories.length}</span>
-            <span className="habits-stat-label">Categories</span>
-          </div>
-        </motion.div>
+      <div className="habits-section-title">Core Disciplines</div>
+      
+      {/* Grid of Individual Habit Cards */}
+      <div className="habits-grid-container">
+        {habits.map((habit, index) => (
+          <motion.div
+            key={habit.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 * index }}
+          >
+            <HabitGridCard habit={habit} />
+          </motion.div>
+        ))}
       </div>
-
-      {/* Full habit card */}
-      <HabitCard compact={false} />
-
-      {/* Categories breakdown */}
-      <motion.div
-        className="habits-categories"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <div className="card-header">
-          <span className="card-title">By Category</span>
-        </div>
-        <div className="habits-cat-grid">
-          {categories.map((cat) => {
-            const catHabits = habits.filter((h) => h.category === cat);
-            const catDone = catHabits.filter((h) => h.done).length;
-            const pct = Math.round((catDone / catHabits.length) * 100);
-            return (
-              <div key={cat} className="habits-cat-item">
-                <div className="habits-cat-info">
-                  <span className="habits-cat-name">{cat}</span>
-                  <span className="habits-cat-count">
-                    {catDone}/{catHabits.length}
-                  </span>
-                </div>
-                <div className="habits-cat-bar">
-                  <motion.div
-                    className="habits-cat-bar-fill"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${pct}%` }}
-                    transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </motion.div>
     </motion.div>
   );
 }

@@ -1,7 +1,9 @@
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, Calendar, Clock, Target, ChevronDown } from 'lucide-react';
 import { analyticsData } from '../data/appData';
 import Heatmap from '../components/Heatmap';
+import OverallProgressCard from '../components/OverallProgressCard';
 import './AnalyticsPage.css';
 
 function MiniBarChart({ data, maxVal, color }) {
@@ -78,17 +80,21 @@ function MoodChart() {
   const vHeight = 160;
   const paddingX = 15;
   const paddingY = 20;
+  
+  const [activePoint, setActivePoint] = useState(null);
 
-  const points = chartData.filter(v => v !== null).map((val, i) => {
+  const points = chartData.map((val, i) => {
+    if (val === null) return null;
     const x = paddingX + (i / 6) * (vWidth - 2 * paddingX - 70); 
     const y = vHeight - paddingY - (val / 100) * (vHeight - 2 * paddingY);
-    return [x, y];
-  });
+    return [x, y, val];
+  }).filter(p => p !== null);
 
   const pathD = smoothLine(points);
   
   const yLabels = ['awesome', 'fine', 'neutral', 'bad', 'very low'];
   const xLabels = ['Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo'];
+  const fullDates = ['Oct 21', 'Oct 22', 'Oct 23', 'Oct 24', 'Oct 25', 'Oct 26', 'Oct 27'];
 
   return (
     <motion.div 
@@ -138,6 +144,57 @@ function MoodChart() {
             transition={{ delay: 1.7, duration: 0.3 }}
           />
 
+          {/* Interactive Points */}
+          {points.map((p, i) => (
+            <g key={`pt-${i}`}>
+              {/* Visible dot on hover/active */}
+              <circle
+                cx={p[0]}
+                cy={p[1]}
+                r={activePoint === i ? 5 : 0}
+                fill="#d9f38e"
+                style={{ transition: 'r 0.2s ease' }}
+              />
+              {/* Invisible Hit Area */}
+              <circle
+                cx={p[0]}
+                cy={p[1]}
+                r="15"
+                fill="transparent"
+                onMouseEnter={() => setActivePoint(i)}
+                onMouseLeave={() => setActivePoint(null)}
+                onClick={() => setActivePoint(i)}
+                style={{ cursor: 'pointer' }}
+              />
+              
+              {/* Tooltip Popup */}
+              {activePoint === i && (
+                <g className="mood-tooltip" style={{ pointerEvents: 'none' }}>
+                  {/* Tooltip vertical line */}
+                  <line x1={p[0]} y1={p[1]} x2={p[0]} y2={vHeight - paddingY} stroke="#fff" strokeWidth="1" strokeDasharray="2,2" opacity="0.3" />
+                  
+                  {/* Tooltip Box */}
+                  <rect 
+                    x={p[0] - 35} 
+                    y={p[1] - 50} 
+                    width="70" 
+                    height="40" 
+                    rx="6" 
+                    fill="#1e1e1e" 
+                    stroke="rgba(255,255,255,0.1)"
+                    strokeWidth="1"
+                  />
+                  <text x={p[0]} y={p[1] - 35} fill="var(--text3)" fontSize="8" textAnchor="middle" fontWeight="500">
+                    {xLabels[i]}, {fullDates[i]}
+                  </text>
+                  <text x={p[0]} y={p[1] - 20} fill="#fff" fontSize="12" textAnchor="middle" fontWeight="700">
+                    {p[2]}%
+                  </text>
+                </g>
+              )}
+            </g>
+          ))}
+
           {/* X Labels */}
           {xLabels.map((lbl, i) => {
             const x = paddingX + (i / 6) * (vWidth - 2 * paddingX - 70);
@@ -146,55 +203,6 @@ function MoodChart() {
             );
           })}
         </svg>
-      </div>
-    </motion.div>
-  );
-}
-
-function OverallProgressCard() {
-  const progress = 89;
-  
-  return (
-    <motion.div className="overall-progress-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-      <div className="opc-header">
-        <span className="opc-subtitle">Tuesday</span>
-        <div className="opc-title-row">
-          <h2 className="opc-title">daily stats</h2>
-          <div className="opc-dropdown">
-            <span>Weekly</span>
-            <ChevronDown size={14} />
-          </div>
-        </div>
-        <span className="opc-section-title">overview</span>
-      </div>
-
-      <div className="opc-body">
-        <div className="opc-gauge-container">
-          <svg width="110" height="110" viewBox="0 0 100 100">
-            <defs>
-              <linearGradient id="gaugeGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#e3365b" />
-                <stop offset="50%" stopColor="#f59e0b" />
-                <stop offset="100%" stopColor="#fcd34d" />
-              </linearGradient>
-            </defs>
-            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="12" />
-            <circle 
-              cx="50" cy="50" r="42" 
-              fill="none" 
-              stroke="url(#gaugeGrad)" 
-              strokeWidth="12" 
-              strokeLinecap="round" 
-              strokeDasharray="263.89" 
-              strokeDashoffset={263.89 - (263.89 * progress) / 100}
-              style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%', transition: 'stroke-dashoffset 1.5s ease-out' }}
-            />
-          </svg>
-        </div>
-        <div className="opc-text-container">
-          <span className="opc-value">{progress}%</span>
-          <span className="opc-label">overall progress</span>
-        </div>
       </div>
     </motion.div>
   );

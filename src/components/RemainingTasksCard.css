@@ -1,0 +1,50 @@
+.remaining-tasks-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 12px;
+  width: 100%;
+}
+
+.rtc-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rtc-icon-container {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rtc-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rtc-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.rtc-sublabel {
+  font-size: 10px;
+  color: var(--text3);
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}

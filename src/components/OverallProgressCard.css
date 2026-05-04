@@ -1,0 +1,47 @@
+.overall-progress-card-simple {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 12px;
+  width: 100%;
+}
+
+.opc-body-simple {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.opc-gauge-container-small {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.opc-gauge-value {
+  position: absolute;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.opc-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.opc-label-large {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.opc-sublabel {
+  font-size: 11px;
+  color: var(--text3);
+}

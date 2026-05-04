@@ -4,6 +4,9 @@ import { Flame } from 'lucide-react';
 import CalendarStrip from '../components/CalendarStrip';
 import DailyCheckin from '../components/DailyCheckin';
 import HabitCard from '../components/HabitCard';
+import OverallProgressCard from '../components/OverallProgressCard';
+import RemainingTasksCard from '../components/RemainingTasksCard';
+import TaskRemainingCard from '../components/TaskRemainingCard';
 import AIInsights from '../components/AIInsights';
 import Heatmap from '../components/Heatmap';
 import PlannerCard from '../components/PlannerCard';
@@ -47,20 +50,23 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Calendar - Full Width */}
+      <CalendarStrip />
+
       {/* Bento Grid */}
       <div className="home-bento-grid">
-        <div className="home-top-group">
-          <CalendarStrip />
-          <DailyCheckin />
-          <HabitCard compact />
+        <div className="home-left-col">
+          <OverallProgressCard />
+          <RemainingTasksCard />
+          <TaskRemainingCard />
         </div>
         
-        <div className="home-bottom-group">
-          <PlannerCard compact />
-          <AIInsights />
-          <Heatmap />
+        <div className="home-right-col">
+          <HabitCard />
         </div>
       </div>
+
+      <DailyCheckin />
     </motion.div>
   );
 }

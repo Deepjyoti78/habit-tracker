@@ -10,8 +10,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  margin-top: 12px;
-  /* Push it away from the calendar section above */
+  margin-top: 0;
 }
 
 .checkin-title {
