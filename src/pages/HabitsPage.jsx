@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Target, Trophy, Zap } from 'lucide-react';
+import { Target, Trophy, Zap, Plus, ChevronLeft } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import HabitGridCard from '../components/HabitGridCard';
 import './HabitsPage.css';
@@ -18,14 +18,21 @@ export default function HabitsPage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Habits</h1>
-          <p className="page-subtitle">Track and build your daily systems</p>
-        </div>
+      <div className="page-header centered">
+        <button className="back-btn" onClick={() => window.history.back()}>
+          <ChevronLeft size={20} />
+        </button>
+        <h1 className="page-title">Habits</h1>
+        <div className="header-spacer" />
       </div>
 
-      <div className="habits-section-title">Core Disciplines</div>
+      <div className="section-header">
+        <div className="habits-section-title">Core Disciplines</div>
+        <button className="add-habit-btn">
+          <Plus size={16} />
+          <span>Add Habits</span>
+        </button>
+      </div>
       
       {/* Grid of Individual Habit Cards */}
       <div className="habits-grid-container">

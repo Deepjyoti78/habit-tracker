@@ -1,0 +1,239 @@
+.timer-page {
+  padding: 16px 20px 100px;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.timer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.timer-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.8px;
+  text-transform: lowercase;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.timer-back-btn, .header-spacer {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.timer-back-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timer-back-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  transform: translateX(-2px);
+}
+
+/* Duration Grid */
+.timer-duration-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.duration-card {
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 24px;
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.duration-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text3);
+  text-transform: lowercase;
+  letter-spacing: 0.2px;
+}
+
+.duration-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -1px;
+}
+
+/* Setting Cards */
+.timer-setting-card {
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 28px;
+  padding: 24px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.timer-setting-card.interactive {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.setting-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.setting-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text2);
+}
+
+.setting-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.setting-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.4px;
+  text-transform: lowercase;
+}
+
+.setting-sublabel {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Progress Bar */
+.session-progress-container {
+  width: 100%;
+}
+
+.session-progress-bar {
+  height: 24px;
+  background: #0d0d0d;
+  border-radius: 100px;
+  overflow: hidden;
+  display: flex;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.progress-fill {
+  width: 65%;
+  height: 100%;
+  background: linear-gradient(90deg, #f1563a, #ff9a4d);
+  border-radius: 0 100px 100px 0;
+  box-shadow: 0 0 20px rgba(241, 86, 58, 0.3);
+}
+
+.progress-remaining-stripes {
+  flex: 1;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(196, 251, 49, 0.15) 10px,
+    rgba(196, 251, 49, 0.15) 20px
+  );
+  border-left: 2px solid rgba(196, 251, 49, 0.2);
+}
+
+/* Toggle Switch */
+.tp-toggle-track {
+  width: 48px;
+  height: 26px;
+  background: #222;
+  border-radius: 100px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.tp-toggle-track.active {
+  background: #333;
+  border-color: rgba(241, 86, 58, 0.3);
+}
+
+.tp-toggle-thumb {
+  width: 20px;
+  height: 20px;
+  background: #555;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tp-toggle-track.active .tp-toggle-thumb {
+  transform: translateX(20px);
+  background: #f1563a;
+  box-shadow: 0 0 12px rgba(241, 86, 58, 0.4);
+}
+
+/* Tomato Plus Banner */
+.tomato-plus-banner {
+  background: #fff;
+  color: #000;
+  border-radius: 100px;
+  padding: 10px 20px;
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tomato-plus-banner:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 480px) {
+  .timer-page {
+    padding: 16px 16px 120px;
+  }
+  
+  .duration-value {
+    font-size: 24px;
+  }
+}

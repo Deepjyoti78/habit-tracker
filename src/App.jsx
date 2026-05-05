@@ -8,6 +8,9 @@ import HomePage from './pages/HomePage';
 import HabitsPage from './pages/HabitsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import PlannerPage from './pages/PlannerPage';
+import TimerPage from './pages/TimerPage';
+import ProfilePage from './pages/ProfilePage';
+import EditProfilePage from './pages/EditProfilePage';
 import './App.css';
 
 const pages = {
@@ -15,6 +18,9 @@ const pages = {
   habits: HabitsPage,
   analytics: AnalyticsPage,
   planner: PlannerPage,
+  timer: TimerPage,
+  profile: ProfilePage,
+  'edit-profile': EditProfilePage,
 };
 
 function AppContent() {

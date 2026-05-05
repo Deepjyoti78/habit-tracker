@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import { useApp } from '../context/AppContext';
-import { Flame } from 'lucide-react';
+import { Flame, Bell, User } from 'lucide-react';
 import CalendarStrip from '../components/CalendarStrip';
 import DailyCheckin from '../components/DailyCheckin';
 import HabitCard from '../components/HabitCard';
 import OverallProgressCard from '../components/OverallProgressCard';
 import RemainingTasksCard from '../components/RemainingTasksCard';
 import TaskRemainingCard from '../components/TaskRemainingCard';
+import TopPriorityCard from '../components/TopPriorityCard';
 import AIInsights from '../components/AIInsights';
 import Heatmap from '../components/Heatmap';
 import PlannerCard from '../components/PlannerCard';
@@ -40,13 +41,16 @@ export default function HomePage() {
     >
       {/* Hero */}
       <section className="hero-section">
+        <div className="hero-profile-btn" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'profile' })}>
+          <User size={20} />
+        </div>
         <div className="hero-text-block">
           <h1 className="hero-heading">{greeting}, Deep!</h1>
           <span className="hero-subtitle">Let's build some discipline today.</span>
         </div>
-        <div className="hero-rating-badge">
-          <Flame size={14} color="#c4fb31" />
-          <span>12 Day Streak</span>
+        <div className="hero-notification-btn">
+          <Bell size={20} />
+          <div className="notification-dot" />
         </div>
       </section>
 
@@ -60,12 +64,13 @@ export default function HomePage() {
           <RemainingTasksCard />
           <TaskRemainingCard />
         </div>
-        
+
         <div className="home-right-col">
           <HabitCard />
         </div>
       </div>
 
+      <TopPriorityCard />
       <DailyCheckin />
     </motion.div>
   );

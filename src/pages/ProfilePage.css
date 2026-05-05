@@ -1,0 +1,233 @@
+.profile-page {
+  padding: 16px 20px 100px;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.profile-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  text-transform: lowercase;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.profile-back-btn, .header-spacer {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.profile-back-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.profile-back-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  transform: translateX(-2px);
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* User Card */
+.user-profile-card {
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 28px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-profile-card:hover {
+  background: #1c1c1c;
+  transform: translateY(-2px);
+}
+
+.user-avatar-container {
+  width: 60px;
+  height: 60px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #c4fb31; /* Vibrant background for avatar */
+}
+
+.user-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.4px;
+}
+
+.user-handle {
+  font-size: 13px;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+.card-chevron {
+  color: var(--text3);
+  opacity: 0.5;
+}
+
+/* Settings Groups */
+.settings-group {
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-row.clickable {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.setting-row.clickable:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.setting-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--text2);
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: lowercase;
+  letter-spacing: -0.2px;
+}
+
+.row-chevron {
+  color: var(--text3);
+  opacity: 0.3;
+}
+
+/* Toggles */
+.toggle-track {
+  width: 48px;
+  height: 26px;
+  background: #222;
+  border-radius: 100px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.toggle-thumb {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-track.active-lime {
+  background: #c4fb31;
+  border-color: #c4fb31;
+}
+
+.toggle-track.active-lime .toggle-thumb {
+  transform: translateX(20px);
+  background: #fff;
+}
+
+.toggle-track.active-grey {
+  background: #444;
+}
+
+.toggle-track.active-grey .toggle-thumb {
+  transform: translateX(20px);
+}
+
+/* Log Out Button */
+.logout-btn {
+  margin-top: 24px;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 100px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  transform: scale(0.98);
+  background: #f4f4f4;
+}
+
+.logout-icon {
+  color: #f1563a; /* Red exit icon */
+}
+
+@media (max-width: 480px) {
+  .profile-page {
+    padding: 16px 16px 120px;
+  }
+}

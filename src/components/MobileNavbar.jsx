@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Activity, PieChart, CalendarDays, User } from 'lucide-react';
+import { Home, Activity, PieChart, CalendarDays, Timer } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import './MobileNavbar.css';
@@ -9,7 +9,7 @@ const navItems = [
   { id: 'habits', label: 'Habits', icon: Activity },
   { id: 'analytics', label: 'Analytics', icon: PieChart },
   { id: 'planner', label: 'Planner', icon: CalendarDays },
-  { id: 'profile', label: 'Profile', icon: User },
+  { id: 'timer', label: 'Timer', icon: Timer },
 ];
 
 export default function MobileNavbar() {
@@ -29,7 +29,7 @@ export default function MobileNavbar() {
           <button
             key={item.id}
             className={`mobile-nav-btn ${isActive ? 'active' : ''}`}
-            onClick={() => dispatch({ type: 'SET_PAGE', payload: item.id === 'profile' ? 'home' : item.id })}
+            onClick={() => dispatch({ type: 'SET_PAGE', payload: item.id })}
           >
             <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
             <AnimatePresence>
