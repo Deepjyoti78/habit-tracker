@@ -16,8 +16,13 @@ export default function MobileNavbar() {
   const { state, dispatch } = useApp();
   const { currentPage } = state;
 
-  // Use 'home' as active if current page is 'profile' but profile isn't a real page
-  const activePage = navItems.find(i => i.id === currentPage) ? currentPage : 'home';
+  const getActivePage = () => {
+    if (currentPage === 'add-habit' || currentPage === 'create-habit') return 'habits';
+    if (currentPage === 'profile' || currentPage === 'edit-profile') return 'home';
+    return navItems.find(i => i.id === currentPage) ? currentPage : 'home';
+  };
+
+  const activePage = getActivePage();
 
   return (
     <nav className="mobile-navbar">

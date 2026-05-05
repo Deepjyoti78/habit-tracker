@@ -1,6 +1,7 @@
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useApp } from '../context/AppContext';
-import { Flame, Bell, User } from 'lucide-react';
+import { Bell, User } from 'lucide-react';
 import CalendarStrip from '../components/CalendarStrip';
 import DailyCheckin from '../components/DailyCheckin';
 import HabitCard from '../components/HabitCard';
@@ -8,24 +9,13 @@ import OverallProgressCard from '../components/OverallProgressCard';
 import RemainingTasksCard from '../components/RemainingTasksCard';
 import TaskRemainingCard from '../components/TaskRemainingCard';
 import TopPriorityCard from '../components/TopPriorityCard';
-import AIInsights from '../components/AIInsights';
-import Heatmap from '../components/Heatmap';
-import PlannerCard from '../components/PlannerCard';
 import './HomePage.css';
 
 export default function HomePage() {
   const { dispatch } = useApp();
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const now = new Date();
-  const dateStr = now
-    .toLocaleDateString('en-US', {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit',
-    })
-    .toUpperCase();
-
   const hour = now.getHours();
   let greeting = 'Good morning';
   if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
@@ -54,24 +44,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Calendar - Full Width */}
-      <CalendarStrip />
+      {/* Calendar - Now Interactive */}
+      <CalendarStrip 
+        selectedDate={selectedDate} 
+        onDateSelect={setSelectedDate} 
+      />
 
       {/* Bento Grid */}
       <div className="home-bento-grid">
         <div className="home-left-col">
-          <OverallProgressCard />
-          <RemainingTasksCard />
-          <TaskRemainingCard />
+          <OverallProgressCard selectedDate={selectedDate} />
+          <RemainingTasksCard selectedDate={selectedDate} />
+          <TaskRemainingCard selectedDate={selectedDate} />
         </div>
 
         <div className="home-right-col">
-          <HabitCard />
+          <HabitCard selectedDate={selectedDate} />
         </div>
       </div>
 
-      <TopPriorityCard />
-      <DailyCheckin />
+      <TopPriorityCard selectedDate={selectedDate} />
+      <DailyCheckin selectedDate={selectedDate} />
     </motion.div>
   );
 }

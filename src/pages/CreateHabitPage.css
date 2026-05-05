@@ -1,0 +1,241 @@
+.create-habit-page-container {
+  padding: 40px 20px 120px;
+  max-width: 450px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.create-habit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.create-habit-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.4px;
+  margin: 0;
+  text-transform: lowercase;
+}
+
+.header-create-btn-highlight {
+  height: 32px;
+  padding: 0 16px;
+  background: #a8d626;
+  color: #000;
+  border: none;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: lowercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-create-btn-highlight:hover {
+  background: #b8eb2a;
+  transform: scale(1.05);
+}
+
+.back-btn-minimal {
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.habit-initial-settings {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.setting-pill {
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 100px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.setting-pill.active {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: #1a1a1a;
+}
+
+.pill-emoji {
+  font-size: 14px;
+}
+
+.color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.pill-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: lowercase;
+}
+
+.habit-inputs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.habit-name-input {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 28px;
+  font-weight: 800;
+  outline: none;
+  letter-spacing: -1px;
+  width: 100%;
+}
+
+.habit-details-input {
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  font-size: 16px;
+  font-weight: 500;
+  resize: none;
+  outline: none;
+  opacity: 0.5;
+  width: 100%;
+}
+
+.habit-settings-list {
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.setting-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.setting-item-row:last-child {
+  border-bottom: none;
+}
+
+.setting-item-row:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.setting-item-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: lowercase;
+}
+
+.setting-item-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text3);
+  font-weight: 600;
+  text-transform: lowercase;
+}
+
+.active-days-section {
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.active-days-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text2);
+  line-height: 1.2;
+  text-transform: lowercase;
+}
+
+.days-row {
+  display: flex;
+  gap: 6px;
+}
+
+.day-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.day-circle.active {
+  background: rgba(168, 214, 38, 0.15);
+  border-color: #a8d626;
+  color: #a8d626;
+}
+
+.day-circle.weekend {
+  opacity: 0.4;
+}
+
+.color-selector-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 4px;
+}
+
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.color-option.active {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}

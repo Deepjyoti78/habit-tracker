@@ -9,30 +9,82 @@
   width: 100%;
 }
 
-.habit-minimal-header {
+.habit-card-header-new {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 4px;
+  padding: 4px 0;
+}
+
+.habit-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.habit-icon-square {
+  width: 40px;
+  height: 40px;
+  background: rgba(108, 99, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(108, 99, 255, 0.1);
+}
+
+.habit-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .habit-minimal-name {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: #fff;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.4px;
+  text-transform: lowercase;
+}
+
+.habit-minimal-desc {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+  opacity: 0.6;
+  text-transform: lowercase;
+}
+
+.habit-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .habit-minimal-streak {
   display: flex;
   align-items: center;
-  gap: 3px;
-  font-size: 12px;
+  gap: 5px;
+  font-size: 13px;
   font-weight: 700;
   color: #f97316;
-  background: rgba(249, 115, 22, 0.1);
-  padding: 2px 6px;
-  border-radius: 6px;
+  background: rgba(249, 115, 22, 0.08);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.habit-more-btn {
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  padding: 4px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+}
+
+.habit-more-btn:hover {
+  opacity: 1;
 }
 
 .habit-minimal-content {
@@ -40,6 +92,7 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding-bottom: 2px;
+  margin-top: 12px;
 }
 
 .habit-minimal-content::-webkit-scrollbar {
@@ -72,14 +125,22 @@
 .grid-cell {
   width: 9px;
   height: 9px;
-  border-radius: 1.5px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.grid-cell.done {
+  background-color: #6c63ff !important;
+  box-shadow: 0 0 6px rgba(108, 99, 255, 0.4);
 }
 
 .month-label {
-  font-size: 9px;
-  color: #555;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 700;
+  text-transform: lowercase;
+  opacity: 0.4;
+  margin-top: 4px;
 }
 
 .day-labels-column {

@@ -11,6 +11,8 @@ import PlannerPage from './pages/PlannerPage';
 import TimerPage from './pages/TimerPage';
 import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from './pages/EditProfilePage';
+import AddHabitPage from './pages/AddHabitPage';
+import CreateHabitPage from './pages/CreateHabitPage';
 import './App.css';
 
 const pages = {
@@ -21,6 +23,8 @@ const pages = {
   timer: TimerPage,
   profile: ProfilePage,
   'edit-profile': EditProfilePage,
+  'add-habit': AddHabitPage,
+  'create-habit': CreateHabitPage,
 };
 
 function AppContent() {
