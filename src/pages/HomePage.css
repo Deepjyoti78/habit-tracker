@@ -11,6 +11,7 @@
 /* Hero */
 .hero-section {
   display: flex;
+
   align-items: center;
   justify-content: space-between;
   padding: 8px 0 24px;
@@ -18,7 +19,8 @@
   gap: 16px;
 }
 
-.hero-notification-btn, .hero-profile-btn {
+.hero-notification-btn,
+.hero-profile-btn {
   width: 44px;
   height: 44px;
   background: var(--surface);
@@ -34,7 +36,8 @@
   flex-shrink: 0;
 }
 
-.hero-notification-btn:hover, .hero-profile-btn:hover {
+.hero-notification-btn:hover,
+.hero-profile-btn:hover {
   background: var(--surface2);
   transform: translateY(-2px);
   color: var(--text);
@@ -47,7 +50,8 @@
   right: 10px;
   width: 8px;
   height: 8px;
-  background: #c4fb31; /* Vibrant accent from theme */
+  background: #c4fb31;
+  /* Vibrant accent from theme */
   border-radius: 50%;
   border: 2px solid var(--surface);
   box-shadow: 0 0 10px rgba(196, 251, 49, 0.4);
@@ -206,11 +210,12 @@
   gap: 8px;
   min-width: 0;
   height: 100%;
-  max-height: 0; /* Magic to make it follow left col height */
+  max-height: 0;
+  /* Magic to make it follow left col height */
   min-height: 100%;
 }
 
-.home-right-col > .habit-card {
+.home-right-col>.habit-card {
   height: 100%;
 }
 
@@ -230,13 +235,14 @@
 
 @media (max-width: 768px) {
   .hero-section {
-    padding-top: 6px; 
-    padding-left: 0; 
+    padding-top: 6px;
+    padding-left: 0;
     align-items: center;
   }
 
   .hero-heading {
-    font-size: 24px; /* Significantly increase size for mobile */
+    font-size: 24px;
+    /* Significantly increase size for mobile */
     line-height: 1.2;
     letter-spacing: -0.5px;
   }

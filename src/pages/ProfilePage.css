@@ -23,7 +23,8 @@
   text-align: center;
 }
 
-.profile-back-btn, .header-spacer {
+.profile-back-btn,
+.header-spacer {
   width: 44px;
   height: 44px;
   flex-shrink: 0;
@@ -50,7 +51,8 @@
 .settings-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
+  /* was 16px — tightens everything up */
 }
 
 /* User Card */
@@ -76,7 +78,8 @@
   height: 60px;
   border-radius: 20px;
   overflow: hidden;
-  background: #c4fb31; /* Vibrant background for avatar */
+  background: #c4fb31;
+  /* Vibrant background for avatar */
 }
 
 .user-avatar-img {
@@ -101,7 +104,7 @@
 
 .user-handle {
   font-size: 13px;
-  color: var(--text3);
+  color: #888;
   font-weight: 500;
 }
 
@@ -143,16 +146,18 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  color: var(--text2);
   font-size: 15px;
+  /* add this explicitly */
+  color: #ccc;
   font-weight: 600;
   text-transform: lowercase;
   letter-spacing: -0.2px;
 }
 
 .row-chevron {
-  color: var(--text3);
-  opacity: 0.3;
+  color: #555;
+  /* was opacity 0.3 which makes it invisible */
+  opacity: 1;
 }
 
 /* Toggles */
@@ -200,30 +205,32 @@
 
 /* Log Out Button */
 .logout-btn {
-  margin-top: 24px;
-  background: #fff;
-  color: #000;
-  border: none;
-  border-radius: 100px;
+  width: 100%;
+  background: #111;
+  color: #ff4444;
+  border: 1px solid #ff444422;
+  border-radius: 16px;
   padding: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  font-size: 16px;
+  gap: 10px;
+  font-size: 15px;
   font-weight: 700;
   text-transform: lowercase;
   cursor: pointer;
   transition: all 0.2s ease;
+  margin-top: 0;
+  /* ← remove the 24px top margin */
 }
 
 .logout-btn:hover {
-  transform: scale(0.98);
-  background: #f4f4f4;
+  background: #ff44441a;
+  border-color: #ff444444;
 }
 
 .logout-icon {
-  color: #f1563a; /* Red exit icon */
+  color: #ff4444;
 }
 
 @media (max-width: 480px) {

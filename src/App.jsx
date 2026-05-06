@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { AppProvider, useApp } from './context/AppContext';
 import Sidebar from './components/Sidebar';
 import MobileNavbar from './components/MobileNavbar';
+import LoginPage from './pages/LoginPage';
 
 import Toast from './components/Toast';
 import HomePage from './pages/HomePage';
@@ -28,7 +29,8 @@ const pages = {
 };
 
 function AppContent() {
-  const { state } = useApp();
+  const { state, token } = useApp();
+  if (!token) return <LoginPage />;
   const PageComponent = pages[state.currentPage] || HomePage;
 
   return (

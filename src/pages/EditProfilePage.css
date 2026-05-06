@@ -1,184 +1,211 @@
-.edit-profile-page {
+.ep-page {
   padding: 16px 20px 100px;
   max-width: 500px;
   margin: 0 auto;
   width: 100%;
 }
 
-.edit-profile-header {
+/* Header */
+.ep-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
+  padding-top: 8px;
 }
 
-.edit-title {
-  font-size: 18px;
+.ep-back-btn {
+  width: 38px;
+  height: 38px;
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ep-back-btn:hover {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.ep-title {
+  font-size: 17px;
   font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.5px;
+  color: #fff;
+  letter-spacing: -0.3px;
   text-transform: lowercase;
   margin: 0;
-  flex: 1;
-  text-align: center;
 }
 
-.edit-back-btn, .header-spacer {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-}
-
-.edit-back-btn {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text2);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.edit-back-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text);
-}
-
-.edit-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Avatar Section */
-.avatar-edit-section {
-  margin-bottom: 40px;
-}
-
-.large-avatar-container {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  position: relative;
-  border: 4px solid #161616;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  background: #c4fb31; /* Vibrant background for avatar */
-}
-
-.large-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.camera-overlay {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 32px;
-  height: 32px;
-  background: #c4fb31;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.ep-save-btn {
+  background: #CCFF00;
   color: #000;
-  border: 3px solid #000;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(196, 251, 49, 0.4);
-}
-
-/* Form Card */
-.edit-form-card {
-  width: 100%;
-  background: #161616;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 28px;
-  overflow: hidden;
-  margin-bottom: 24px;
-}
-
-.form-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-}
-
-.form-row:last-child {
-  border-bottom: none;
-}
-
-.form-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text3);
-  text-transform: lowercase;
-  letter-spacing: -0.2px;
-}
-
-.form-input {
-  background: transparent;
   border: none;
-  color: var(--text);
+  border-radius: 20px;
+  padding: 9px 20px;
   font-size: 14px;
-  font-weight: 600;
-  text-align: right;
-  width: 60%;
-  outline: none;
-}
-
-.form-input:focus {
-  color: #c4fb31;
-}
-
-/* Buttons */
-.save-changes-btn {
-  width: 100%;
-  background: #c4fb31;
-  color: #000;
-  border: none;
-  border-radius: 24px;
-  padding: 18px;
-  font-size: 16px;
   font-weight: 800;
   text-transform: lowercase;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-bottom: 16px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.save-changes-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(196, 251, 49, 0.3);
+.ep-save-btn:hover {
+  background: #d4ff1a;
 }
 
-.delete-account-btn {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--text3);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.ep-save-btn.saved {
+  background: #1a2e00;
+  color: #CCFF00;
+  border: 1px solid #CCFF0033;
+}
+
+/* Avatar */
+.ep-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.ep-avatar-wrap {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+
+.ep-avatar-img {
+  width: 90px;
+  height: 90px;
   border-radius: 24px;
+  background: #CCFF0022;
+  object-fit: cover;
+}
+
+.ep-camera-btn {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 28px;
+  height: 28px;
+  background: #CCFF00;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  border: 2px solid #080808;
+  cursor: pointer;
+}
+
+.ep-avatar-hint {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+/* Form card — outer wrapper */
+.ep-form-card {
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 20px;
+  padding: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Each field — stacked label + input, rounded card */
+.ep-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #161616;
+  border: 1px solid #222;
+  border-radius: 14px;
+  padding: 12px 16px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.ep-field:focus-within {
+  border-color: #CCFF0055;
+  background: #191919;
+}
+
+.ep-field:focus-within .ep-label {
+  color: #CCFF00;
+}
+
+/* Label — small uppercase above input */
+.ep-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  transition: color 0.2s;
+}
+
+/* Input — full width, no border, tall enough */
+.ep-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  width: 100%;
+  padding: 4px 0;
+  caret-color: #CCFF00;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ep-input::placeholder {
+  color: #333;
+}
+
+.ep-input:focus {
+  color: #fff;
+}
+
+/* Kill autofill white background */
+.ep-input:-webkit-autofill,
+.ep-input:-webkit-autofill:hover,
+.ep-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #161616 inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #CCFF00;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Delete button */
+.ep-delete-btn {
+  width: 100%;
+  background: #1a0000;
+  color: #ff4444;
+  border: 1px solid #ff444433;
+  border-radius: 12px;
   padding: 16px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   text-transform: lowercase;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
+  margin-top: 4px;
 }
 
-.delete-account-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #f1563a;
-  border-color: rgba(241, 86, 58, 0.2);
-}
-
-@media (max-width: 480px) {
-  .edit-profile-page {
-    padding: 16px 16px 120px;
-  }
+.ep-delete-btn:hover {
+  background: #ff44441a;
+  border-color: #ff444466;
 }

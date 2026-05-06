@@ -1,48 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Flame, ChevronRight } from 'lucide-react';
-import { getIcon } from '../utils/iconMap';
+import { Flame, ChevronRight, Plus, Minus } from 'lucide-react';
+import { logHabit } from '../api/habits';
+import { useApp } from '../context/AppContext';
+import { Heart, Palette, Trophy, Target, Globe, Sprout, Activity, Star } from 'lucide-react';
 import './HabitLargeCard.css';
 
-// Fallback color map to ensure user sees unique colors even with legacy state
-const colorMap = {
-  'drink water': '#3b82f6',
-  'morning run': '#f97316',
-  'read 20 min': '#c4fb31',
-  'gym': '#ec4899',
-  'meditate': '#8b5cf6',
-  'no social media': '#ff4b4b'
+const iconMap = {
+  health: Heart, arts: Palette, sport: Trophy,
+  skills: Target, language: Globe, mindfulness: Sprout,
+  custom: Activity, activity: Activity,
+};
+
+const catColorMap = {
+  health: '#ff4b4b', arts: '#6c63ff', sport: '#f97316',
+  skills: '#10b981', language: '#3b82f6', mindfulness: '#8b5cf6', custom: '#CCFF00',
 };
 
 export default function HabitLargeCard({ habit }) {
-  // Use habit.color if it exists, otherwise use fallback map or default to lime
-  const habitColor = habit.color || colorMap[habit.name?.toLowerCase()] || '#c4fb31';
-  
-  // Handling metrics data from either legacy state or new structure
-  const progress = habit.progress !== undefined ? habit.progress : (habit.done ? 100 : 45);
-  const target = habit.targetValue || 10;
-  const current = habit.currentValue || (habit.done ? 10 : 4);
-  const unit = habit.unit || (habit.target?.includes('glasses') ? 'glasses' : 'units');
-  
-  const IconComponent = getIcon(habit.icon || (habit.emoji ? null : 'activity'));
-  
+  const { dispatch } = useApp();
+  const habitColor = habit.color || catColorMap[habit.category] || '#CCFF00';
+  const target = habit.target_value || 1;
+
+  const [current, setCurrent] = useState(habit.current_value || 0);
+  const [saving, setSaving] = useState(false);
+
+  const progress = Math.min(Math.round((current / target) * 100), 100);
+  const isDone = progress >= 100;
+
+  const IconComponent = iconMap[habit.emoji] || iconMap[habit.category] || Activity;
+
+  const handleLog = async (newVal) => {
+    const clamped = Math.max(0, Math.min(newVal, target));
+    setCurrent(clamped);
+    setSaving(true);
+    try {
+      await logHabit(habit.id, {
+        current_value: clamped,
+        target_value: target,
+        done: clamped >= target,
+      });
+      dispatch({
+        type: 'UPDATE_HABIT',
+        payload: { ...habit, current_value: clamped }
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
-    <motion.div 
-      className="habit-large-card"
-      whileTap={{ scale: 0.98 }}
+    <motion.div
+      className={`habit-large-card ${isDone ? 'habit-done' : ''}`}
+      style={{ borderColor: isDone ? `${habitColor}40` : 'var(--border)' }}
+      whileTap={{ scale: 0.99 }}
     >
+      {/* Header */}
       <div className="h-card-header-row">
         <div className="h-card-left-content">
-          <div className="h-card-icon-wrapper" style={{ backgroundColor: `${habitColor}15`, borderColor: `${habitColor}25` }}>
-            {habit.emoji ? (
-              <span className="h-card-emoji">{habit.emoji}</span>
-            ) : (
-              <IconComponent size={18} color={habitColor} />
-            )}
+          <div className="h-card-icon-wrapper" style={{ backgroundColor: `${habitColor}18` }}>
+            <IconComponent size={17} color={habitColor} />
           </div>
           <div className="h-card-text-stack">
-            <h3 className="h-card-main-title">{habit.name}</h3>
-            <p className="h-card-sub-label">{habit.desc || habit.target || 'stay consistent, feel better'}</p>
+            <div className="h-card-name-row">
+              <h3 className="h-card-main-title">{habit.name}</h3>
+              {habit.is_core && <Star size={11} fill="#CCFF00" color="#CCFF00" />}
+            </div>
+            <p className="h-card-sub-label">
+              {habit.frequency || 'every day'} · {target} {habit.unit || 'times'} / day
+            </p>
           </div>
         </div>
         <div className="h-card-streak-pill">
@@ -51,41 +79,67 @@ export default function HabitLargeCard({ habit }) {
         </div>
       </div>
 
+      {/* Metrics */}
       <div className="h-card-body-metrics">
         <div className="h-card-metric-main">
           <div className="h-card-stat-display">
-            <span className="h-stat-big">{current}</span>
-            <span className="h-stat-small">of {target} {unit}</span>
+            <span className="h-stat-big" style={{ color: isDone ? habitColor : '#fff' }}>{current}</span>
+            <span className="h-stat-small">of {target} {habit.unit || 'times'}</span>
+            {isDone && <span className="h-done-badge">✓ done</span>}
           </div>
           <div className="h-card-progress-track">
-            <motion.div 
-              className="h-card-progress-bar" 
+            <motion.div
+              className="h-card-progress-bar"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
               style={{ backgroundColor: habitColor }}
             />
           </div>
         </div>
 
+        {/* Circular progress */}
         <div className="h-card-circular-progress">
-          <svg width="40" height="40" viewBox="0 0 40 40">
-            <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="3" />
-            <motion.circle 
-              cx="20" cy="20" r="18" fill="none" 
-              stroke={habitColor} 
-              strokeWidth="3" 
+          <svg width="44" height="44" viewBox="0 0 44 44">
+            <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="3" />
+            <motion.circle
+              cx="22" cy="22" r="18" fill="none"
+              stroke={habitColor}
+              strokeWidth="3"
               strokeDasharray="113"
               initial={{ strokeDashoffset: 113 }}
               animate={{ strokeDashoffset: 113 - (113 * progress) / 100 }}
+              transition={{ duration: 0.4 }}
               strokeLinecap="round"
-              transform="rotate(-90 20 20)"
+              transform="rotate(-90 22 22)"
             />
           </svg>
-          <span className="h-percentage-text">{progress}%</span>
+          <span className="h-percentage-text" style={{ color: isDone ? habitColor : '#fff' }}>
+            {progress}%
+          </span>
         </div>
       </div>
 
+      {/* Footer — log buttons + tracker link */}
       <div className="h-card-bottom-footer">
+        <div className="h-log-controls">
+          <button
+            className="h-log-btn minus"
+            onClick={() => handleLog(current - 1)}
+            disabled={current <= 0 || saving}
+          >
+            <Minus size={12} />
+          </button>
+          <span className="h-log-label">{saving ? '...' : 'log progress'}</span>
+          <button
+            className="h-log-btn plus"
+            onClick={() => handleLog(current + 1)}
+            disabled={current >= target || saving}
+            style={{ backgroundColor: current < target ? `${habitColor}22` : '#1a1a1a', color: habitColor }}
+          >
+            <Plus size={12} />
+          </button>
+        </div>
         <button className="h-view-tracker-link">
           <span>view tracker</span>
           <ChevronRight size={12} />

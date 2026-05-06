@@ -1,16 +1,20 @@
 .habit-large-card {
-  background: var(--surface); /* Matching home page card color */
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 12px 16px;
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 18px;
+  padding: 16px;
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: none !important;
+  gap: 14px;
+  transition: border-color 0.3s ease;
 }
 
+.habit-done {
+  background: #0f120a;
+}
+
+/* Header */
 .h-card-header-row {
   display: flex;
   justify-content: space-between;
@@ -19,45 +23,45 @@
 
 .h-card-left-content {
   display: flex;
-  gap: 12px;
+  gap: 11px;
   align-items: center;
 }
 
 .h-card-icon-wrapper {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.02);
+  flex-shrink: 0;
 }
 
-.h-card-emoji {
-  font-size: 16px;
+.h-card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .h-card-text-stack {
   display: flex;
   flex-direction: column;
-  gap: 0px;
+  gap: 3px;
 }
 
 .h-card-main-title {
-  font-size: 15px;
-  font-weight: 800;
-  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
   margin: 0;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
 }
 
 .h-card-sub-label {
   font-size: 11px;
-  color: #ffffff;
-  font-weight: 600;
+  color: #888;
+  /* was #444 */
   margin: 0;
-  opacity: 0.55;
   text-transform: lowercase;
 }
 
@@ -65,18 +69,19 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: var(--surface2);
-  padding: 4px 10px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
+  background: #1a1a1a;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid #222;
 }
 
 .h-streak-count {
   font-size: 12px;
-  font-weight: 900;
-  color: #ffffff;
+  font-weight: 800;
+  color: #fff;
 }
 
+/* Metrics */
 .h-card-body-metrics {
   display: flex;
   align-items: center;
@@ -88,42 +93,51 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .h-card-stat-display {
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 6px;
 }
 
 .h-stat-big {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 900;
-  color: #ffffff;
   line-height: 1;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
+  transition: color 0.3s;
 }
 
 .h-stat-small {
-  font-size: 11px;
-  font-weight: 700;
-  color: #ffffff;
-  opacity: 0.5;
+  font-size: 12px;
+  color: #777;
+  /* was #444 */
   text-transform: lowercase;
+}
+
+.h-done-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #000;
+  background: #CCFF00;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-left: 4px;
 }
 
 .h-card-progress-track {
   width: 100%;
-  height: 4px;
-  background: var(--surface2);
-  border-radius: 2px;
+  height: 3px;
+  background: #1e1e1e;
+  border-radius: 99px;
   overflow: hidden;
 }
 
 .h-card-progress-bar {
   height: 100%;
-  border-radius: 2px;
+  border-radius: 99px;
 }
 
 .h-card-circular-progress {
@@ -131,22 +145,68 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
 }
 
 .h-percentage-text {
   position: absolute;
   font-size: 9px;
   font-weight: 900;
-  color: #ffffff;
-  opacity: 0.9;
+  transition: color 0.3s;
 }
 
+/* Footer */
 .h-card-bottom-footer {
   display: flex;
-  justify-content: flex-end;
-  margin-top: -6px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: -4px;
+}
+
+.h-log-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1a1a1a;
+  border-radius: 20px;
+  padding: 5px 12px;
+  border: 1px solid #222;
+}
+
+.h-log-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #2a2a2a;
+  background: #222;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.h-log-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.h-log-btn.plus {
+  border: none;
+}
+
+.h-log-btn:not(:disabled):hover {
+  opacity: 0.8;
+}
+
+.h-log-label {
+  font-size: 11px;
+  color: #777;
+  /* was #444 */
+  font-weight: 600;
 }
 
 .h-view-tracker-link {
@@ -155,16 +215,15 @@
   display: flex;
   align-items: center;
   gap: 3px;
-  color: #ffffff;
+  color: #666;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  opacity: 0.45;
   text-transform: lowercase;
 }
 
 .h-view-tracker-link:hover {
-  opacity: 1;
+  color: #CCFF00;
   transform: translateX(2px);
 }

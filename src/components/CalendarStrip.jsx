@@ -1,139 +1,110 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Flame } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import './CalendarStrip.css';
 
 export default function CalendarStrip({ hideHeader = false, selectedDate = new Date(), onDateSelect }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [baseDate, setBaseDate] = useState(selectedDate);
-  const scrollRef = React.useRef(null);
-
-  const handlePrevClick = (e) => {
-    e.stopPropagation();
-    if (isExpanded) {
-      const newDate = new Date(baseDate);
-      newDate.setMonth(newDate.getMonth() - 1);
-      setBaseDate(newDate);
-    } else {
-      if (scrollRef.current) {
-        scrollRef.current.scrollBy({ left: -250, behavior: 'smooth' });
-      }
-    }
-  };
-
-  const handleNextClick = (e) => {
-    e.stopPropagation();
-    if (isExpanded) {
-      const newDate = new Date(baseDate);
-      newDate.setMonth(newDate.getMonth() + 1);
-      setBaseDate(newDate);
-    } else {
-      if (scrollRef.current) {
-        scrollRef.current.scrollBy({ left: 250, behavior: 'smooth' });
-      }
-    }
-  };
-
+  const [baseDate, setBaseDate] = useState(new Date());
+  const scrollRef = useRef(null);
   const today = new Date();
 
-  // Generate 180 days for horizontal scrolling
   const days = Array.from({ length: 180 }).map((_, i) => {
     const d = new Date();
     d.setDate(today.getDate() - 30 + i);
-    const isSelected = d.toDateString() === selectedDate.toDateString();
-    const isPast = d < today && d.toDateString() !== today.toDateString();
-
-    let status = 'upcoming';
-    if (isSelected) status = 'active';
-    else if (isPast) status = 'partial';
-
     return {
       label: d.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase(),
       date: d.getDate().toString().padStart(2, '0'),
-      status,
-      icon: isSelected ? Flame : null,
-      fullDate: d
+      isToday: d.toDateString() === today.toDateString(),
+      isSelected: d.toDateString() === selectedDate.toDateString(),
+      isPast: d < today && d.toDateString() !== today.toDateString(),
+      isWeekend: d.getDay() === 0 || d.getDay() === 6,
+      fullDate: d,
     };
   });
 
-  const monthLabel = baseDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
-  // Scroll to selected on mount or when changed
   useEffect(() => {
     if (!isExpanded) {
-      const activeEl = document.querySelector('.calendar-day-col.active-day');
-      if (activeEl) {
-        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      }
+      setTimeout(() => {
+        const el = scrollRef.current?.querySelector('.cs-day.selected');
+        el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }, 100);
     }
   }, [selectedDate, isExpanded]);
 
+  const monthLabel = baseDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  // Build full month grid
+  const firstDay = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1).getDay();
+  const daysInMonth = new Date(baseDate.getFullYear(), baseDate.getMonth() + 1, 0).getDate();
+
   return (
-    <div className={`calendar-strip-card ${isExpanded ? 'expanded' : ''} ${hideHeader ? 'compact-no-header' : ''}`}>
+    <div className={`cs-wrap ${isExpanded ? 'cs-expanded' : ''} ${hideHeader ? 'cs-no-header' : ''}`}>
       {!hideHeader && (
-        <div className="calendar-strip-header">
-          <button className="calendar-nav-btn" onClick={handlePrevClick}><ChevronLeft size={16} /></button>
-          <div
-            className="calendar-date-text"
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            {isExpanded ? monthLabel : `Today, ${today.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}`}
-          </div>
-          <button className="calendar-nav-btn" onClick={handleNextClick}><ChevronRight size={16} /></button>
+        <div className="cs-header">
+          <button className="cs-nav-btn" onClick={() => {
+            if (isExpanded) {
+              const d = new Date(baseDate);
+              d.setMonth(d.getMonth() - 1);
+              setBaseDate(d);
+            } else {
+              scrollRef.current?.scrollBy({ left: -220, behavior: 'smooth' });
+            }
+          }}>
+            <ChevronLeft size={15} />
+          </button>
+          <span className="cs-header-label" onClick={() => setIsExpanded(!isExpanded)}>
+            {isExpanded ? monthLabel : `today, ${today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`}
+          </span>
+          <button className="cs-nav-btn" onClick={() => {
+            if (isExpanded) {
+              const d = new Date(baseDate);
+              d.setMonth(d.getMonth() + 1);
+              setBaseDate(d);
+            } else {
+              scrollRef.current?.scrollBy({ left: 220, behavior: 'smooth' });
+            }
+          }}>
+            <ChevronRight size={15} />
+          </button>
         </div>
       )}
 
       {!isExpanded ? (
-        <div className="calendar-days-row-scrollable" ref={scrollRef}>
+        <div className="cs-strip" ref={scrollRef}>
           {days.map((day, idx) => (
             <div
               key={idx}
-              className={`calendar-day-col ${day.status === 'active' ? 'active-day' : ''}`}
-              onClick={() => onDateSelect && onDateSelect(day.fullDate)}
+              className={`cs-day ${day.isSelected ? 'selected' : ''} ${day.isToday && !day.isSelected ? 'today' : ''} ${day.isPast && !day.isSelected ? 'past' : ''} ${day.isWeekend && !day.isSelected ? 'weekend' : ''}`}
+              onClick={() => onDateSelect?.(day.fullDate)}
             >
-              <span className="calendar-day-label">{day.label}</span>
-              <div className="calendar-day-circle">
-                {day.status === 'active' ? (
-                  <span className="active-date">{day.date}</span>
-                ) : day.status === 'partial' ? (
-                  <div className="h-cal-ring-wrapper" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="28" height="28" viewBox="0 0 32 32">
-                      <circle cx="16" cy="16" r="14" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="2" />
-                      <circle 
-                        cx="16" cy="16" r="14" fill="none" stroke="#f97316" strokeWidth="2" 
-                        strokeDasharray="87.9" strokeDashoffset="20" transform="rotate(-90 16 16)" 
-                      />
-                    </svg>
-                    <span className="upcoming-date" style={{ position: 'absolute' }}>{day.date}</span>
-                  </div>
-                ) : (
-                  <span className="upcoming-date">{day.date}</span>
-                )}
+              <span className="cs-day-name">{day.label.slice(0, 3)}</span>
+              <div className="cs-day-num-wrap">
+                <span className="cs-day-num">{day.date}</span>
+                {day.isToday && !day.isSelected && <div className="cs-today-dot" />}
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="calendar-month-view">
-          <div className="month-grid">
-            {['S','M','T','W','T','F','S'].map((d, i) => <span key={i} className="month-grid-header">{d}</span>)}
-            {Array.from({length: 31}).map((_, i) => {
-              const cellDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), i + 1);
-              const isSelected = cellDate.toDateString() === selectedDate.toDateString();
-              const isToday = cellDate.toDateString() === today.toDateString();
-              
-              return (
-                <div 
-                  key={i} 
-                  className={`month-grid-cell ${isSelected ? 'active-today' : ''} ${isToday ? 'is-today-marker' : ''}`}
-                  onClick={() => {
-                    onDateSelect && onDateSelect(cellDate);
-                  }}
-                >
-                  {i + 1}
-                </div>
-              );
-            })}
-          </div>
+        <div className="cs-month-grid">
+          {['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'].map(d => (
+            <span key={d} className="cs-month-label">{d}</span>
+          ))}
+          {Array.from({ length: firstDay }).map((_, i) => <div key={`e-${i}`} />)}
+          {Array.from({ length: daysInMonth }).map((_, i) => {
+            const cellDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), i + 1);
+            const isSel = cellDate.toDateString() === selectedDate.toDateString();
+            const isTod = cellDate.toDateString() === today.toDateString();
+            return (
+              <div
+                key={i}
+                className={`cs-month-cell ${isSel ? 'selected' : ''} ${isTod && !isSel ? 'today' : ''}`}
+                onClick={() => { onDateSelect?.(cellDate); setIsExpanded(false); }}
+              >
+                {i + 1}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

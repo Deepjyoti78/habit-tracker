@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Plus, Calendar, BarChart2 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { getHabits, getHabitLogs } from '../api/habits';
 import HabitLargeCard from '../components/HabitLargeCard';
 import CalendarStrip from '../components/CalendarStrip';
 import Heatmap from '../components/Heatmap';
@@ -12,24 +13,47 @@ export default function HabitsPage() {
   const { habits } = state;
   const [viewMode, setViewMode] = useState('list');
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [successRate, setSuccessRate] = useState(0);
+  const [avgStreak, setAvgStreak] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  // Deterministically "randomize" habit progress based on date and habit ID
-  const displayHabits = useMemo(() => {
-    const dateSeed = selectedDate.getDate() + selectedDate.getMonth() * 31;
-    return habits.map(h => {
-      // Create a pseudo-random progress between 20% and 100% based on the date
-      const hash = (h.id.charCodeAt(0) + dateSeed) % 100;
-      const mockProgress = 20 + (hash % 81);
-      const mockCurrent = Math.round((mockProgress / 100) * 10);
-      
-      return {
-        ...h,
-        progress: mockProgress,
-        currentValue: mockCurrent,
-        targetValue: 10
-      };
-    });
-  }, [habits, selectedDate]);
+  useEffect(() => {
+    const fetchHabits = async () => {
+      try {
+        const res = await getHabits();
+        dispatch({ type: 'SET_HABITS', payload: res.data });
+
+        // Calculate real stats from logs
+        let totalDone = 0, totalLogs = 0, totalStreak = 0;
+        for (const habit of res.data) {
+          const logsRes = await getHabitLogs(habit.id);
+          const logs = logsRes.data;
+          totalLogs += logs.length;
+          totalDone += logs.filter(l => l.done).length;
+
+          // Simple streak: count consecutive done days from today backwards
+          let streak = 0;
+          const sortedLogs = [...logs].sort((a, b) => new Date(b.date) - new Date(a.date));
+          for (const log of sortedLogs) {
+            if (log.done) streak++;
+            else break;
+          }
+          totalStreak += streak;
+        }
+
+        setSuccessRate(totalLogs > 0 ? Math.round((totalDone / totalLogs) * 100) : 0);
+        setAvgStreak(res.data.length > 0 ? Math.round(totalStreak / res.data.length) : 0);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHabits();
+  }, []);
+
+  const coreDisciplines = habits.filter(h => h.is_core);
+  const regularHabits = habits.filter(h => !h.is_core);
 
   return (
     <motion.div
@@ -42,39 +66,35 @@ export default function HabitsPage() {
         <button className="h-header-btn-circle" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'home' })}>
           <ChevronLeft size={20} />
         </button>
-        <h1 className="h-page-title">Habits</h1>
-        <button 
+        <h1 className="h-page-title">habits</h1>
+        <button
           className="h-add-habit-btn-pill"
           onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}
         >
           <Plus size={18} />
-          <span>Add habit</span>
+          <span>add habit</span>
         </button>
       </header>
 
       <div className="h-page-calendar-section-home">
-        <CalendarStrip 
-          hideHeader={true} 
-          selectedDate={selectedDate} 
-          onDateSelect={setSelectedDate} 
+        <CalendarStrip
+          hideHeader={true}
+          selectedDate={selectedDate}
+          onDateSelect={setSelectedDate}
         />
       </div>
 
       <div className="h-content-controls">
         <h2 className="h-section-label">
-          {selectedDate.toDateString() === new Date().toDateString() ? 'Today' : selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          {selectedDate.toDateString() === new Date().toDateString()
+            ? 'today'
+            : selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
         </h2>
         <div className="h-view-toggles">
-          <button 
-            className={`h-view-btn ${viewMode === 'list' ? 'active' : ''}`}
-            onClick={() => setViewMode('list')}
-          >
+          <button className={`h-view-btn ${viewMode === 'list' ? 'active' : ''}`} onClick={() => setViewMode('list')}>
             <Calendar size={16} />
           </button>
-          <button 
-            className={`h-view-btn ${viewMode === 'stats' ? 'active' : ''}`}
-            onClick={() => setViewMode('stats')}
-          >
+          <button className={`h-view-btn ${viewMode === 'stats' ? 'active' : ''}`} onClick={() => setViewMode('stats')}>
             <BarChart2 size={16} />
           </button>
         </div>
@@ -82,7 +102,7 @@ export default function HabitsPage() {
 
       <AnimatePresence mode="wait">
         {viewMode === 'list' ? (
-          <motion.div 
+          <motion.div
             key="list"
             className="h-cards-container"
             initial={{ opacity: 0, x: -10 }}
@@ -90,16 +110,33 @@ export default function HabitsPage() {
             exit={{ opacity: 0, x: 10 }}
             transition={{ duration: 0.2 }}
           >
-            {displayHabits && displayHabits.length > 0 ? (
-              displayHabits.map((habit) => (
-                <HabitLargeCard key={habit.id} habit={habit} />
-              ))
-            ) : (
+            {loading ? (
+              <div className="empty-state-mini">Loading habits...</div>
+            ) : habits.length === 0 ? (
               <div className="empty-state-mini">No habits yet. Add one to start tracking.</div>
+            ) : (
+              <>
+                {coreDisciplines.length > 0 && (
+                  <>
+                    <p className="h-group-label">core disciplines</p>
+                    {coreDisciplines.map(habit => (
+                      <HabitLargeCard key={habit.id} habit={habit} />
+                    ))}
+                  </>
+                )}
+                {regularHabits.length > 0 && (
+                  <>
+                    {coreDisciplines.length > 0 && <p className="h-group-label">other habits</p>}
+                    {regularHabits.map(habit => (
+                      <HabitLargeCard key={habit.id} habit={habit} />
+                    ))}
+                  </>
+                )}
+              </>
             )}
           </motion.div>
         ) : (
-          <motion.div 
+          <motion.div
             key="stats"
             className="h-stats-container"
             initial={{ opacity: 0, x: 10 }}
@@ -108,21 +145,20 @@ export default function HabitsPage() {
             transition={{ duration: 0.2 }}
           >
             <div className="h-stats-summary-card">
-              <h3 className="h-stats-title">Performance Heatmap</h3>
-              <p className="h-stats-subtitle">Your activity across all disciplines</p>
+              <h3 className="h-stats-title">performance heatmap</h3>
+              <p className="h-stats-subtitle">your activity across all disciplines</p>
               <div className="h-heatmap-wrapper">
                 <Heatmap />
               </div>
             </div>
-            
             <div className="h-mini-stats-grid">
               <div className="h-mini-stat-card">
-                <span className="h-mini-val">92%</span>
-                <span className="h-mini-label">Success Rate</span>
+                <span className="h-mini-val">{successRate}%</span>
+                <span className="h-mini-label">success rate</span>
               </div>
               <div className="h-mini-stat-card">
-                <span className="h-mini-val">12d</span>
-                <span className="h-mini-label">Avg. Streak</span>
+                <span className="h-mini-val">{avgStreak}d</span>
+                <span className="h-mini-label">avg. streak</span>
               </div>
             </div>
           </motion.div>

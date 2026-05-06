@@ -1,0 +1,3431 @@
+=== FILE: src/data/appData.js ===
+export const defaultHabits = [
+  {
+    id: 'h1',
+    name: 'Drink Water',
+    emoji: '💧',
+    streak: 12,
+    done: true,
+    category: 'health',
+    target: '8 glasses',
+    currentValue: 4,
+    targetValue: 8,
+    progress: 50,
+    unit: 'glasses',
+    color: '#3b82f6', // Blue
+  },
+  {
+    id: 'h2',
+    name: 'Morning Run',
+    emoji: '🏃',
+    streak: 5,
+    done: false,
+    category: 'fitness',
+    target: '5 km',
+    currentValue: 2.4,
+    targetValue: 5,
+    progress: 48,
+    unit: 'km today',
+    color: '#f97316', // Orange
+  },
+  {
+    id: 'h3',
+    name: 'Read 20 min',
+    emoji: '📖',
+    streak: 3,
+    done: true,
+    category: 'growth',
+    target: '20 min',
+    currentValue: 12,
+    targetValue: 20,
+    progress: 60,
+    unit: 'min',
+    color: '#c4fb31', // Lime
+  },
+  {
+    id: 'h4',
+    name: 'Gym',
+    emoji: '🏋️',
+    streak: 1,
+    done: false,
+    category: 'fitness',
+    target: '3 sessions',
+    currentValue: 1,
+    targetValue: 3,
+    progress: 33,
+    unit: 'sessions',
+    color: '#ec4899', // Pink
+  },
+  {
+    id: 'h5',
+    name: 'Meditate',
+    emoji: '🧘',
+    streak: 7,
+    done: false,
+    category: 'mindfulness',
+    target: '10 min',
+    currentValue: 5,
+    targetValue: 10,
+    progress: 50,
+    unit: 'min',
+    color: '#8b5cf6', // Violet
+  },
+];
+
+export const plannerItems = [
+  { id: 'p1', time: '06:00', text: 'Wake up + cold shower', category: 'health', status: 'done' },
+  { id: 'p2', time: '06:30', text: 'Morning run — 5km target', category: 'fitness', status: 'done' },
+  { id: 'p3', time: '08:00', text: 'Breakfast + journal reflection', category: 'health', status: 'done' },
+  { id: 'p4', time: '09:00', text: 'Deep work — DSA problems (LeetCode)', category: 'work', status: 'active' },
+  { id: 'p5', time: '12:00', text: 'Python assignment CIE-332T', category: 'work', status: 'upcoming' },
+  { id: 'p6', time: '14:00', text: 'Lunch + power nap (20 min)', category: 'health', status: 'upcoming' },
+  { id: 'p7', time: '15:00', text: 'System design study', category: 'work', status: 'upcoming' },
+  { id: 'p8', time: '17:00', text: 'Swimming — kick technique drills', category: 'fitness', status: 'upcoming' },
+  { id: 'p9', time: '19:00', text: 'Dinner + family time', category: 'personal', status: 'upcoming' },
+  { id: 'p10', time: '21:00', text: 'Read + wind down — no screens', category: 'growth', status: 'upcoming' },
+];
+
+export const aiInsights = [
+  { id: 'ai1', type: 'warning', icon: '⚠️', text: '<strong>You missed Gym 2 days in a row.</strong> Your streak is at risk. Today is the critical recovery window.' },
+  { id: 'ai2', type: 'success', icon: '⚡', text: '<strong>You\'re most productive at 9 AM.</strong> Your task completion rate is 73% higher in the first 2 hours.' },
+  { id: 'ai3', type: 'info', icon: '📊', text: '<strong>Weekly discipline score: 68%.</strong> You need 3 clean days to hit your 75% target.' },
+  { id: 'ai4', type: 'tip', icon: '💡', text: '<strong>Pattern detected:</strong> You tend to skip evening habits on Tuesdays and Thursdays.' },
+];
+
+export const weeklyStats = { done: 12, missed: 5, streak: 7, score: 68, delta: 4, totalHabits: 24 };
+
+export const analyticsData = {
+  weeklyScores: [52, 61, 58, 72, 65, 68, 74],
+  monthlyScores: [45, 52, 58, 55, 61, 64, 68, 72, 70, 75, 68, 74],
+  categoryBreakdown: [
+    { name: 'Fitness', score: 62, color: '#ef4444' },
+    { name: 'Health', score: 85, color: '#22c55e' },
+    { name: 'Growth', score: 71, color: '#6c63ff' },
+    { name: 'Focus', score: 58, color: '#f59e0b' },
+    { name: 'Mindfulness', score: 77, color: '#ec4899' },
+  ],
+  bestDay: 'Wednesday',
+  worstDay: 'Saturday',
+  bestTime: '9:00 AM',
+  avgCompletionRate: 68,
+};
+
+export function generateHeatmapData() {
+  const weeks = 52;
+  const data = [];
+  for (let w = 0; w < weeks; w++) {
+    const week = [];
+    for (let d = 0; d < 7; d++) {
+      if (w === weeks - 1 && d >= new Date().getDay()) {
+        week.push(0);
+      } else {
+        const r = Math.random();
+        if (r > 0.82) week.push(4);
+        else if (r > 0.6) week.push(3);
+        else if (r > 0.35) week.push(2);
+        else if (r > 0.15) week.push(1);
+        else week.push(0);
+      }
+    }
+    data.push(week);
+  }
+  return data;
+}
+
+=== END FILE ===
+
+=== FILE: src/context/AppContext.jsx ===
+import { createContext, useContext, useReducer, useEffect } from 'react';
+import { defaultHabits, weeklyStats } from '../data/appData';
+
+const AppContext = createContext(null);
+
+const STORAGE_KEY = 'discipline-os-state';
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (e) {
+    console.warn('Failed to load state:', e);
+  }
+  return null;
+}
+
+const initialState = loadState() || {
+  habits: defaultHabits,
+  stats: weeklyStats,
+  currentPage: 'home',
+  sidebarCollapsed: false,
+  toastMessage: null,
+  dayStarted: false,
+};
+
+function appReducer(state, action) {
+  switch (action.type) {
+    case 'TOGGLE_HABIT': {
+      const habits = state.habits.map((h) =>
+        h.id === action.payload
+          ? { ...h, done: !h.done, streak: !h.done ? h.streak + 1 : Math.max(0, h.streak - 1) }
+          : h
+      );
+      const doneCount = habits.filter((h) => h.done).length;
+      const score = Math.round((doneCount / habits.length) * 100);
+      return {
+        ...state,
+        habits,
+        stats: { ...state.stats, score, done: doneCount, missed: habits.length - doneCount },
+      };
+    }
+    case 'SET_PAGE':
+      return { ...state, currentPage: action.payload };
+    case 'TOGGLE_SIDEBAR':
+      return { ...state, sidebarCollapsed: !state.sidebarCollapsed };
+    case 'SHOW_TOAST':
+      return { ...state, toastMessage: action.payload };
+    case 'HIDE_TOAST':
+      return { ...state, toastMessage: null };
+    case 'START_DAY':
+      return { ...state, dayStarted: true };
+    case 'ADD_HABIT':
+      return { ...state, habits: [...state.habits, action.payload] };
+    case 'DELETE_HABIT':
+      return { ...state, habits: state.habits.filter((h) => h.id !== action.payload) };
+    default:
+      return state;
+  }
+}
+
+export function AppProvider({ children }) {
+  const [state, dispatch] = useReducer(appReducer, initialState);
+
+  // Persist state to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.warn('Failed to save state:', e);
+    }
+  }, [state]);
+
+  return (
+    <AppContext.Provider value={{ state, dispatch }}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+
+export function useApp() {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error('useApp must be used within an AppProvider');
+  }
+  return context;
+}
+
+=== END FILE ===
+
+=== FILE: src/pages/AddHabitPage.jsx ===
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Plus, Search, ChevronRight, Check, ChevronDown, Clock, RefreshCw, Bell } from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import './AddHabitPage.css';
+
+const categories = [
+  { id: 'health', label: 'health', iconName: 'health', color: '#ff4b4b', desc: 'fitness, sleep, nutrition' },
+  { id: 'arts', label: 'arts', iconName: 'arts', color: '#6c63ff', desc: 'drawing, music, writing' },
+  { id: 'sport', label: 'sport', iconName: 'sport', color: '#f97316', desc: 'running, swimming, gym' },
+  { id: 'skills', label: 'skills development', iconName: 'skills', color: '#10b981', desc: 'coding, reading, courses' },
+  { id: 'language', label: 'language', iconName: 'language', color: '#3b82f6', desc: 'vocab, practice, fluency' },
+  { id: 'mindfulness', label: 'mindfulness', iconName: 'mindfulness', color: '#8b5cf6', desc: 'meditation, journaling' },
+];
+
+const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+const frequencyOptions = ['every day', '3 times / week', 'on weekends', 'custom'];
+const repeatOptions = ['1 time / day', '2 times / day', '3 times / day', '5 times / day'];
+
+// Local icon map for selection UI
+import { Heart, Palette, Trophy, Target, Globe, Sprout } from 'lucide-react';
+const catIconMap = {
+  health: Heart,
+  arts: Palette,
+  sport: Trophy,
+  skills: Target,
+  language: Globe,
+  mindfulness: Sprout
+};
+
+export default function AddHabitPage() {
+  const { dispatch } = useApp();
+  const [expandedCategoryId, setExpandedCategoryId] = React.useState(null);
+  const [activeDays, setActiveDays] = React.useState([0, 1, 2, 3, 4]);
+  
+  const [openDropdown, setOpenDropdown] = React.useState(null);
+
+  const [config, setConfig] = React.useState({
+    frequency: 'every day',
+    repeats: '1 time / day',
+    reminders: true
+  });
+
+  const handleAddHabit = (cat) => {
+    const newHabit = {
+      id: Date.now().toString(),
+      name: cat.label,
+      category: cat.id,
+      icon: cat.iconName, // Store string name for serialization
+      color: cat.color,
+      streak: 0,
+      done: false,
+      desc: `${config.frequency}, ${config.repeats}`,
+      history: [],
+      config: { ...config, activeDays }
+    };
+
+    dispatch({ type: 'ADD_HABIT', payload: newHabit });
+    dispatch({ type: 'SHOW_TOAST', payload: `Added ${cat.label} habit!` });
+    
+    setTimeout(() => {
+      dispatch({ type: 'SET_PAGE', payload: 'habits' });
+      dispatch({ type: 'HIDE_TOAST' });
+    }, 1200);
+  };
+
+  const toggleDropdown = (type) => {
+    setOpenDropdown(openDropdown === type ? null : type);
+  };
+
+  const selectOption = (type, value) => {
+    setConfig(prev => ({ ...prev, [type]: value }));
+    setOpenDropdown(null);
+  };
+
+  return (
+    <motion.div 
+      className="add-habit-page-container"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      transition={{ duration: 0.2 }}
+    >
+      <header className="add-habit-header-new">
+        <button className="header-icon-box" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'habits' })}>
+          <X size={18} />
+        </button>
+        <h1 className="add-habit-title">add new habit</h1>
+        <button className="header-done-btn-new" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'habits' })}>
+          done
+        </button>
+      </header>
+
+      <div className="search-bar-container">
+        <Search size={14} className="search-icon-dim" />
+        <input type="text" placeholder="search habits..." className="habit-search-input" />
+      </div>
+
+      <div className="categories-list">
+        {categories.map((cat) => {
+          const isExpanded = expandedCategoryId === cat.id;
+          const CatIcon = catIconMap[cat.iconName];
+          
+          return (
+            <div 
+              key={cat.id} 
+              className={`category-row-new-container ${isExpanded ? 'expanded' : ''}`}
+            >
+              <div className="category-row-new" onClick={() => {
+                setExpandedCategoryId(isExpanded ? null : cat.id);
+                setOpenDropdown(null);
+              }}>
+                <div className="category-left">
+                  <div className="cat-icon-box" style={{ backgroundColor: `${cat.color}20` }}>
+                    <CatIcon size={18} color={cat.color} />
+                  </div>
+                  <div className="cat-text-group">
+                    <span className="cat-label">{cat.label}</span>
+                    <span className="cat-desc">{cat.desc}</span>
+                  </div>
+                </div>
+                <button className={`cat-add-btn-bordered ${isExpanded ? 'active' : ''}`}>
+                  <Plus size={14} className={isExpanded ? 'rotate-plus' : ''} />
+                </button>
+              </div>
+
+              <AnimatePresence>
+                {isExpanded && (
+                  <motion.div 
+                    className="category-expand-content"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                  >
+                    <div className="expand-inner">
+                      <div className="habit-settings-list-mini">
+                        <div className="dropdown-wrapper">
+                          <div className="setting-item-row-mini dropdown-trigger" onClick={() => toggleDropdown('frequency')}>
+                            <div className="setting-left-group">
+                              <Clock size={16} className="setting-icon" />
+                              <span className="setting-label-mini">frequency</span>
+                            </div>
+                            <div className="setting-value-mini highlight-val">
+                              <span>{config.frequency}</span>
+                              <ChevronDown size={14} className={`chevron-transition ${openDropdown === 'frequency' ? 'rotate' : ''}`} />
+                            </div>
+                          </div>
+                          <AnimatePresence>
+                            {openDropdown === 'frequency' && (
+                              <motion.div 
+                                className="dropdown-menu-mini"
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                              >
+                                {frequencyOptions.map(opt => (
+                                  <div 
+                                    key={opt} 
+                                    className={`dropdown-option ${config.frequency === opt ? 'active' : ''}`}
+                                    onClick={() => selectOption('frequency', opt)}
+                                  >
+                                    <span>{opt}</span>
+                                    {config.frequency === opt && <Check size={12} />}
+                                  </div>
+                                ))}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+
+                        <div className="dropdown-wrapper">
+                          <div className="setting-item-row-mini dropdown-trigger" onClick={() => toggleDropdown('repeats')}>
+                            <div className="setting-left-group">
+                              <RefreshCw size={16} className="setting-icon" />
+                              <span className="setting-label-mini">repeats</span>
+                            </div>
+                            <div className="setting-value-mini highlight-val">
+                              <span>{config.repeats}</span>
+                              <ChevronDown size={14} className={`chevron-transition ${openDropdown === 'repeats' ? 'rotate' : ''}`} />
+                            </div>
+                          </div>
+                          <AnimatePresence>
+                            {openDropdown === 'repeats' && (
+                              <motion.div 
+                                className="dropdown-menu-mini"
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                              >
+                                {repeatOptions.map(opt => (
+                                  <div 
+                                    key={opt} 
+                                    className={`dropdown-option ${config.repeats === opt ? 'active' : ''}`}
+                                    onClick={() => selectOption('repeats', opt)}
+                                  >
+                                    <span>{opt}</span>
+                                    {config.repeats === opt && <Check size={12} />}
+                                  </div>
+                                ))}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+
+                        <div className="setting-item-row-mini dropdown-trigger" onClick={() => setConfig(p => ({...p, reminders: !p.reminders}))}>
+                          <div className="setting-left-group">
+                            <Bell size={16} className="setting-icon" />
+                            <span className="setting-label-mini">reminders</span>
+                          </div>
+                          <div className="setting-value-mini highlight-val">
+                            <span className={config.reminders ? 'status-on' : 'status-off'}>
+                              {config.reminders ? 'on' : 'off'}
+                            </span>
+                            <ChevronRight size={14} className="chevron-faint" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="active-days-label-mini-header">ACTIVE DAYS</div>
+                      <div className="active-days-section-mini">
+                        <div className="days-row-mini">
+                          {days.map((day, idx) => (
+                            <div 
+                              key={idx} 
+                              className={`day-circle-mini ${activeDays.includes(idx) ? 'active' : ''} ${idx >= 5 ? 'weekend' : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (activeDays.includes(idx)) {
+                                  setActiveDays(activeDays.filter(d => d !== idx));
+                                } else {
+                                  setActiveDays([...activeDays, idx]);
+                                }
+                              }}
+                            >
+                              {day.toLowerCase()}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <button 
+                        className="add-category-habit-btn vibrant-pop"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddHabit(cat);
+                        }}
+                      >
+                        add this habit
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          );
+        })}
+      </div>
+
+      <div 
+        className="custom-habit-trigger-dashed" 
+        onClick={() => dispatch({ type: 'SET_PAGE', payload: 'create-habit' })}
+      >
+        <div className="trigger-icon-box">
+          <Plus size={16} />
+        </div>
+        <p className="trigger-text-new">
+          couldn't find anything? <span className="highlight-text">create a new tag habit</span>
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/pages/AnalyticsPage.jsx ===
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { TrendingUp, Calendar, Clock, Target, ChevronDown } from 'lucide-react';
+import { analyticsData } from '../data/appData';
+import Heatmap from '../components/Heatmap';
+import OverallProgressCard from '../components/OverallProgressCard';
+import './AnalyticsPage.css';
+
+function MiniBarChart({ data, maxVal, color }) {
+  const max = maxVal || Math.max(...data);
+  return (
+    <div className="mini-bar-chart">
+      {data.map((val, i) => (
+        <motion.div
+          key={i}
+          className="mini-bar"
+          style={{
+            '--bar-color': color || 'var(--accent)',
+          }}
+          initial={{ height: 0 }}
+          animate={{ height: `${(val / max) * 100}%` }}
+          transition={{ duration: 0.6, delay: 0.3 + i * 0.05, ease: 'easeOut' }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function CategoryRing({ category, index }) {
+  const circumference = 2 * Math.PI * 28;
+  const offset = circumference - (circumference * category.score) / 100;
+
+  return (
+    <motion.div
+      className="analytics-cat-item"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 + index * 0.08 }}
+    >
+      <div className="analytics-cat-ring">
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle cx="34" cy="34" r="28" fill="none" stroke="var(--surface3)" strokeWidth="5" />
+          <motion.circle
+            cx="34"
+            cy="34"
+            r="28"
+            fill="none"
+            stroke={category.color}
+            strokeWidth="5"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            initial={{ strokeDashoffset: circumference }}
+            animate={{ strokeDashoffset: offset }}
+            transition={{ duration: 1, delay: 0.4 + index * 0.1, ease: 'easeOut' }}
+            style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%' }}
+          />
+        </svg>
+        <span className="analytics-cat-ring-val">{category.score}%</span>
+      </div>
+      <span className="analytics-cat-name">{category.name}</span>
+    </motion.div>
+  );
+}
+
+function smoothLine(points) {
+  if (points.length === 0) return '';
+  let d = `M ${points[0][0]} ${points[0][1]}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i];
+    const p1 = points[i + 1];
+    const xc = (p0[0] + p1[0]) / 2;
+    d += ` C ${xc} ${p0[1]}, ${xc} ${p1[1]}, ${p1[0]} ${p1[1]}`;
+  }
+  return d;
+}
+
+function MoodChart() {
+  const chartData = [80, 20, 30, 10, 50, 40, null]; 
+  const vWidth = 360;
+  const vHeight = 160;
+  const paddingX = 15;
+  const paddingY = 20;
+  
+  const [activePoint, setActivePoint] = useState(null);
+
+  const points = chartData.map((val, i) => {
+    if (val === null) return null;
+    const x = paddingX + (i / 6) * (vWidth - 2 * paddingX - 70); 
+    const y = vHeight - paddingY - (val / 100) * (vHeight - 2 * paddingY);
+    return [x, y, val];
+  }).filter(p => p !== null);
+
+  const pathD = smoothLine(points);
+  
+  const yLabels = ['awesome', 'fine', 'neutral', 'bad', 'very low'];
+  const xLabels = ['Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo'];
+  const fullDates = ['Oct 21', 'Oct 22', 'Oct 23', 'Oct 24', 'Oct 25', 'Oct 26', 'Oct 27'];
+
+  return (
+    <motion.div 
+      className="mood-chart-card"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.18 }}
+    >
+      <div className="mood-chart-header">
+        <h3 className="mood-chart-title">Mood In This Week</h3>
+        <span className="mood-chart-date">5-11 April 2025</span>
+      </div>
+      <div className="mood-chart-body">
+        <svg viewBox={`0 0 ${vWidth} ${vHeight}`} className="mood-svg">
+          {/* Horizontal Grid Lines & Y-Labels */}
+          {yLabels.map((lbl, i) => {
+            const y = paddingY + (i / (yLabels.length - 1)) * (vHeight - 2 * paddingY);
+            return (
+              <g key={lbl}>
+                <line x1={paddingX} y1={y} x2={vWidth - 65} y2={y} stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+                <text x={vWidth - 55} y={y + 4} fill="var(--text3)" fontSize="11" fontWeight="500">{lbl}</text>
+              </g>
+            );
+          })}
+          
+          {/* Line Path */}
+          <motion.path 
+            d={pathD} 
+            fill="none" 
+            stroke="#d9f38e" 
+            strokeWidth="2.5" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1.5, ease: "easeInOut", delay: 0.2 }}
+          />
+          
+          {/* End Dot */}
+          <motion.circle 
+            cx={points[points.length - 1][0]} 
+            cy={points[points.length - 1][1]} 
+            r="4" 
+            fill="#d9f38e" 
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1.7, duration: 0.3 }}
+          />
+
+          {/* Interactive Points */}
+          {points.map((p, i) => (
+            <g key={`pt-${i}`}>
+              {/* Visible dot on hover/active */}
+              <circle
+                cx={p[0]}
+                cy={p[1]}
+                r={activePoint === i ? 5 : 0}
+                fill="#d9f38e"
+                style={{ transition: 'r 0.2s ease' }}
+              />
+              {/* Invisible Hit Area */}
+              <circle
+                cx={p[0]}
+                cy={p[1]}
+                r="15"
+                fill="transparent"
+                onMouseEnter={() => setActivePoint(i)}
+                onMouseLeave={() => setActivePoint(null)}
+                onClick={() => setActivePoint(i)}
+                style={{ cursor: 'pointer' }}
+              />
+              
+              {/* Tooltip Popup */}
+              {activePoint === i && (
+                <g className="mood-tooltip" style={{ pointerEvents: 'none' }}>
+                  {/* Tooltip vertical line */}
+                  <line x1={p[0]} y1={p[1]} x2={p[0]} y2={vHeight - paddingY} stroke="#fff" strokeWidth="1" strokeDasharray="2,2" opacity="0.3" />
+                  
+                  {/* Tooltip Box */}
+                  <rect 
+                    x={p[0] - 35} 
+                    y={p[1] - 50} 
+                    width="70" 
+                    height="40" 
+                    rx="6" 
+                    fill="#1e1e1e" 
+                    stroke="rgba(255,255,255,0.1)"
+                    strokeWidth="1"
+                  />
+                  <text x={p[0]} y={p[1] - 35} fill="var(--text3)" fontSize="8" textAnchor="middle" fontWeight="500">
+                    {xLabels[i]}, {fullDates[i]}
+                  </text>
+                  <text x={p[0]} y={p[1] - 20} fill="#fff" fontSize="12" textAnchor="middle" fontWeight="700">
+                    {p[2]}%
+                  </text>
+                </g>
+              )}
+            </g>
+          ))}
+
+          {/* X Labels */}
+          {xLabels.map((lbl, i) => {
+            const x = paddingX + (i / 6) * (vWidth - 2 * paddingX - 70);
+            return (
+              <text key={lbl} x={x} y={vHeight - 2} fill="var(--text3)" fontSize="11" textAnchor="middle">{lbl}</text>
+            );
+          })}
+        </svg>
+      </div>
+    </motion.div>
+  );
+}
+
+export default function AnalyticsPage() {
+  const { weeklyScores, monthlyScores, categoryBreakdown, bestDay, worstDay, bestTime, avgCompletionRate } = analyticsData;
+
+  return (
+    <motion.div
+      className="analytics-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+
+      {/* Overall Progress */}
+      <OverallProgressCard />
+
+      <MoodChart />
+
+      {/* Charts row */}
+      <div className="analytics-grid">
+        <motion.div
+          className="analytics-chart-card"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="card-header">
+            <span className="card-title">Weekly Trend</span>
+            <span className="analytics-chart-label">Last 7 days</span>
+          </div>
+          <div className="analytics-chart-container">
+            <MiniBarChart data={weeklyScores} maxVal={100} />
+            <div className="analytics-chart-x-labels">
+              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => (
+                <span key={d}>{d}</span>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="analytics-chart-card"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+        >
+          <div className="card-header">
+            <span className="card-title">Monthly Trend</span>
+            <span className="analytics-chart-label">Last 12 weeks</span>
+          </div>
+          <div className="analytics-chart-container">
+            <MiniBarChart data={monthlyScores} maxVal={100} color="var(--green)" />
+            <div className="analytics-chart-x-labels wide">
+              {['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12'].map((d) => (
+                <span key={d}>{d}</span>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Category breakdown */}
+      <motion.div
+        className="analytics-categories-card"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <div className="card-header">
+          <span className="card-title">Category Performance</span>
+        </div>
+        <div className="analytics-cats-grid">
+          {categoryBreakdown.map((cat, i) => (
+            <CategoryRing key={cat.name} category={cat} index={i} />
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Heatmap */}
+      <Heatmap />
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/pages/CreateHabitPage.jsx ===
+import React from 'react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Palette, Bell, Check } from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import './CreateHabitPage.css';
+
+const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+const colors = ['#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#ef4444'];
+
+export default function CreateHabitPage() {
+  const { dispatch } = useApp();
+  const [showColors, setShowColors] = React.useState(false);
+  const [selectedColor, setSelectedColor] = React.useState('#8b5cf6');
+  const [activeDays, setActiveDays] = React.useState([0, 1, 2, 3, 4]); // M-F active by default
+
+  return (
+    <motion.div 
+      className="create-habit-page-container"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{ duration: 0.3 }}
+    >
+      <header className="create-habit-header">
+        <button className="back-btn-minimal" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}>
+          <ChevronLeft size={20} />
+        </button>
+        <h1 className="create-habit-title">create personal habit</h1>
+        <button className="header-create-btn-highlight" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'habits' })}>
+          create
+        </button>
+      </header>
+
+      <div className="habit-initial-settings">
+        <div className="setting-pill">
+          <span className="pill-emoji">😎</span>
+          <span className="pill-label">icon</span>
+        </div>
+        <div 
+          className={`setting-pill ${showColors ? 'active' : ''}`} 
+          onClick={() => setShowColors(!showColors)}
+        >
+          <div className="color-dot" style={{ backgroundColor: selectedColor }}></div>
+          <span className="pill-label">colour</span>
+        </div>
+      </div>
+
+      {showColors && (
+        <div className="color-selector-row">
+          {colors.map(c => (
+            <div 
+              key={c} 
+              className={`color-option ${selectedColor === c ? 'active' : ''}`}
+              style={{ backgroundColor: c }}
+              onClick={() => setSelectedColor(c)}
+            >
+              {selectedColor === c && <Check size={10} color="#fff" />}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="habit-inputs-container">
+        <input type="text" className="habit-name-input" placeholder="habit name..." />
+        <textarea 
+          className="habit-details-input" 
+          placeholder="extra details..."
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div className="habit-settings-list">
+        <div className="setting-item-row">
+          <span className="setting-item-label">frequency</span>
+          <div className="setting-item-value">
+            <span>every day</span>
+            <ChevronRight size={16} />
+          </div>
+        </div>
+        
+        <div className="setting-item-row">
+          <span className="setting-item-label">repeats</span>
+          <div className="setting-item-value">
+            <span>1 time per day</span>
+            <ChevronRight size={16} />
+          </div>
+        </div>
+
+        <div className="setting-item-row">
+          <span className="setting-item-label">reminders</span>
+          <div className="setting-item-value">
+            <span>on</span>
+            <ChevronRight size={16} />
+          </div>
+        </div>
+      </div>
+
+      <div className="active-days-section">
+        <div className="active-days-label">
+          <span>active</span>
+          <span>days</span>
+        </div>
+        <div className="days-row">
+          {days.map((day, idx) => (
+            <div 
+              key={idx} 
+              className={`day-circle ${activeDays.includes(idx) ? 'active' : ''} ${idx >= 5 ? 'weekend' : ''}`}
+              onClick={() => {
+                if (activeDays.includes(idx)) {
+                  setActiveDays(activeDays.filter(d => d !== idx));
+                } else {
+                  setActiveDays([...activeDays, idx]);
+                }
+              }}
+            >
+              {day}
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/pages/EditProfilePage.jsx ===
+import React from 'react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, Camera } from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import './EditProfilePage.css';
+
+export default function EditProfilePage() {
+  const { dispatch } = useApp();
+
+  return (
+    <motion.div 
+      className="edit-profile-page"
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+    >
+      <header className="edit-profile-header">
+        <button className="edit-back-btn" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'profile' })}>
+          <ChevronLeft size={20} />
+        </button>
+        <h1 className="edit-title">edit profile</h1>
+        <div className="header-spacer" />
+      </header>
+
+      <div className="edit-content">
+        {/* Avatar Section */}
+        <div className="avatar-edit-section">
+          <div className="large-avatar-container">
+            <img 
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Deep" 
+              alt="User Avatar" 
+              className="large-avatar-img"
+            />
+            <div className="camera-overlay">
+              <Camera size={16} />
+            </div>
+          </div>
+        </div>
+
+        {/* Form Card */}
+        <div className="edit-form-card">
+          <div className="form-row">
+            <label className="form-label">full name</label>
+            <input type="text" className="form-input" defaultValue="Deepjyoti" />
+          </div>
+          <div className="form-row">
+            <label className="form-label">phone number</label>
+            <input type="text" className="form-input" defaultValue="+91 1234-567-890" />
+          </div>
+          <div className="form-row">
+            <label className="form-label">email</label>
+            <input type="email" className="form-input" defaultValue="deepjyoti@email.com" />
+          </div>
+          <div className="form-row">
+            <label className="form-label">username</label>
+            <input type="text" className="form-input" defaultValue="@deep_discipline" />
+          </div>
+        </div>
+
+        <button className="save-changes-btn">
+          save changes
+        </button>
+
+        <button className="delete-account-btn">
+          delete account
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/pages/HabitsPage.jsx ===
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, Plus, Calendar, BarChart2 } from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import HabitLargeCard from '../components/HabitLargeCard';
+import CalendarStrip from '../components/CalendarStrip';
+import Heatmap from '../components/Heatmap';
+import './HabitsPage.css';
+
+export default function HabitsPage() {
+  const { state, dispatch } = useApp();
+  const { habits } = state;
+  const [viewMode, setViewMode] = useState('list');
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // Deterministically "randomize" habit progress based on date and habit ID
+  const displayHabits = useMemo(() => {
+    const dateSeed = selectedDate.getDate() + selectedDate.getMonth() * 31;
+    return habits.map(h => {
+      // Create a pseudo-random progress between 20% and 100% based on the date
+      const hash = (h.id.charCodeAt(0) + dateSeed) % 100;
+      const mockProgress = 20 + (hash % 81);
+      const mockCurrent = Math.round((mockProgress / 100) * 10);
+      
+      return {
+        ...h,
+        progress: mockProgress,
+        currentValue: mockCurrent,
+        targetValue: 10
+      };
+    });
+  }, [habits, selectedDate]);
+
+  return (
+    <motion.div
+      className="habits-page-v2"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <header className="h-page-header">
+        <button className="h-header-btn-circle" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'home' })}>
+          <ChevronLeft size={20} />
+        </button>
+        <h1 className="h-page-title">Habits</h1>
+        <button 
+          className="h-add-habit-btn-pill"
+          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}
+        >
+          <Plus size={18} />
+          <span>Add habit</span>
+        </button>
+      </header>
+
+      <div className="h-page-calendar-section-home">
+        <CalendarStrip 
+          hideHeader={true} 
+          selectedDate={selectedDate} 
+          onDateSelect={setSelectedDate} 
+        />
+      </div>
+
+      <div className="h-content-controls">
+        <h2 className="h-section-label">
+          {selectedDate.toDateString() === new Date().toDateString() ? 'Today' : selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+        </h2>
+        <div className="h-view-toggles">
+          <button 
+            className={`h-view-btn ${viewMode === 'list' ? 'active' : ''}`}
+            onClick={() => setViewMode('list')}
+          >
+            <Calendar size={16} />
+          </button>
+          <button 
+            className={`h-view-btn ${viewMode === 'stats' ? 'active' : ''}`}
+            onClick={() => setViewMode('stats')}
+          >
+            <BarChart2 size={16} />
+          </button>
+        </div>
+      </div>
+
+      <AnimatePresence mode="wait">
+        {viewMode === 'list' ? (
+          <motion.div 
+            key="list"
+            className="h-cards-container"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={{ duration: 0.2 }}
+          >
+            {displayHabits && displayHabits.length > 0 ? (
+              displayHabits.map((habit) => (
+                <HabitLargeCard key={habit.id} habit={habit} />
+              ))
+            ) : (
+              <div className="empty-state-mini">No habits yet. Add one to start tracking.</div>
+            )}
+          </motion.div>
+        ) : (
+          <motion.div 
+            key="stats"
+            className="h-stats-container"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="h-stats-summary-card">
+              <h3 className="h-stats-title">Performance Heatmap</h3>
+              <p className="h-stats-subtitle">Your activity across all disciplines</p>
+              <div className="h-heatmap-wrapper">
+                <Heatmap />
+              </div>
+            </div>
+            
+            <div className="h-mini-stats-grid">
+              <div className="h-mini-stat-card">
+                <span className="h-mini-val">92%</span>
+                <span className="h-mini-label">Success Rate</span>
+              </div>
+              <div className="h-mini-stat-card">
+                <span className="h-mini-val">12d</span>
+                <span className="h-mini-label">Avg. Streak</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/pages/HomePage.jsx ===
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useApp } from '../context/AppContext';
+import { Bell, User } from 'lucide-react';
+import CalendarStrip from '../components/CalendarStrip';
+import DailyCheckin from '../components/DailyCheckin';
+import HabitCard from '../components/HabitCard';
+import OverallProgressCard from '../components/OverallProgressCard';
+import RemainingTasksCard from '../components/RemainingTasksCard';
+import TaskRemainingCard from '../components/TaskRemainingCard';
+import TopPriorityCard from '../components/TopPriorityCard';
+import './HomePage.css';
+
+export default function HomePage() {
+  const { dispatch } = useApp();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const now = new Date();
+  const hour = now.getHours();
+  let greeting = 'Good morning';
+  if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
+  else if (hour >= 17) greeting = 'Good evening';
+
+  return (
+    <motion.div
+      className="home-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Hero */}
+      <section className="hero-section">
+        <div className="hero-profile-btn" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'profile' })}>
+          <User size={20} />
+        </div>
+        <div className="hero-text-block">
+          <h1 className="hero-heading">{greeting}, Deep!</h1>
+          <span className="hero-subtitle">Let's build some discipline today.</span>
+        </div>
+        <div className="hero-notification-btn">
+          <Bell size={20} />
+          <div className="notification-dot" />
+        </div>
+      </section>
+
+      {/* Calendar - Now Interactive */}
+      <CalendarStrip 
+        selectedDate={selectedDate} 
+        onDateSelect={setSelectedDate} 
+      />
+
+      {/* Bento Grid */}
+      <div className="home-bento-grid">
+        <div className="home-left-col">
+          <OverallProgressCard selectedDate={selectedDate} />
+          <RemainingTasksCard selectedDate={selectedDate} />
+          <TaskRemainingCard selectedDate={selectedDate} />
+        </div>
+
+        <div className="home-right-col">
+          <HabitCard selectedDate={selectedDate} />
+        </div>
+      </div>
+
+      <TopPriorityCard selectedDate={selectedDate} />
+      <DailyCheckin selectedDate={selectedDate} />
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/pages/PlannerPage.jsx ===
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, Clock, Calendar, MoreHorizontal, Plus, ChevronLeft, MessageSquare, Flag, Briefcase, ChevronRight } from 'lucide-react';
+import './PlannerPage.css';
+
+// --- Custom Components ---
+
+function CustomSelect({ value, onChange, options }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const selectedOption = options.find(o => o.value === value);
+
+  return (
+    <div className="custom-select-container" ref={containerRef}>
+      <div className="custom-select-trigger" onClick={() => setIsOpen(!isOpen)}>
+        <span>{selectedOption ? `${selectedOption.icon} ${selectedOption.label}` : 'Select type'}</span>
+        <ChevronDown size={16} />
+      </div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="custom-select-options"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            {options.map((opt) => (
+              <div
+                key={opt.value}
+                className={`custom-select-option ${value === opt.value ? 'selected' : ''}`}
+                onClick={() => {
+                  onChange(opt.value);
+                  setIsOpen(false);
+                }}
+              >
+                <span>{opt.icon}</span>
+                <span>{opt.label}</span>
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function ClockPicker({ value, onChange, onClose }) {
+  const [hour, setHour] = useState(10);
+  const [minute, setMinute] = useState(30);
+  const [ampm, setAmpm] = useState('AM');
+  const [mode, setMode] = useState('hour'); 
+
+  const numbers = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  const minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+
+  const currentSelection = mode === 'hour' ? hour : minute;
+  const rotation = mode === 'hour'
+    ? (hour % 12) * 30
+    : (minute / 5) * 30;
+
+  return (
+    <div className="clock-picker-overlay" onClick={onClose}>
+      <motion.div
+        className="clock-picker-content"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 50, opacity: 0 }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="clock-display">
+          <div className="clock-display-time">
+            <span className={mode === 'hour' ? 'active' : ''} onClick={() => setMode('hour')}>
+              {hour}
+            </span>
+            <span className="time-divider">:</span>
+            <span className={mode === 'minute' ? 'active' : ''} onClick={() => setMode('minute')}>
+              {minute.toString().padStart(2, '0')}
+            </span>
+          </div>
+          <div className="clock-display-ampm">
+            <div className={`ampm-side-btn ${ampm === 'AM' ? 'active' : ''}`} onClick={(e) => { e.stopPropagation(); setAmpm('AM'); }}>AM</div>
+            <div className={`ampm-side-btn ${ampm === 'PM' ? 'active' : ''}`} onClick={(e) => { e.stopPropagation(); setAmpm('PM'); }}>PM</div>
+          </div>
+        </div>
+
+        <div className="clock-face">
+          <div className="clock-center" />
+          <motion.div
+            className="clock-hand"
+            initial={{ rotate: rotation, height: mode === 'hour' ? '70px' : '90px' }}
+            animate={{ 
+              rotate: rotation, 
+              height: mode === 'hour' ? '70px' : '90px' 
+            }}
+            transition={{ type: "spring", damping: 20, stiffness: 400, mass: 0.8 }}
+          />
+
+          {(mode === 'hour' ? numbers : minutes).map((num, i) => {
+            const angle = (i * 30) * (Math.PI / 180) - (Math.PI / 2);
+            const radius = 95; 
+            const x = 120 + radius * Math.cos(angle);
+            const y = 120 + radius * Math.sin(angle);
+
+            return (
+              <div
+                key={mode + num}
+                className={`clock-number ${currentSelection === num ? 'active' : ''}`}
+                style={{ left: x - 17, top: y - 17 }}
+                onClick={() => {
+                  if (mode === 'hour') {
+                    setHour(num);
+                    setMode('minute');
+                  } else {
+                    setMinute(num);
+                    const formattedMinute = num.toString().padStart(2, '0');
+                    setTimeout(() => {
+                      onChange(`${hour}:${formattedMinute} ${ampm}`);
+                      onClose();
+                    }, 200);
+                  }
+                }}
+              >
+                {num}
+              </div>
+            );
+          })}
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function CustomDatePicker({ value, onChange, onClose }) {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const selectedDate = value ? new Date(value) : new Date();
+
+  const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+
+  const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+  const monthName = currentDate.toLocaleString('default', { month: 'long' });
+
+  const prevMonth = () => setCurrentDate(new Date(year, month - 1));
+  const nextMonth = () => setCurrentDate(new Date(year, month + 1));
+
+  const days = [];
+  const totalDays = daysInMonth(year, month);
+  const startDay = firstDayOfMonth(year, month);
+
+  // Padding
+  for (let i = 0; i < startDay; i++) {
+    days.push(<div key={`empty-${i}`} className="calendar-day outside" />);
+  }
+
+  // Days
+  for (let d = 1; d <= totalDays; d++) {
+    const isToday = new Date().toDateString() === new Date(year, month, d).toDateString();
+    const isSelected = selectedDate.toDateString() === new Date(year, month, d).toDateString();
+
+    days.push(
+      <div
+        key={d}
+        className={`calendar-day ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}`}
+        onClick={() => {
+          const newDate = new Date(year, month, d);
+          // Store as YYYY-MM-DD string to avoid timezone shifts
+          const yearStr = newDate.getFullYear();
+          const monthStr = (newDate.getMonth() + 1).toString().padStart(2, '0');
+          const dayStr = newDate.getDate().toString().padStart(2, '0');
+          onChange(`${yearStr}-${monthStr}-${dayStr}`);
+        }}
+      >
+        {d}
+      </div>
+    );
+  }
+
+  return (
+    <div className="date-picker-overlay" onClick={onClose}>
+      <motion.div
+        className="date-picker-content"
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="calendar-header">
+          <span className="calendar-month-year">{monthName} {year}</span>
+          <div className="calendar-nav">
+            <button className="calendar-nav-btn" onClick={prevMonth}><ChevronLeft size={16} /></button>
+            <button className="calendar-nav-btn" onClick={nextMonth}><ChevronRight size={16} /></button>
+          </div>
+        </div>
+
+        <div className="calendar-grid">
+          {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => (
+            <div key={d} className="calendar-weekday">{d}</div>
+          ))}
+          {days}
+        </div>
+
+        <div className="picker-footer">
+          <button className="picker-btn-cancel" onClick={onClose}>Cancel</button>
+          <button className="picker-btn-confirm" onClick={onClose}>Confirm</button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+// --- Main Page ---
+
+const tasksData = [
+  {
+    group: 'Top priority',
+    tasks: [
+      {
+        id: 1,
+        priority: 'High',
+        label: 'Zoom Meet',
+        title: 'Design team planning',
+        time: '9:30 - 10:30 AM',
+        due: 'December 20',
+        color: '#c4fb31',
+      },
+      {
+        id: 2,
+        priority: 'Low',
+        label: 'Google Meet',
+        title: 'Design team planning',
+        time: '9:30 - 10:30 AM',
+        due: 'December 20',
+        color: '#6c63ff',
+      },
+    ],
+  },
+  {
+    group: 'Dev today',
+    tasks: [
+      {
+        id: 4,
+        priority: 'Low',
+        label: 'Google Meet',
+        title: 'Backend API review',
+        time: '11:00 - 12:00 PM',
+        due: 'December 20',
+        color: '#6c63ff',
+      },
+    ],
+  },
+];
+
+const priorityColors = {
+  High: '#c4fb31',
+  Medium: '#f59e0b',
+  Low: '#6c63ff',
+};
+
+function TaskCard({ task, index }) {
+  return (
+    <motion.div
+      className="task-card"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -6 }}
+      transition={{ delay: index * 0.05 }}
+    >
+      <div className="task-card-left">
+        <div className="task-card-top">
+          <span
+            className="task-priority-badge"
+            style={{ color: priorityColors[task.priority], borderColor: `${priorityColors[task.priority]}33`, background: `${priorityColors[task.priority]}11` }}
+          >
+            {task.priority}
+          </span>
+          <span className="task-label-dot" style={{ color: task.color }}>
+            ● {task.label}
+          </span>
+        </div>
+        <h3 className="task-title">{task.title}</h3>
+        <div className="task-meta">
+          <span className="task-meta-item">
+            <Clock size={11} />
+            {task.time}
+          </span>
+          <span className="task-meta-item">
+            <Calendar size={11} />
+            Due: {task.due}
+          </span>
+        </div>
+      </div>
+      <div className="task-card-avatars">
+        <div className="task-avatar" style={{ background: '#6c63ff' }} />
+        <div className="task-avatar" style={{ background: '#c4fb31', marginLeft: '-6px' }} />
+      </div>
+    </motion.div>
+  );
+}
+
+function TaskGroup({ group, tasks }) {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <div className="task-group">
+      <button className="task-group-header" onClick={() => setOpen(o => !o)}>
+        <span className="task-group-name">{group}</span>
+        <div className="task-group-right">
+          <span className="task-group-count">{tasks.length} Task</span>
+          <motion.div animate={{ rotate: open ? 0 : -90 }} transition={{ duration: 0.2 }}>
+            <ChevronDown size={16} />
+          </motion.div>
+        </div>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            className="task-group-items"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+          >
+            {tasks.map((task, i) => (
+              <TaskCard key={task.id} task={task} index={i} />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+export default function PlannerPage() {
+  const [groups, setGroups] = useState(tasksData);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // Form state
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [priority, setPriority] = useState('High');
+  const [startTime, setStartTime] = useState('09:00 AM');
+  const [endTime, setEndTime] = useState('10:00 AM');
+  const [workType, setWorkType] = useState('Deep Work');
+  const [dueDate, setDueDate] = useState('2026-05-04');
+
+  // Picker States
+  const [activePicker, setActivePicker] = useState(null); // 'start', 'end', 'date'
+
+  const handleAddTask = () => {
+    if (!title.trim()) return;
+
+    const newTask = {
+      id: Date.now(),
+      priority,
+      label: workType,
+      title,
+      time: `${startTime} - ${endTime}`,
+      due: dueDate,
+      color: priority === 'High' ? '#c4fb31' : priority === 'Medium' ? '#f59e0b' : '#6c63ff',
+    };
+
+    setGroups(prevGroups => {
+      const newGroups = [...prevGroups];
+      const targetGroupIndex = 0;
+      newGroups[targetGroupIndex] = {
+        ...newGroups[targetGroupIndex],
+        tasks: [newTask, ...newGroups[targetGroupIndex].tasks]
+      };
+      return newGroups;
+    });
+
+    setTitle('');
+    setDescription('');
+    setPriority('High');
+    setStartTime('09:00 AM');
+    setEndTime('10:00 AM');
+    setWorkType('Deep Work');
+    setDueDate('2026-05-04');
+    setModalOpen(false);
+  };
+
+  const workTypeOptions = [
+    { value: 'File Submission', label: 'File Submission', icon: '📁' },
+    { value: 'Meeting', label: 'Meeting', icon: '👥' },
+    { value: 'Deep Work', label: 'Deep Work', icon: '🎧' },
+    { value: 'Review', label: 'Review', icon: '👀' },
+  ];
+
+  return (
+    <>
+      <motion.div
+        className="tasks-page"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <div className="tasks-page-header">
+          <h1 className="tasks-page-title">all tasks</h1>
+          <button className="tasks-more-btn">
+            <MoreHorizontal size={18} />
+          </button>
+        </div>
+
+        <div className="tasks-groups">
+          {groups.map((group) => (
+            <TaskGroup key={group.group} group={group.group} tasks={group.tasks} />
+          ))}
+        </div>
+      </motion.div>
+
+      {/* FAB */}
+      <motion.button
+        className="planner-fab"
+        whileTap={{ scale: 0.9 }}
+        onClick={() => setModalOpen(true)}
+      >
+        <Plus size={24} />
+      </motion.button>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {modalOpen && (
+          <motion.div
+            className="task-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setModalOpen(false)}
+          >
+            <motion.div
+              className="task-modal-content"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="task-modal-header">
+                <button className="task-modal-back" onClick={() => setModalOpen(false)}>
+                  <ChevronLeft size={20} />
+                </button>
+                <button className="task-modal-done" onClick={handleAddTask}>
+                  Done
+                </button>
+              </div>
+
+              <input
+                type="text"
+                className="task-modal-input"
+                placeholder="Task title..."
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                autoFocus
+              />
+
+              <div className="task-modal-fields">
+                <div className="task-modal-field">
+                  <div className="task-modal-icon"><MessageSquare size={16} /></div>
+                  <span className="task-modal-label">Description</span>
+                  <input
+                    type="text"
+                    className="task-modal-value-input"
+                    placeholder="Add description..."
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                  />
+                </div>
+
+                <div className="task-modal-field">
+                  <div className="task-modal-icon"><Flag size={16} /></div>
+                  <span className="task-modal-label">Priority level</span>
+                  <div className="task-priority-selector">
+                    <button
+                      className={`task-priority-btn high ${priority === 'High' ? 'active' : ''}`}
+                      onClick={() => setPriority('High')}
+                    >High</button>
+                    <button
+                      className={`task-priority-btn medium ${priority === 'Medium' ? 'active' : ''}`}
+                      onClick={() => setPriority('Medium')}
+                    >Medium</button>
+                    <button
+                      className={`task-priority-btn low ${priority === 'Low' ? 'active' : ''}`}
+                      onClick={() => setPriority('Low')}
+                    >Low</button>
+                  </div>
+                </div>
+
+                <div className="task-modal-field">
+                  <div className="task-modal-icon"><Clock size={16} /></div>
+                  <span className="task-modal-label">Time</span>
+                  <div className="task-time-inputs">
+                    <div className="custom-select-trigger" onClick={() => setActivePicker('start')}>
+                      {startTime || '--:--'}
+                    </div>
+                    <span className="time-separator">to</span>
+                    <div className="custom-select-trigger" onClick={() => setActivePicker('end')}>
+                      {endTime || '--:--'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="task-modal-field">
+                  <div className="task-modal-icon"><Briefcase size={16} /></div>
+                  <span className="task-modal-label">Work type</span>
+                  <CustomSelect
+                    value={workType}
+                    onChange={setWorkType}
+                    options={workTypeOptions}
+                  />
+                </div>
+
+                <div className="task-modal-field">
+                  <div className="task-modal-icon"><Calendar size={16} /></div>
+                  <span className="task-modal-label">Due date</span>
+                  <div className="custom-select-trigger" onClick={() => setActivePicker('date')}>
+                    {dueDate || 'Select date'}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ height: "40px" }} />
+            </motion.div>
+
+            {/* Pickers */}
+            <AnimatePresence>
+              {activePicker === 'start' && (
+                <ClockPicker
+                  value={startTime}
+                  onChange={setStartTime}
+                  onClose={() => setActivePicker(null)}
+                />
+              )}
+              {activePicker === 'end' && (
+                <ClockPicker
+                  value={endTime}
+                  onChange={setEndTime}
+                  onClose={() => setActivePicker(null)}
+                />
+              )}
+              {activePicker === 'date' && (
+                <CustomDatePicker
+                  value={dueDate}
+                  onChange={setDueDate}
+                  onClose={() => setActivePicker(null)}
+                />
+              )}
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/pages/ProfilePage.jsx ===
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  BellOff, 
+  Settings, 
+  Moon, 
+  Globe, 
+  Users, 
+  HelpCircle, 
+  FileText, 
+  Shield, 
+  LogOut 
+} from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import './ProfilePage.css';
+
+export default function ProfilePage() {
+  const { dispatch } = useApp();
+  const [notifications, setNotifications] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
+
+  return (
+    <motion.div 
+      className="profile-page"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+    >
+      <header className="profile-header">
+        <button className="profile-back-btn" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'home' })}>
+          <ChevronLeft size={20} />
+        </button>
+        <h1 className="profile-title">settings</h1>
+        <div className="header-spacer" />
+      </header>
+
+      <div className="settings-content">
+        {/* User Card */}
+        <div className="user-profile-card" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'edit-profile' })}>
+          <div className="user-avatar-container">
+            <img 
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Deep" 
+              alt="User Avatar" 
+              className="user-avatar-img"
+            />
+          </div>
+          <div className="user-info">
+            <h2 className="user-name">Deepjyoti</h2>
+            <span className="user-handle">@deep_discipline</span>
+          </div>
+          <ChevronRight size={18} className="card-chevron" />
+        </div>
+
+        {/* Settings Groups */}
+        <div className="settings-group">
+          <div className="setting-row">
+            <div className="setting-left">
+              <BellOff size={18} />
+              <span>pause notifications</span>
+            </div>
+            <button 
+              className={`toggle-track ${notifications ? 'active-lime' : ''}`}
+              onClick={() => setNotifications(!notifications)}
+            >
+              <div className="toggle-thumb"></div>
+            </button>
+          </div>
+          
+          <div className="setting-row clickable">
+            <div className="setting-left">
+              <Settings size={18} />
+              <span>general settings</span>
+            </div>
+            <ChevronRight size={18} className="row-chevron" />
+          </div>
+        </div>
+
+        <div className="settings-group">
+          <div className="setting-row">
+            <div className="setting-left">
+              <Moon size={18} />
+              <span>dark mode</span>
+            </div>
+            <button 
+              className={`toggle-track ${darkMode ? 'active-grey' : ''}`}
+              onClick={() => setDarkMode(!darkMode)}
+            >
+              <div className="toggle-thumb"></div>
+            </button>
+          </div>
+
+          <div className="setting-row clickable">
+            <div className="setting-left">
+              <Globe size={18} />
+              <span>language</span>
+            </div>
+            <ChevronRight size={18} className="row-chevron" />
+          </div>
+
+          <div className="setting-row clickable">
+            <div className="setting-left">
+              <Users size={18} />
+              <span>my contacts</span>
+            </div>
+            <ChevronRight size={18} className="row-chevron" />
+          </div>
+        </div>
+
+        <div className="settings-group">
+          <div className="setting-row clickable">
+            <div className="setting-left">
+              <HelpCircle size={18} />
+              <span>FAQ</span>
+            </div>
+            <ChevronRight size={18} className="row-chevron" />
+          </div>
+
+          <div className="setting-row clickable">
+            <div className="setting-left">
+              <FileText size={18} />
+              <span>terms of service</span>
+            </div>
+            <ChevronRight size={18} className="row-chevron" />
+          </div>
+
+          <div className="setting-row clickable">
+            <div className="setting-left">
+              <Shield size={18} />
+              <span>user policy</span>
+            </div>
+            <ChevronRight size={18} className="row-chevron" />
+          </div>
+        </div>
+
+        {/* Log Out Button */}
+        <button className="logout-btn">
+          <LogOut size={18} className="logout-icon" />
+          <span>log out</span>
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/pages/TimerPage.jsx ===
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, Clock, Minus, Plus, Zap, BellOff, Smartphone } from 'lucide-react';
+import './TimerPage.css';
+
+export default function TimerPage() {
+  const [dnd, setDnd] = useState(true);
+  const [aod, setAod] = useState(false);
+
+  return (
+    <motion.div 
+      className="timer-page"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+    >
+      <header className="timer-header">
+        <button className="timer-back-btn" onClick={() => window.history.back()}>
+          <ChevronLeft size={20} />
+        </button>
+        <h1 className="timer-title">timer settings</h1>
+        <div className="header-spacer" />
+      </header>
+
+      <div className="timer-duration-grid">
+        <div className="duration-card">
+          <span className="duration-label">select task</span>
+          <div className="duration-value">25</div>
+        </div>
+        <div className="duration-card">
+          <span className="duration-label">short break</span>
+          <div className="duration-value">5</div>
+        </div>
+        <div className="duration-card">
+          <span className="duration-label">long break</span>
+          <div className="duration-value">15</div>
+        </div>
+      </div>
+
+      <div className="timer-setting-card session-card">
+        <div className="setting-info">
+          <div className="setting-icon-wrapper">
+            <Clock size={18} />
+          </div>
+          <div className="setting-text">
+            <span className="setting-label">session length</span>
+            <span className="setting-sublabel">focus intervals in one session: 4</span>
+          </div>
+        </div>
+        <div className="session-progress-container">
+          <div className="session-progress-bar">
+            <div className="progress-fill"></div>
+            <div className="progress-remaining-stripes"></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="timer-setting-card interactive">
+        <div className="setting-info">
+          <div className="setting-icon-wrapper">
+            <BellOff size={18} />
+          </div>
+          <div className="setting-text">
+            <span className="setting-label">do not disturb</span>
+            <span className="setting-sublabel">turn on DND when running a focus timer</span>
+          </div>
+        </div>
+        <button 
+          className={`tp-toggle-track ${dnd ? 'active' : ''}`} 
+          onClick={() => setDnd(!dnd)}
+        >
+          <div className="tp-toggle-thumb"></div>
+        </button>
+      </div>
+
+      <div className="tomato-plus-banner">
+        <span>customize further with tomato +</span>
+      </div>
+
+      <div className="timer-setting-card interactive">
+        <div className="setting-info">
+          <div className="setting-icon-wrapper">
+            <Smartphone size={18} />
+          </div>
+          <div className="setting-text">
+            <span className="setting-label">always on display</span>
+            <span className="setting-sublabel">tap anywhere when viewing time to switch to AOD mode</span>
+          </div>
+        </div>
+        <button 
+          className={`tp-toggle-track ${aod ? 'active' : ''}`} 
+          onClick={() => setAod(!aod)}
+        >
+          <div className="tp-toggle-thumb"></div>
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/AIInsights.jsx ===
+import { motion } from 'framer-motion';
+import { aiInsights } from '../data/appData';
+import './AIInsights.css';
+
+const typeClasses = {
+  warning: 'warn',
+  success: 'good',
+  info: 'info',
+  tip: 'tip',
+};
+
+export default function AIInsights() {
+  return (
+    <motion.div
+      className="ai-card"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.25 }}
+    >
+      <div className="ai-header">
+        <div className="ai-dot-wrap">
+          <div className="ai-dot" />
+          <div className="ai-dot-ring" />
+        </div>
+        <span className="ai-title">AI Insights</span>
+        <span className="ai-beta">LIVE</span>
+      </div>
+
+      <div className="ai-insights-list">
+        {aiInsights.map((insight, i) => (
+          <motion.div
+            key={insight.id}
+            className="ai-insight"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 + i * 0.08 }}
+            whileHover={{ x: 3, transition: { duration: 0.15 } }}
+          >
+            <div className={`ai-insight-icon ${typeClasses[insight.type]}`}>
+              {insight.icon}
+            </div>
+            <div
+              className="ai-insight-text"
+              dangerouslySetInnerHTML={{ __html: insight.text }}
+            />
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/CalendarStrip.jsx ===
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Flame } from 'lucide-react';
+import './CalendarStrip.css';
+
+export default function CalendarStrip({ hideHeader = false, selectedDate = new Date(), onDateSelect }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [baseDate, setBaseDate] = useState(selectedDate);
+  const scrollRef = React.useRef(null);
+
+  const handlePrevClick = (e) => {
+    e.stopPropagation();
+    if (isExpanded) {
+      const newDate = new Date(baseDate);
+      newDate.setMonth(newDate.getMonth() - 1);
+      setBaseDate(newDate);
+    } else {
+      if (scrollRef.current) {
+        scrollRef.current.scrollBy({ left: -250, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const handleNextClick = (e) => {
+    e.stopPropagation();
+    if (isExpanded) {
+      const newDate = new Date(baseDate);
+      newDate.setMonth(newDate.getMonth() + 1);
+      setBaseDate(newDate);
+    } else {
+      if (scrollRef.current) {
+        scrollRef.current.scrollBy({ left: 250, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const today = new Date();
+
+  // Generate 180 days for horizontal scrolling
+  const days = Array.from({ length: 180 }).map((_, i) => {
+    const d = new Date();
+    d.setDate(today.getDate() - 30 + i);
+    const isSelected = d.toDateString() === selectedDate.toDateString();
+    const isPast = d < today && d.toDateString() !== today.toDateString();
+
+    let status = 'upcoming';
+    if (isSelected) status = 'active';
+    else if (isPast) status = 'partial';
+
+    return {
+      label: d.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase(),
+      date: d.getDate().toString().padStart(2, '0'),
+      status,
+      icon: isSelected ? Flame : null,
+      fullDate: d
+    };
+  });
+
+  const monthLabel = baseDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  // Scroll to selected on mount or when changed
+  useEffect(() => {
+    if (!isExpanded) {
+      const activeEl = document.querySelector('.calendar-day-col.active-day');
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+  }, [selectedDate, isExpanded]);
+
+  return (
+    <div className={`calendar-strip-card ${isExpanded ? 'expanded' : ''} ${hideHeader ? 'compact-no-header' : ''}`}>
+      {!hideHeader && (
+        <div className="calendar-strip-header">
+          <button className="calendar-nav-btn" onClick={handlePrevClick}><ChevronLeft size={16} /></button>
+          <div
+            className="calendar-date-text"
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            {isExpanded ? monthLabel : `Today, ${today.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}`}
+          </div>
+          <button className="calendar-nav-btn" onClick={handleNextClick}><ChevronRight size={16} /></button>
+        </div>
+      )}
+
+      {!isExpanded ? (
+        <div className="calendar-days-row-scrollable" ref={scrollRef}>
+          {days.map((day, idx) => (
+            <div
+              key={idx}
+              className={`calendar-day-col ${day.status === 'active' ? 'active-day' : ''}`}
+              onClick={() => onDateSelect && onDateSelect(day.fullDate)}
+            >
+              <span className="calendar-day-label">{day.label}</span>
+              <div className="calendar-day-circle">
+                {day.status === 'active' ? (
+                  <span className="active-date">{day.date}</span>
+                ) : day.status === 'partial' ? (
+                  <div className="h-cal-ring-wrapper" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="28" height="28" viewBox="0 0 32 32">
+                      <circle cx="16" cy="16" r="14" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="2" />
+                      <circle 
+                        cx="16" cy="16" r="14" fill="none" stroke="#f97316" strokeWidth="2" 
+                        strokeDasharray="87.9" strokeDashoffset="20" transform="rotate(-90 16 16)" 
+                      />
+                    </svg>
+                    <span className="upcoming-date" style={{ position: 'absolute' }}>{day.date}</span>
+                  </div>
+                ) : (
+                  <span className="upcoming-date">{day.date}</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="calendar-month-view">
+          <div className="month-grid">
+            {['S','M','T','W','T','F','S'].map((d, i) => <span key={i} className="month-grid-header">{d}</span>)}
+            {Array.from({length: 31}).map((_, i) => {
+              const cellDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), i + 1);
+              const isSelected = cellDate.toDateString() === selectedDate.toDateString();
+              const isToday = cellDate.toDateString() === today.toDateString();
+              
+              return (
+                <div 
+                  key={i} 
+                  className={`month-grid-cell ${isSelected ? 'active-today' : ''} ${isToday ? 'is-today-marker' : ''}`}
+                  onClick={() => {
+                    onDateSelect && onDateSelect(cellDate);
+                  }}
+                >
+                  {i + 1}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/DailyCheckin.jsx ===
+import React, { useState } from 'react';
+import { Droplet, Moon, Sun, Flame, Plus, Minus } from 'lucide-react';
+import './DailyCheckin.css';
+
+export default function DailyCheckin() {
+  const [checkins, setCheckins] = useState([
+    { id: 'water', label: 'Water', icon: Droplet, current: 6, total: 10, unit: 'Glass', color: '#a881ff' },
+    { id: 'sleep', label: 'Sleep', icon: Moon, current: 5, total: 8, unit: 'Hours', color: '#c4fb31' },
+    { id: 'meditate', label: 'Meditate', icon: Sun, current: 10, total: 15, unit: 'Mins', color: '#ff9a4d' },
+    { id: 'read', label: 'Reading', icon: Flame, current: 20, total: 30, unit: 'Pages', color: '#ff6b6b' },
+  ]);
+
+  const handleUpdate = (id, increment) => {
+    setCheckins(checkins.map(c => {
+      if (c.id === id) {
+        let newCurrent = c.current + increment;
+        if (newCurrent < 0) newCurrent = 0;
+        if (newCurrent > c.total) newCurrent = c.total;
+        return { ...c, current: newCurrent };
+      }
+      return c;
+    }));
+  };
+
+  const completedCount = checkins.filter(c => c.current >= c.total).length;
+
+  return (
+    <div className="daily-checkin-section">
+      <div className="checkin-header">
+        <h3 className="checkin-title">Daily check-in</h3>
+        <span className="checkin-count">{completedCount}/{checkins.length}</span>
+      </div>
+      <div className="checkin-cards-scroll">
+        {checkins.map((item) => {
+          const progress = (item.current / item.total) * 100;
+          return (
+            <div key={item.id} className="checkin-card">
+              <div className="checkin-card-header">
+                <div className="checkin-icon-wrapper">
+                  <item.icon size={14} color={item.color} />
+                </div>
+                <span className="checkin-label">{item.label}</span>
+              </div>
+
+              <div className="checkin-ring-container">
+                <svg className="checkin-ring-svg" viewBox="0 0 100 50">
+                  {/* Background half-circle */}
+                  <path
+                    d="M 10 50 A 40 40 0 0 1 90 50"
+                    fill="none"
+                    stroke="var(--surface2)"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                  />
+                  {/* Progress half-circle */}
+                  <path
+                    d="M 10 50 A 40 40 0 0 1 90 50"
+                    fill="none"
+                    stroke={item.color}
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeDasharray="125.6"
+                    strokeDashoffset={125.6 - (125.6 * progress) / 100}
+                    style={{ transition: 'stroke-dashoffset 0.4s ease' }}
+                  />
+                </svg>
+                <div className="checkin-value-display">
+                  <span className="checkin-current">{item.current}/{item.total}</span>
+                  <span className="checkin-unit">{item.unit}</span>
+                </div>
+              </div>
+
+              <div className="checkin-controls">
+                <button className="checkin-btn minus" onClick={() => handleUpdate(item.id, -1)}>
+                  <Minus size={14} />
+                </button>
+                <div className="checkin-btn-divider"></div>
+                <button className="checkin-btn plus" onClick={() => handleUpdate(item.id, 1)}>
+                  <Plus size={14} />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+=== END FILE ===
+
+=== FILE: src/components/HabitCard.jsx ===
+import React, { useState } from 'react';
+import { Check, Flame } from 'lucide-react';
+import './HabitCard.css';
+
+export default function HabitCard({ compact }) {
+  const [habits, setHabits] = useState([
+    { id: 1, text: 'Communication', streak: 5, done: true, color: '#a881ff' },
+    { id: 2, text: 'Swimming', streak: 2, done: false, color: '#3b82f6' },
+    { id: 3, text: 'No Junk Food', streak: 12, done: true, color: '#e8b835' },
+    { id: 4, text: 'Clean', streak: 0, done: false, color: '#1db890' },
+    { id: 5, text: 'Face Exercise', streak: 3, done: true, color: '#ff6b6b' },
+  ]);
+
+  const toggleHabit = (id) => {
+    setHabits(habits.map(h => h.id === id ? { ...h, done: !h.done } : h));
+  };
+
+  return (
+    <div className="habit-card">
+      <div className="habit-card-header">
+        <h3 className="habit-title">Core Disciplines</h3>
+      </div>
+
+      <div className="habit-scroll-container">
+        <div className="habit-list-clean">
+          {habits.map(habit => (
+            <div key={habit.id} className={`habit-row ${habit.done ? 'done' : ''}`} onClick={() => toggleHabit(habit.id)}>
+              <div className="habit-info-left">
+                <div className="habit-color-dot" style={{ backgroundColor: habit.color }}></div>
+                <span
+                  className="habit-text"
+                  style={habit.done ? { textDecoration: 'line-through', textDecorationColor: habit.color, textDecorationThickness: '2px', color: 'rgba(255,255,255,0.4)' } : {}}
+                >
+                  {habit.text}
+                </span>
+              </div>
+
+              <div className="habit-info-right">
+                <button
+                  className="habit-checkbox-right"
+                  style={{
+                    borderColor: habit.done ? habit.color : 'var(--border)',
+                    backgroundColor: habit.done ? habit.color : 'transparent'
+                  }}
+                >
+                  {habit.done && <Check size={14} color="#000" strokeWidth={3} />}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/HabitGridCard.jsx ===
+import React from 'react';
+import { Flame, CheckCircle2, Circle, MessageSquare, Waves, Utensils, Brush, Dumbbell, Code, Book, Droplets, MoreVertical, Zap, Target } from 'lucide-react';
+import './HabitGridCard.css';
+
+const HabitGridCard = ({ habit }) => {
+  // Generate 8 months of data (4 weeks each = 28 days * 8 = 224 days)
+  const months = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+  const data = months.map((month, mIdx) => {
+    return Array.from({ length: 28 }, (_, i) => {
+      const seed = Math.sin(habit.id * 10 + mIdx * 28 + i) * 10000;
+      const random = seed - Math.floor(seed);
+      return random > 0.45;
+    });
+  });
+
+  const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+  const getHabitIcon = (name) => {
+    const n = name.toLowerCase();
+    if (n.includes('water')) return <Droplets size={18} color="#6c63ff" />;
+    if (n.includes('run') || n.includes('swimming')) return <Zap size={18} color="#10b981" />;
+    if (n.includes('read') || n.includes('communication')) return <Book size={18} color="#f59e0b" />;
+    return <Target size={18} color="#6c63ff" />;
+  };
+
+  const getHabitDesc = (name) => {
+    const n = name.toLowerCase();
+    if (n.includes('water')) return 'stay hydrated, feel better';
+    if (n.includes('run')) return 'start strong, build momentum';
+    if (n.includes('swimming')) return 'full body discipline';
+    if (n.includes('communication')) return 'master your voice';
+    return 'track and build daily systems';
+  };
+
+  return (
+    <div className="habit-minimal-card">
+      <div className="habit-card-header-new">
+        <div className="habit-header-left">
+          <div className="habit-icon-square">
+            {getHabitIcon(habit.name || habit.text)}
+          </div>
+          <div className="habit-title-group">
+            <span className="habit-minimal-name">{habit.name || habit.text}</span>
+            <span className="habit-minimal-desc">{getHabitDesc(habit.name || habit.text)}</span>
+          </div>
+        </div>
+        <div className="habit-header-right">
+          <div className="habit-minimal-streak">
+            <span>{habit.streak || 0}</span>
+            <Flame size={14} fill="#f97316" color="#f97316" />
+          </div>
+          <button className="habit-more-btn">
+            <MoreVertical size={16} />
+          </button>
+        </div>
+      </div>
+
+      <div className="habit-minimal-content">
+        <div className="habit-months-row">
+          {data.map((monthData, mIdx) => (
+            <div key={mIdx} className="month-block">
+              <div className="month-grid">
+                {monthData.map((done, i) => (
+                  <div 
+                    key={i} 
+                    className={`grid-cell ${done ? 'done' : ''}`}
+                    style={{ 
+                      backgroundColor: done ? habit.color : 'rgba(255,255,255,0.08)',
+                    }}
+                  />
+                ))}
+              </div>
+              <span className="month-label">{months[mIdx]}</span>
+            </div>
+          ))}
+          
+          <div className="day-labels-column">
+            {dayLabels.map((label, i) => (
+              <span key={i} className="day-label-tiny">{label}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HabitGridCard;
+
+=== END FILE ===
+
+=== FILE: src/components/HabitLargeCard.jsx ===
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Flame, ChevronRight } from 'lucide-react';
+import { getIcon } from '../utils/iconMap';
+import './HabitLargeCard.css';
+
+// Fallback color map to ensure user sees unique colors even with legacy state
+const colorMap = {
+  'drink water': '#3b82f6',
+  'morning run': '#f97316',
+  'read 20 min': '#c4fb31',
+  'gym': '#ec4899',
+  'meditate': '#8b5cf6',
+  'no social media': '#ff4b4b'
+};
+
+export default function HabitLargeCard({ habit }) {
+  // Use habit.color if it exists, otherwise use fallback map or default to lime
+  const habitColor = habit.color || colorMap[habit.name?.toLowerCase()] || '#c4fb31';
+  
+  // Handling metrics data from either legacy state or new structure
+  const progress = habit.progress !== undefined ? habit.progress : (habit.done ? 100 : 45);
+  const target = habit.targetValue || 10;
+  const current = habit.currentValue || (habit.done ? 10 : 4);
+  const unit = habit.unit || (habit.target?.includes('glasses') ? 'glasses' : 'units');
+  
+  const IconComponent = getIcon(habit.icon || (habit.emoji ? null : 'activity'));
+  
+  return (
+    <motion.div 
+      className="habit-large-card"
+      whileTap={{ scale: 0.98 }}
+    >
+      <div className="h-card-header-row">
+        <div className="h-card-left-content">
+          <div className="h-card-icon-wrapper" style={{ backgroundColor: `${habitColor}15`, borderColor: `${habitColor}25` }}>
+            {habit.emoji ? (
+              <span className="h-card-emoji">{habit.emoji}</span>
+            ) : (
+              <IconComponent size={18} color={habitColor} />
+            )}
+          </div>
+          <div className="h-card-text-stack">
+            <h3 className="h-card-main-title">{habit.name}</h3>
+            <p className="h-card-sub-label">{habit.desc || habit.target || 'stay consistent, feel better'}</p>
+          </div>
+        </div>
+        <div className="h-card-streak-pill">
+          <Flame size={12} fill="#f97316" color="#f97316" />
+          <span className="h-streak-count">{habit.streak || 0}</span>
+        </div>
+      </div>
+
+      <div className="h-card-body-metrics">
+        <div className="h-card-metric-main">
+          <div className="h-card-stat-display">
+            <span className="h-stat-big">{current}</span>
+            <span className="h-stat-small">of {target} {unit}</span>
+          </div>
+          <div className="h-card-progress-track">
+            <motion.div 
+              className="h-card-progress-bar" 
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              style={{ backgroundColor: habitColor }}
+            />
+          </div>
+        </div>
+
+        <div className="h-card-circular-progress">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="3" />
+            <motion.circle 
+              cx="20" cy="20" r="18" fill="none" 
+              stroke={habitColor} 
+              strokeWidth="3" 
+              strokeDasharray="113"
+              initial={{ strokeDashoffset: 113 }}
+              animate={{ strokeDashoffset: 113 - (113 * progress) / 100 }}
+              strokeLinecap="round"
+              transform="rotate(-90 20 20)"
+            />
+          </svg>
+          <span className="h-percentage-text">{progress}%</span>
+        </div>
+      </div>
+
+      <div className="h-card-bottom-footer">
+        <button className="h-view-tracker-link">
+          <span>view tracker</span>
+          <ChevronRight size={12} />
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/HabitPageCalendar.jsx ===
+import React from 'react';
+import { motion } from 'framer-motion';
+import './HabitPageCalendar.css';
+
+export default function HabitPageCalendar() {
+  const scrollRef = React.useRef(null);
+  const today = new Date();
+  
+  // Generate days (30 days past to 60 days future)
+  const days = Array.from({ length: 90 }).map((_, i) => {
+    const d = new Date();
+    d.setDate(today.getDate() - 15 + i);
+    const isToday = d.toDateString() === today.toDateString();
+    
+    // Mock completion percentage for the rings
+    let completion = 0;
+    if (d < today) completion = Math.random() > 0.3 ? 100 : 40;
+    
+    return {
+      fullDate: d,
+      dayName: d.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase(),
+      dateNum: d.getDate(),
+      isToday,
+      completion
+    };
+  });
+
+  React.useEffect(() => {
+    const activeEl = document.querySelector('.h-cal-day.active');
+    if (activeEl && scrollRef.current) {
+      activeEl.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+    }
+  }, []);
+
+  return (
+    <div className="habit-calendar-scroll-container" ref={scrollRef}>
+      {days.map((day, idx) => (
+        <div key={idx} className={`h-cal-day ${day.isToday ? 'active' : ''}`}>
+          <span className="h-cal-name">{day.dayName}</span>
+          <div className="h-cal-date-container">
+            {day.isToday ? (
+              <div className="h-cal-today-circle">
+                {day.dateNum}
+              </div>
+            ) : (
+              <div className="h-cal-ring-wrapper">
+                <svg width="32" height="32" viewBox="0 0 32 32">
+                  <circle cx="16" cy="16" r="14" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="2" />
+                  {day.completion > 0 && (
+                    <circle 
+                      cx="16" cy="16" r="14" fill="none" 
+                      stroke={day.completion === 100 ? '#f97316' : '#f9731680'} 
+                      strokeWidth="2" 
+                      strokeDasharray="87.9"
+                      strokeDashoffset={87.9 - (87.9 * day.completion) / 100}
+                      strokeLinecap="round"
+                      transform="rotate(-90 16 16)"
+                    />
+                  )}
+                </svg>
+                <span className="h-cal-date-num-ring">{day.dateNum}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/Heatmap.jsx ===
+import { useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
+import { generateHeatmapData } from '../data/appData';
+import './Heatmap.css';
+
+const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+const levelColors = [
+  'var(--surface3)',
+  'rgba(108, 99, 255, 0.18)',
+  'rgba(108, 99, 255, 0.38)',
+  'rgba(108, 99, 255, 0.62)',
+  'var(--accent)',
+];
+
+export default function Heatmap() {
+  const data = useMemo(() => generateHeatmapData(), []);
+  const [hoveredCell, setHoveredCell] = useState(null);
+
+  return (
+    <motion.div
+      className="heatmap-card"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.3 }}
+    >
+      <div className="card-header">
+        <span className="card-title">progress</span>
+        <span className="heatmap-period">last 52 weeks</span>
+      </div>
+
+      <div className="heatmap-container">
+        {/* Day labels */}
+        <div className="heatmap-day-labels">
+          {dayLabels.map((d, i) => (
+            <span key={i} className="heatmap-day-label">
+              {i % 2 === 1 ? d : ''}
+            </span>
+          ))}
+        </div>
+
+        {/* Grid */}
+        <div className="heatmap-grid">
+          {data.map((week, wi) => (
+            <div key={wi} className="heatmap-col">
+              {week.map((level, di) => (
+                <motion.div
+                  key={`${wi}-${di}`}
+                  className="heatmap-cell"
+                  style={{ background: levelColors[level] }}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    delay: 0.1 + wi * 0.008 + di * 0.005,
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 20,
+                  }}
+                  whileHover={{ scale: 1.4, zIndex: 2 }}
+                  onMouseEnter={() =>
+                    setHoveredCell({
+                      week: wi + 1,
+                      day: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][di],
+                      level,
+                    })
+                  }
+                  onMouseLeave={() => setHoveredCell(null)}
+                  title={`Week ${wi + 1}, ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][di]}`}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="heatmap-legend">
+        <span className="heatmap-legend-text">Less</span>
+        {[0, 1, 2, 3, 4].map((level) => (
+          <div
+            key={level}
+            className="heatmap-legend-cell"
+            style={{ background: levelColors[level] }}
+          />
+        ))}
+        <span className="heatmap-legend-text">More</span>
+
+        {hoveredCell && (
+          <span className="heatmap-tooltip">
+            Week {hoveredCell.week} · {hoveredCell.day} ·{' '}
+            {['None', 'Low', 'Medium', 'High', 'Perfect'][hoveredCell.level]}
+          </span>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/MobileNavbar.jsx ===
+import React from 'react';
+import { Home, Activity, PieChart, CalendarDays, Timer } from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import './MobileNavbar.css';
+
+const navItems = [
+  { id: 'home', label: 'Home', icon: Home },
+  { id: 'habits', label: 'Habits', icon: Activity },
+  { id: 'analytics', label: 'Analytics', icon: PieChart },
+  { id: 'planner', label: 'Planner', icon: CalendarDays },
+  { id: 'timer', label: 'Timer', icon: Timer },
+];
+
+export default function MobileNavbar() {
+  const { state, dispatch } = useApp();
+  const { currentPage } = state;
+
+  const getActivePage = () => {
+    if (currentPage === 'add-habit' || currentPage === 'create-habit') return 'habits';
+    if (currentPage === 'profile' || currentPage === 'edit-profile') return 'home';
+    return navItems.find(i => i.id === currentPage) ? currentPage : 'home';
+  };
+
+  const activePage = getActivePage();
+
+  return (
+    <nav className="mobile-navbar">
+      {navItems.map((item) => {
+        const isActive = activePage === item.id;
+        const Icon = item.icon;
+
+        return (
+          <button
+            key={item.id}
+            className={`mobile-nav-btn ${isActive ? 'active' : ''}`}
+            onClick={() => dispatch({ type: 'SET_PAGE', payload: item.id })}
+          >
+            <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+            <AnimatePresence>
+              {isActive && (
+                <motion.span
+                  className="mobile-nav-label"
+                  initial={{ opacity: 0, width: 0, marginLeft: 0 }}
+                  animate={{ opacity: 1, width: "auto", marginLeft: 8 }}
+                  exit={{ opacity: 0, width: 0, marginLeft: 0 }}
+                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                >
+                  {item.label}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/OverallProgressCard.jsx ===
+import { motion } from 'framer-motion';
+import './OverallProgressCard.css';
+
+export default function OverallProgressCard() {
+  const progress = 89;
+  
+  return (
+    <motion.div className="overall-progress-card-simple" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+      <div className="opc-body-simple">
+        <div className="opc-gauge-container-small">
+          <svg width="60" height="60" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#e3365b" />
+                <stop offset="50%" stopColor="#f59e0b" />
+                <stop offset="100%" stopColor="#fcd34d" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="14" />
+            <circle 
+              cx="50" cy="50" r="42" 
+              fill="none" 
+              stroke="url(#gaugeGrad)" 
+              strokeWidth="14" 
+              strokeLinecap="round" 
+              strokeDasharray="263.89" 
+              strokeDashoffset={263.89 - (263.89 * progress) / 100}
+              style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%', transition: 'stroke-dashoffset 1.5s ease-out' }}
+            />
+          </svg>
+          <div className="opc-gauge-value">{progress}%</div>
+        </div>
+        <div className="opc-text-container">
+          <span className="opc-label-large">Completed</span>
+          <span className="opc-sublabel">22/72 task</span>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/PlannerCard.jsx ===
+import { motion } from 'framer-motion';
+import { useApp } from '../context/AppContext';
+import { plannerItems } from '../data/appData';
+import { Plus } from 'lucide-react';
+import './PlannerCard.css';
+
+export default function PlannerCard({ compact = false }) {
+  const { dispatch } = useApp();
+  const items = compact ? plannerItems.slice(0, 4) : plannerItems;
+  const monthName = new Date().toLocaleString('default', { month: 'long' });
+
+  const handleFocusTask = (text) => {
+    dispatch({ type: 'SHOW_TOAST', payload: `focusing on: ${text}` });
+  };
+
+  const formatTimeInfo = (timeStr) => {
+    const [h, m] = timeStr.split(':');
+    const hourNum = parseInt(h);
+    const ampm = hourNum >= 12 ? 'pm' : 'am';
+    
+    let standardHour = hourNum % 12;
+    if (standardHour === 0) standardHour = 12;
+    const formattedHourStr = standardHour.toString().padStart(2, '0');
+
+    return { 
+      h: formattedHourStr, 
+      m, 
+      ampm,
+      fullTimeStr: `${formattedHourStr}:${m} ${ampm}`
+    };
+  };
+
+  // For the left column we want a short Day string and Date string.
+  // Since our items are just times, we can show a mock day/date sequence or just the time parts.
+  // Let's use the time hour and minute to look like the design, OR we can show the day abbreviation and date.
+  // The user wanted "Today's Plan", so showing different dates doesn't make sense.
+  // We'll show the hour on top, minute below it to mimic the look.
+  
+  return (
+    <motion.div
+      className="planner-card"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.35 }}
+    >
+      <div className="card-header">
+        <span className="card-title">{monthName}</span>
+        <button
+          className="card-action add-btn"
+          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'planner' })}
+        >
+          <Plus size={18} />
+        </button>
+      </div>
+
+      <div className="planner-list">
+        {items.map((item, i) => {
+          const { h, m, ampm, fullTimeStr } = formatTimeInfo(item.time);
+          
+          return (
+            <motion.div
+              key={item.id}
+              className={`planner-item ${item.status === 'active' || item.status === 'upcoming' && i % 2 !== 0 ? 'is-active' : ''}`}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 + i * 0.05 }}
+              whileHover={{ x: 3, transition: { duration: 0.15 } }}
+              onClick={() => handleFocusTask(item.text)}
+            >
+              <div className="planner-time-col">
+                <span className="planner-time-hr">{h}</span>
+                <span className="planner-time-min">{m}</span>
+              </div>
+              
+              <div className="planner-pill">
+                <span className="planner-pill-title">{item.text}</span>
+                <span className="planner-pill-time">{fullTimeStr}</span>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {compact && plannerItems.length > 4 && (
+        <button
+          className="planner-show-all"
+          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'planner' })}
+        >
+          view full schedule →
+        </button>
+      )}
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/RemainingTasksCard.jsx ===
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Loader } from 'lucide-react';
+import './RemainingTasksCard.css';
+
+export default function RemainingTasksCard() {
+  return (
+    <motion.div className="remaining-tasks-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+      <div className="rtc-body">
+        <div className="rtc-icon-container">
+          <Loader size={20} className="animate-spin-slow" color="var(--text)" />
+        </div>
+        <div className="rtc-text-container">
+          <span className="rtc-label">In Progress</span>
+          <span className="rtc-sublabel">6 task remaining</span>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/ScoreCard.jsx ===
+import { motion } from 'framer-motion';
+import { TrendingUp, TrendingDown } from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import './ScoreCard.css';
+
+export default function ScoreCard() {
+  const { state } = useApp();
+  const { stats } = state;
+  const circumference = 2 * Math.PI * 42;
+  const offset = circumference - (circumference * stats.score) / 100;
+
+  return (
+    <motion.div
+      className="score-card"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 }}
+    >
+      <div className="card-header">
+        <span className="card-title">Discipline Score</span>
+        <button className="card-action" id="score-details-btn">Details →</button>
+      </div>
+
+      <div className="score-ring-wrap">
+        <div className="score-ring-container">
+          <svg width="100" height="100" viewBox="0 0 100 100" className="score-ring-svg">
+            <defs>
+              <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#6c63ff" />
+                <stop offset="100%" stopColor="#ec4899" />
+              </linearGradient>
+            </defs>
+            <circle
+              cx="50"
+              cy="50"
+              r="42"
+              fill="none"
+              stroke="var(--surface3)"
+              strokeWidth="7"
+            />
+            <motion.circle
+              cx="50"
+              cy="50"
+              r="42"
+              fill="none"
+              stroke="url(#scoreGradient)"
+              strokeWidth="7"
+              strokeLinecap="round"
+              strokeDasharray={circumference}
+              initial={{ strokeDashoffset: circumference }}
+              animate={{ strokeDashoffset: offset }}
+              transition={{ duration: 1.2, ease: 'easeOut', delay: 0.3 }}
+              style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%' }}
+            />
+          </svg>
+          <div className="score-ring-value">
+            <motion.span
+              className="score-big-num"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              {stats.score}
+            </motion.span>
+            <span className="score-percent">%</span>
+          </div>
+        </div>
+
+        <div className="score-details">
+          <div className="score-label">Weekly average</div>
+          <div className={`score-delta ${stats.delta >= 0 ? 'up' : 'down'}`}>
+            {stats.delta >= 0 ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
+            <span>{stats.delta >= 0 ? '+' : ''}{stats.delta}% from last week</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="score-stats-row">
+        <div className="score-stat">
+          <span className="score-stat-val done">{stats.done}</span>
+          <span className="score-stat-label">Done</span>
+        </div>
+        <div className="score-stat">
+          <span className="score-stat-val missed">{stats.missed}</span>
+          <span className="score-stat-label">Missed</span>
+        </div>
+        <div className="score-stat">
+          <span className="score-stat-val streak">{stats.streak}</span>
+          <span className="score-stat-label">Streak</span>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/Sidebar.jsx ===
+import { motion } from 'framer-motion';
+import {
+  Home,
+  CheckCircle2,
+  BarChart3,
+  CalendarDays,
+  Sliders,
+  PanelLeftClose,
+  PanelLeft
+} from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import './Sidebar.css';
+
+const navItems = [
+  { id: 'home', label: 'Home', icon: Home },
+  { id: 'habits', label: 'Habits', icon: CheckCircle2, badge: null },
+  { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+  { id: 'planner', label: 'Planner', icon: CalendarDays },
+];
+
+export default function Sidebar() {
+  const { state, dispatch } = useApp();
+  const { currentPage, sidebarCollapsed, habits } = state;
+  const pendingCount = habits.filter((h) => !h.done).length;
+
+  return (
+    <motion.nav
+      className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}
+      initial={false}
+      animate={{ width: sidebarCollapsed ? 48 : 210 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+    >
+      {/* Main Inner Block */}
+      <div className="sidebar-main-block">
+        {/* Top Header / Profile */}
+        <div className={`sidebar-logo-row ${sidebarCollapsed ? 'collapsed-row' : ''}`}>
+          {!sidebarCollapsed && (
+            <div className="sidebar-logo-left">
+              <div className="sidebar-avatar-img">
+                <img src="https://ui-avatars.com/api/?name=Deep+jyoti+Das&background=1f1f22&color=fff" alt="User" />
+              </div>
+              <span className="sidebar-logo-text">
+                Deep jyoti Das
+              </span>
+            </div>
+          )}
+          <button
+            className="sidebar-collapse-btn"
+            onClick={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
+            title={sidebarCollapsed ? 'Expand' : 'Collapse'}
+          >
+            {sidebarCollapsed ? <PanelLeft size={15} /> : <PanelLeftClose size={15} />}
+          </button>
+        </div>
+
+        {/* Navigation */}
+        <div className="sidebar-nav">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = currentPage === item.id;
+            const badge = item.id === 'habits' ? pendingCount : null;
+
+            return (
+              <button
+                key={item.id}
+                className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
+                onClick={() => dispatch({ type: 'SET_PAGE', payload: item.id })}
+              >
+                <Icon size={16} className="sidebar-nav-icon" />
+                {!sidebarCollapsed && (
+                  <span className="sidebar-nav-label">{item.label}</span>
+                )}
+                {!sidebarCollapsed && badge > 0 && (
+                  <span className="sidebar-nav-badge">{badge}</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Footer / Settings Area */}
+      <div className="sidebar-footer">
+        <button className="sidebar-settings-btn">
+          <Sliders size={16} className="sidebar-nav-icon" />
+          {!sidebarCollapsed && <span className="sidebar-nav-label">Settings</span>}
+        </button>
+      </div>
+    </motion.nav>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/TaskRemainingCard.jsx ===
+import React from 'react';
+import { motion } from 'framer-motion';
+import { CheckCircle2 } from 'lucide-react';
+import './TaskRemainingCard.css';
+
+export default function TaskRemainingCard() {
+  return (
+    <motion.div className="task-remaining-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+      <div className="trc-body">
+        <div className="trc-icon-container">
+          <CheckCircle2 size={20} color="var(--text)" />
+        </div>
+        <div className="trc-text-container">
+          <span className="trc-label">Remaining Task</span>
+          <span className="trc-sublabel">44 task to go</span>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/Toast.jsx ===
+import { useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useApp } from '../context/AppContext';
+import './Toast.css';
+
+export default function Toast() {
+  const { state, dispatch } = useApp();
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    if (state.toastMessage) {
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        dispatch({ type: 'HIDE_TOAST' });
+      }, 2500);
+    }
+    return () => clearTimeout(timerRef.current);
+  }, [state.toastMessage, dispatch]);
+
+  return (
+    <AnimatePresence>
+      {state.toastMessage && (
+        <motion.div
+          className="toast"
+          initial={{ opacity: 0, y: 20, x: '-50%' }}
+          animate={{ opacity: 1, y: 0, x: '-50%' }}
+          exit={{ opacity: 0, y: 20, x: '-50%' }}
+          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+        >
+          <span className="toast-text">{state.toastMessage}</span>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/TopBar.jsx ===
+import { Flame, Plus } from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import './TopBar.css';
+
+export default function TopBar() {
+  const { state, dispatch } = useApp();
+
+  const now = new Date();
+  const dateStr = now
+    .toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+    })
+    .toUpperCase();
+
+  const hour = now.getHours();
+  let greeting = 'Good morning';
+  if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
+  else if (hour >= 17) greeting = 'Good evening';
+
+  const handleStartDay = () => {
+    dispatch({ type: 'START_DAY' });
+    dispatch({ type: 'SHOW_TOAST', payload: "Day started — let's get after it 🚀" });
+  };
+
+  return (
+    <header className="topbar" id="topbar">
+      <div className="topbar-left">
+        <span className="topbar-date">{dateStr}</span>
+        <span className="topbar-greeting">{greeting}, Deep</span>
+      </div>
+      <div className="topbar-right">
+        <div className="topbar-streak" id="streak-badge">
+          <Flame size={13} />
+          <span>{state.stats.streak}-day streak</span>
+        </div>
+        <button
+          className="topbar-btn primary"
+          onClick={handleStartDay}
+          id="start-day-btn"
+        >
+          <Plus size={14} />
+          Start Day
+        </button>
+      </div>
+    </header>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: src/components/TopPriorityCard.jsx ===
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, Clock, Calendar } from 'lucide-react';
+import './TopPriorityCard.css';
+
+const priorityColors = {
+  High: '#c4fb31',
+  Medium: '#f59e0b',
+  Low: '#6c63ff',
+};
+
+const topTasks = [
+  {
+    id: 1,
+    priority: 'High',
+    label: 'zoom meet',
+    title: 'design team planning',
+    time: '9:30 - 10:30 am',
+    due: 'due: december 20',
+    dotColor: '#c4fb31',
+  },
+  {
+    id: 2,
+    priority: 'Low',
+    label: 'google meet',
+    title: 'design team planning',
+    time: '9:30 - 10:30 am',
+    due: 'due: december 20',
+    dotColor: '#6c63ff',
+  }
+];
+
+export default function TopPriorityCard() {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="top-priority-container">
+      <button className="tp-group-header" onClick={() => setIsOpen(!isOpen)}>
+        <span className="tp-group-name">top priority</span>
+        <div className="tp-group-right">
+          <span className="tp-group-count">{topTasks.length} task</span>
+          <motion.div animate={{ rotate: isOpen ? 0 : -90 }} transition={{ duration: 0.2 }}>
+            <ChevronDown size={18} />
+          </motion.div>
+        </div>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            className="tp-group-items"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            {topTasks.map((task) => (
+              <div key={task.id} className="tp-task-item">
+                <div className="tp-task-left">
+                  <div className="tp-task-header">
+                    <span 
+                      className="tp-priority-badge"
+                      style={{ 
+                        color: priorityColors[task.priority], 
+                        borderColor: `${priorityColors[task.priority]}33`,
+                        background: `${priorityColors[task.priority]}11` 
+                      }}
+                    >
+                      {task.priority.toLowerCase()}
+                    </span>
+                    <span className="tp-label-dot">
+                      <span className="dot" style={{ background: task.dotColor }}></span>
+                      {task.label}
+                    </span>
+                  </div>
+                  <h3 className="tp-task-title">{task.title}</h3>
+                  <div className="tp-task-meta">
+                    <span className="tp-meta-item">
+                      <Clock size={12} />
+                      {task.time}
+                    </span>
+                    <span className="tp-meta-item">
+                      <Calendar size={12} />
+                      {task.due}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="tp-task-right">
+                  <div className="tp-toggle-container">
+                    <div className="tp-toggle-track">
+                      <div className="tp-toggle-thumb"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+=== END FILE ===
+
+=== FILE: package.json ===
+{
+  "name": "discipline-os",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.14.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^10.2.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.5.0",
+    "vite": "^8.0.10"
+  }
+}
+
+=== END FILE ===
+
