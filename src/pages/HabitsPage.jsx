@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Plus, Calendar, BarChart2 } from 'lucide-react';
+import { ChevronLeft, Plus, Calendar, BarChart2, Flame } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { getHabits, getHabitLogs } from '../api/habits';
 import HabitLargeCard from '../components/HabitLargeCard';
@@ -23,7 +23,6 @@ export default function HabitsPage() {
         const res = await getHabits();
         dispatch({ type: 'SET_HABITS', payload: res.data });
 
-        // Calculate real stats from logs
         let totalDone = 0, totalLogs = 0, totalStreak = 0;
         for (const habit of res.data) {
           const logsRes = await getHabitLogs(habit.id);
@@ -31,7 +30,6 @@ export default function HabitsPage() {
           totalLogs += logs.length;
           totalDone += logs.filter(l => l.done).length;
 
-          // Simple streak: count consecutive done days from today backwards
           let streak = 0;
           const sortedLogs = [...logs].sort((a, b) => new Date(b.date) - new Date(a.date));
           for (const log of sortedLogs) {
@@ -63,17 +61,24 @@ export default function HabitsPage() {
       exit={{ opacity: 0 }}
     >
       <header className="h-page-header">
-        <button className="h-header-btn-circle" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'home' })}>
+        <button
+          className="h-header-btn-circle"
+          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'home' })}
+        >
           <ChevronLeft size={20} />
         </button>
         <h1 className="h-page-title">habits</h1>
-        <button
-          className="h-add-habit-btn-pill"
-          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}
-        >
-          <Plus size={18} />
-          <span>add habit</span>
-        </button>
+        {habits.length > 0 ? (
+          <button
+            className="h-add-habit-btn-pill"
+            onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}
+          >
+            <Plus size={18} />
+            <span>add habit</span>
+          </button>
+        ) : (
+          <div style={{ width: 40 }} />
+        )}
       </header>
 
       <div className="h-page-calendar-section-home">
@@ -91,10 +96,16 @@ export default function HabitsPage() {
             : selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
         </h2>
         <div className="h-view-toggles">
-          <button className={`h-view-btn ${viewMode === 'list' ? 'active' : ''}`} onClick={() => setViewMode('list')}>
+          <button
+            className={`h-view-btn ${viewMode === 'list' ? 'active' : ''}`}
+            onClick={() => setViewMode('list')}
+          >
             <Calendar size={16} />
           </button>
-          <button className={`h-view-btn ${viewMode === 'stats' ? 'active' : ''}`} onClick={() => setViewMode('stats')}>
+          <button
+            className={`h-view-btn ${viewMode === 'stats' ? 'active' : ''}`}
+            onClick={() => setViewMode('stats')}
+          >
             <BarChart2 size={16} />
           </button>
         </div>
@@ -111,9 +122,28 @@ export default function HabitsPage() {
             transition={{ duration: 0.2 }}
           >
             {loading ? (
-              <div className="empty-state-mini">Loading habits...</div>
+              <div className="h-loading-state">
+                {[1, 2, 3].map(i => (
+                  <div className="h-skeleton-card" key={i} />
+                ))}
+              </div>
             ) : habits.length === 0 ? (
-              <div className="empty-state-mini">No habits yet. Add one to start tracking.</div>
+              <div className="h-empty-state">
+                <div className="h-empty-icon-ring">
+                  <Flame size={28} />
+                </div>
+                <p className="h-empty-title">no habits yet</p>
+                <p className="h-empty-sub">
+                  start building your streak — add your first habit below
+                </p>
+                <button
+                  className="h-empty-cta"
+                  onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}
+                >
+                  <Plus size={14} />
+                  add first habit
+                </button>
+              </div>
             ) : (
               <>
                 {coreDisciplines.length > 0 && (
@@ -126,7 +156,9 @@ export default function HabitsPage() {
                 )}
                 {regularHabits.length > 0 && (
                   <>
-                    {coreDisciplines.length > 0 && <p className="h-group-label">other habits</p>}
+                    {coreDisciplines.length > 0 && (
+                      <p className="h-group-label">other habits</p>
+                    )}
                     {regularHabits.map(habit => (
                       <HabitLargeCard key={habit.id} habit={habit} />
                     ))}

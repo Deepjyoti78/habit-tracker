@@ -1,5 +1,5 @@
 .add-habit-page-container {
-  padding: 16px 20px 20px;
+  padding: 16px 20px 40px;
   max-width: 450px;
   margin: 0 auto;
   width: 100%;
@@ -7,16 +7,17 @@
   flex-direction: column;
 }
 
+/* ── Header ─────────────────────────────────────────────── */
 .add-habit-header-new {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .header-icon-box {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -25,7 +26,11 @@
   justify-content: center;
   color: var(--text);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
+}
+
+.header-icon-box:hover {
+  background: var(--surface2);
 }
 
 .add-habit-title {
@@ -38,8 +43,8 @@
 }
 
 .header-done-btn-new {
-  height: 40px;
-  padding: 0 20px;
+  height: 38px;
+  padding: 0 18px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -47,30 +52,32 @@
   font-size: 14px;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
   text-transform: lowercase;
 }
 
-.header-done-btn-new:hover,
-.header-icon-box:hover {
+.header-done-btn-new:hover {
   background: var(--surface2);
   border-color: var(--border2);
 }
 
+/* ── Search ──────────────────────────────────────────────── */
 .search-bar-container {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 14px 18px;
+  border-radius: 14px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 32px;
+  gap: 12px;
+  /* Key fix: was 32px, killed the dead space */
+  margin-bottom: 12px;
 }
 
 .search-icon-dim {
   color: var(--text2);
-  opacity: 0.9;
+  opacity: 0.6;
+  flex-shrink: 0;
 }
 
 .habit-search-input {
@@ -78,86 +85,95 @@
   border: none;
   color: var(--text);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   width: 100%;
   outline: none;
 }
 
 .habit-search-input::placeholder {
   color: var(--text3);
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
+/* ── Categories list — tight gap ────────────────────────── */
 .categories-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-bottom: 24px;
+  gap: 6px;
+  /* was 14px — that was the big culprit */
+  margin-bottom: 16px;
 }
 
 .category-row-new-container {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 24px;
-  overflow: visible;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: border-color 0.3s;
 }
 
 .category-row-new-container.expanded {
-  border-color: var(--border2);
-  background: var(--surface);
-  /* Kept same as non-expanded */
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .category-row-new {
-  padding: 18px 20px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+}
+
+/* Remove bottom border on row when NOT expanded */
+.category-row-new-container:not(.expanded) .category-row-new {
+  border-bottom: none;
+}
+
+.category-row-new-container.expanded .category-row-new {
   border-bottom: 1px solid var(--border);
 }
 
 .category-left {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
 }
 
 .cat-icon-box {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .cat-text-group {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
 }
 
 .cat-label {
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--text);
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
   text-transform: lowercase;
 }
 
 .cat-desc {
   font-size: 12px;
   color: var(--text3);
-  font-weight: 700;
-  opacity: 0.6;
+  font-weight: 500;
+  opacity: 0.55;
   text-transform: lowercase;
 }
 
 .cat-add-btn-bordered {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   background: transparent;
   border: 1px solid var(--border);
   color: var(--text);
@@ -166,7 +182,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s;
+  flex-shrink: 0;
 }
 
 .cat-add-btn-bordered.active {
@@ -177,22 +194,25 @@
 
 .rotate-plus {
   transform: rotate(45deg);
+  transition: transform 0.25s;
 }
 
+/* ── Drawer ──────────────────────────────────────────────── */
 .category-expand-content {
-  overflow: visible;
+  overflow: hidden;
 }
 
 .expand-inner {
-  padding: 20px;
+  padding: 14px 16px 16px;
 }
 
+/* ── Settings card inside drawer ────────────────────────── */
 .habit-settings-list-mini {
-  background: var(--surface);
-  border-radius: 18px;
-  padding: 4px 0;
-  margin-bottom: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px;
   border: 1px solid var(--border);
+  margin-bottom: 16px;
+  overflow: hidden;
 }
 
 .dropdown-wrapper {
@@ -203,30 +223,34 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 13px 14px;
   border-bottom: 1px solid var(--border);
-  transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  transition: background 0.2s;
 }
 
 .setting-item-row-mini:last-child {
   border-bottom: none;
 }
 
+.setting-item-row-mini:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
 .setting-left-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .setting-icon {
   color: var(--text2);
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .setting-label-mini {
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text);
   text-transform: lowercase;
 }
@@ -234,10 +258,10 @@
 .setting-value-mini {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-size: 13px;
   color: var(--text);
-  font-weight: 800;
+  font-weight: 700;
   text-transform: lowercase;
 }
 
@@ -246,7 +270,7 @@
 }
 
 .chevron-transition {
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s;
   opacity: 0.4;
 }
 
@@ -255,89 +279,121 @@
   opacity: 1;
 }
 
+.status-on {
+  font-size: 13px;
+  font-weight: 700;
+  color: #c4fb31;
+}
+
+.status-off {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ff4b4b;
+}
+
+/* Inline toggle (replaces the clunky external toggle row) */
+.inline-toggle {
+  width: 34px;
+  height: 19px;
+  background: #2a2a2a;
+  border-radius: 999px;
+  padding: 2px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.inline-toggle.on {
+  background: #CCFF00;
+  justify-content: flex-end;
+}
+
+.inline-toggle-knob {
+  width: 15px;
+  height: 15px;
+  background: #fff;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.inline-toggle.on .inline-toggle-knob {
+  background: #000;
+}
+
+/* ── Dropdown ────────────────────────────────────────────── */
 .dropdown-menu-mini {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   right: 0;
-  width: 180px;
-  background: var(--surface3);
-  border: 1px solid var(--border2);
-  border-radius: 14px;
+  width: 175px;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   z-index: 100;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
   overflow: hidden;
-  margin-top: 6px;
-  backdrop-filter: blur(10px);
 }
 
 .dropdown-option {
-  width: 100%;
-  padding: 12px 16px;
+  padding: 11px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text2);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background 0.15s;
   text-transform: lowercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.dropdown-option:last-child {
+  border-bottom: none;
 }
 
 .dropdown-option:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text);
 }
 
 .dropdown-option.active {
   color: #c4fb31;
-  background: rgba(196, 251, 49, 0.05);
 }
 
-.status-on {
-  color: #c4fb31;
-}
-
-.status-off {
-  color: #ff4b4b;
-}
-
+/* ── Active days ─────────────────────────────────────────── */
 .active-days-label-mini-header {
-  font-size: 11px;
-  font-weight: 900;
+  font-size: 10px;
+  font-weight: 800;
   color: var(--text3);
-  letter-spacing: 1.2px;
-  margin-bottom: 14px;
-  padding-left: 4px;
-  opacity: 0.7;
-}
-
-.active-days-section-mini {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 32px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  opacity: 0.6;
 }
 
 .days-row-mini {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  margin-bottom: 16px;
 }
 
 .day-circle-mini {
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
+  flex: 1;
+  height: 34px;
+  border-radius: 10px;
   background: var(--surface);
   border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   color: var(--text2);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
+  text-transform: uppercase;
 }
 
 .day-circle-mini.active {
@@ -347,25 +403,32 @@
 }
 
 .day-circle-mini.weekend {
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
+.day-circle-mini.weekend.active {
+  opacity: 1;
+}
+
+/* ── Add habit CTA button ────────────────────────────────── */
 .vibrant-pop {
   width: 100%;
-  height: 52px;
+  height: 46px;
   background: #c4fb31;
   color: #000;
   border: none;
-  border-radius: 18px;
-  font-size: 15px;
+  /* Subtle left accent using category color injected inline */
+  border-left: 3px solid transparent;
+  border-radius: 14px;
+  font-size: 14px;
   font-weight: 900;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
   text-transform: lowercase;
-  box-shadow: none;
+  letter-spacing: -0.2px;
 }
 
-.vibrant-pop:hover {
+.vibrant-pop:hover:not(:disabled) {
   background: #d4ff55;
   transform: translateY(-1px);
 }
@@ -374,15 +437,21 @@
   transform: scale(0.98);
 }
 
+.vibrant-pop:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Custom habit trigger ────────────────────────────────── */
 .custom-habit-trigger-dashed {
   display: flex;
   align-items: center;
-  gap: 18px;
-  padding: 24px;
-  border: 1px dashed var(--border3);
-  border-radius: 24px;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
   margin-bottom: 40px;
 }
 
@@ -392,92 +461,28 @@
 }
 
 .trigger-icon-box {
-  width: 44px;
-  height: 44px;
-  background: var(--surface2);
+  width: 38px;
+  height: 38px;
+  background: rgba(196, 251, 49, 0.08);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #c4fb31;
+  flex-shrink: 0;
 }
 
 .trigger-text-new {
-  font-size: 15px;
-  color: var(--text);
-  font-weight: 800;
+  font-size: 14px;
+  color: var(--text2);
+  font-weight: 600;
   line-height: 1.4;
   text-transform: lowercase;
+  margin: 0;
 }
 
 .highlight-text {
   color: #c4fb31;
+  font-weight: 700;
   display: block;
-}
-
-.core-discipline-toggle-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #111;
-  border: 1px solid #222;
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin: 0 16px 12px;
-  cursor: pointer;
-}
-
-.core-toggle-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.core-toggle-title {
-  font-size: 13px;
-  color: #fff;
-  margin: 0;
-}
-
-.core-toggle-sub {
-  font-size: 11px;
-  color: #555;
-  margin: 2px 0 0;
-}
-
-.core-toggle-switch {
-  width: 36px;
-  height: 20px;
-  background: #222;
-  border-radius: 999px;
-  padding: 2px;
-  transition: background 0.2s;
-  display: flex;
-  align-items: center;
-}
-
-.core-toggle-switch.on {
-  background: #CCFF00;
-  justify-content: flex-end;
-}
-
-.core-toggle-knob {
-  width: 16px;
-  height: 16px;
-  background: #fff;
-  border-radius: 50%;
-  transition: all 0.2s;
-}
-
-.core-toggle-switch.on .core-toggle-knob {
-  background: #000;
-}
-
-.h-group-label {
-  font-size: 11px;
-  color: #555;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 8px 0 6px;
-  padding: 0 4px;
 }

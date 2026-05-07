@@ -1,5 +1,5 @@
 .habits-page-v2 {
-  padding: 32px 16px 120px; /* Increased from 12px to give more room */
+  padding: 32px 16px 120px;
   max-width: 450px;
   margin: 0 auto;
   width: 100%;
@@ -10,12 +10,12 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
-  position: relative; /* For absolute centering of title */
+  position: relative;
 }
 
 .h-header-btn-circle {
-  width: 40px; /* Reduced from 44px */
-  height: 40px; /* Reduced from 44px */
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -45,19 +45,18 @@
 }
 
 .h-add-habit-btn-pill {
-  background: #c4fb31;
+  background: #CCFF00;
   color: #000;
   border: none;
-  border-radius: 12px; /* Matched 'Done' button style */
-  padding: 6px 12px; /* Reduced width */
+  border-radius: 12px;
+  padding: 6px 12px;
   display: flex;
   align-items: center;
   gap: 4px;
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: none;
+  transition: all 0.2s ease;
   z-index: 2;
 }
 
@@ -74,11 +73,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px; /* Reduced from 20px */
+  margin-bottom: 16px;
 }
 
 .h-section-label {
-  font-size: 20px; /* Reduced from 24px */
+  font-size: 20px;
   font-weight: 900;
   color: var(--text);
   margin: 0;
@@ -115,10 +114,10 @@
 .h-cards-container {
   display: flex;
   flex-direction: column;
-  gap: 4px; /* Tighter list */
+  gap: 4px;
 }
 
-/* Stats View Styles */
+/* Stats View */
 .h-stats-container {
   display: flex;
   flex-direction: column;
@@ -171,7 +170,7 @@
 .h-mini-val {
   font-size: 20px;
   font-weight: 900;
-  color: #c4fb31;
+  color: #CCFF00;
 }
 
 .h-mini-label {
@@ -180,4 +179,112 @@
   color: var(--text3);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+/* Empty state */
+.h-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 20px 40px;
+  text-align: center;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+}
+
+.h-empty-icon-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: rgba(204, 255, 0, 0.08);
+  border: 1px solid rgba(204, 255, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  color: #CCFF00;
+}
+
+.h-empty-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 6px;
+  letter-spacing: -0.3px;
+}
+
+.h-empty-sub {
+  font-size: 13px;
+  color: #555;
+  font-weight: 500;
+  margin: 0 0 22px;
+  line-height: 1.5;
+  max-width: 220px;
+}
+
+.h-empty-cta {
+  background: #CCFF00;
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s, transform 0.15s;
+  text-transform: lowercase;
+}
+
+.h-empty-cta:hover {
+  background: #d4ff55;
+  transform: translateY(-1px);
+}
+
+/* Loading skeleton */
+.h-loading-state {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.h-skeleton-card {
+  height: 68px;
+  border-radius: 18px;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  position: relative;
+}
+
+.h-skeleton-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%);
+  animation: h-shimmer 1.4s infinite;
+}
+
+@keyframes h-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Group labels */
+.h-group-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 10px 0 6px 4px;
 }

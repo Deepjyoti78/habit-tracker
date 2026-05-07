@@ -5,12 +5,12 @@
   width: 100%;
 }
 
-/* Header */
+/* ── Header ─────────────────────────────────────────────── */
 .ep-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
   padding-top: 8px;
 }
 
@@ -26,6 +26,7 @@
   color: #aaa;
   cursor: pointer;
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
 .ep-back-btn:hover {
@@ -43,7 +44,7 @@
 }
 
 .ep-save-btn {
-  background: #CCFF00;
+  background: #ccff00;
   color: #000;
   border: none;
   border-radius: 20px;
@@ -56,6 +57,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
+  flex-shrink: 0;
 }
 
 .ep-save-btn:hover {
@@ -64,148 +66,203 @@
 
 .ep-save-btn.saved {
   background: #1a2e00;
-  color: #CCFF00;
-  border: 1px solid #CCFF0033;
+  color: #ccff00;
+  border: 1px solid #ccff0033;
 }
 
-/* Avatar */
+/* ── Avatar — compact inline card ───────────────────────── */
 .ep-avatar-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 28px;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 14px;
+  padding: 14px 18px;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  margin-bottom: 10px;
 }
 
 .ep-avatar-wrap {
   position: relative;
-  width: 90px;
-  height: 90px;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
 }
 
 .ep-avatar-img {
-  width: 90px;
-  height: 90px;
-  border-radius: 24px;
-  background: #CCFF0022;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #ccff0022;
   object-fit: cover;
+  display: block;
 }
 
 .ep-camera-btn {
   position: absolute;
   bottom: -4px;
   right: -4px;
-  width: 28px;
-  height: 28px;
-  background: #CCFF00;
+  width: 22px;
+  height: 22px;
+  background: #ccff00;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #000;
-  border: 2px solid #080808;
+  border: 2px solid #161616;
   cursor: pointer;
 }
 
-.ep-avatar-hint {
-  font-size: 13px;
-  color: #666;
+.ep-avatar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ep-avatar-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
   margin: 0;
 }
 
-/* Form card — outer wrapper */
-.ep-form-card {
-  background: #111;
-  border: 1px solid #1e1e1e;
-  border-radius: 20px;
-  padding: 12px;
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.ep-avatar-hint {
+  font-size: 12px;
+  color: #555;
+  margin: 0;
 }
 
-/* Each field — stacked label + input, rounded card */
-.ep-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+/* ── Form card ───────────────────────────────────────────── */
+.ep-form-card {
   background: #161616;
-  border: 1px solid #222;
-  border-radius: 14px;
-  padding: 12px 16px;
-  transition: border-color 0.2s, background 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+/* THE FIX: force single horizontal row, no column stacking */
+.ep-field {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 20px;
+  height: 52px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 12px;
+  transition: background 0.2s;
+}
+
+.ep-field:last-child {
+  border-bottom: none;
 }
 
 .ep-field:focus-within {
-  border-color: #CCFF0055;
-  background: #191919;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .ep-field:focus-within .ep-label {
-  color: #CCFF00;
+  color: #ccff00;
 }
 
-/* Label — small uppercase above input */
+/* Label — fixed width, left side, never wraps */
 .ep-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ccc;
+  text-transform: lowercase;
+  flex-shrink: 0;
+  width: 96px;
+  white-space: nowrap;
   transition: color 0.2s;
+  cursor: default;
+  margin: 0;
+  padding: 0;
 }
 
-/* Input — full width, no border, tall enough */
+/* Input — fills rest, text right-aligned */
 .ep-input {
-  background: transparent;
-  border: none;
-  outline: none;
+  flex: 1;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
   color: #fff;
   font-size: 15px;
-  font-weight: 500;
-  width: 100%;
-  padding: 4px 0;
-  caret-color: #CCFF00;
-  -webkit-appearance: none;
-  appearance: none;
+  font-weight: 400;
+  text-align: right;
+  min-width: 0;
+  height: 100%;
+  caret-color: #ccff00;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  display: block;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+}
+
+.ep-input:focus,
+.ep-input:active {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }
 
 .ep-input::placeholder {
-  color: #333;
+  color: #3a3a3a;
+  text-align: right;
 }
 
-.ep-input:focus {
-  color: #fff;
-}
-
-/* Kill autofill white background */
 .ep-input:-webkit-autofill,
 .ep-input:-webkit-autofill:hover,
 .ep-input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #161616 inset !important;
   -webkit-text-fill-color: #fff !important;
-  caret-color: #CCFF00;
+  caret-color: #ccff00;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Delete button */
+/* ── Delete — card row, no fat pill ─────────────────────── */
+.ep-danger-card {
+  background: #161616;
+  border: 1px solid rgba(255, 60, 60, 0.12);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
 .ep-delete-btn {
   width: 100%;
-  background: #1a0000;
+  background: transparent;
   color: #ff4444;
-  border: 1px solid #ff444433;
-  border-radius: 12px;
-  padding: 16px;
+  border: none;
+  padding: 0 20px;
+  height: 52px;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: lowercase;
   cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 4px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .ep-delete-btn:hover {
-  background: #ff44441a;
-  border-color: #ff444466;
+  background: rgba(255, 68, 68, 0.06);
+}
+
+.ep-delete-icon {
+  color: #ff444466;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Search, ChevronRight, Check, ChevronDown, Clock, RefreshCw, Bell, Star } from 'lucide-react';
+import { X, Plus, Search, Check, ChevronDown, Clock, RefreshCw, Bell, Star } from 'lucide-react';
 import { Heart, Palette, Trophy, Target, Globe, Sprout } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { createHabit } from '../api/habits';
@@ -21,21 +21,38 @@ const repeatOptions = ['1 time / day', '2 times / day', '3 times / day', '5 time
 
 const catIconMap = {
   health: Heart, arts: Palette, sport: Trophy,
-  skills: Target, language: Globe, mindfulness: Sprout
+  skills: Target, language: Globe, mindfulness: Sprout,
 };
 
 export default function AddHabitPage() {
   const { dispatch } = useApp();
+
+  // Per-category state — each category tracks its own config independently
   const [expandedCategoryId, setExpandedCategoryId] = React.useState(null);
   const [activeDays, setActiveDays] = React.useState([0, 1, 2, 3, 4]);
   const [openDropdown, setOpenDropdown] = React.useState(null);
-  const [isCore, setIsCore] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
+
+  // isCore and config are now per-expanded category (reset on close)
+  const [isCore, setIsCore] = React.useState(false);
   const [config, setConfig] = React.useState({
     frequency: 'every day',
     repeats: '1 time / day',
-    reminders: true
+    reminders: true,
   });
+
+  const handleExpand = (catId) => {
+    if (expandedCategoryId === catId) {
+      setExpandedCategoryId(null);
+    } else {
+      setExpandedCategoryId(catId);
+      // Reset options for fresh expand
+      setIsCore(false);
+      setConfig({ frequency: 'every day', repeats: '1 time / day', reminders: true });
+      setActiveDays([0, 1, 2, 3, 4]);
+      setOpenDropdown(null);
+    }
+  };
 
   const handleAddHabit = async (cat) => {
     setSaving(true);
@@ -70,6 +87,7 @@ export default function AddHabitPage() {
       exit={{ opacity: 0, y: 10 }}
       transition={{ duration: 0.2 }}
     >
+      {/* Header */}
       <header className="add-habit-header-new">
         <button className="header-icon-box" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'habits' })}>
           <X size={18} />
@@ -80,25 +98,13 @@ export default function AddHabitPage() {
         </button>
       </header>
 
-      {/* Core Discipline Toggle */}
-      <div className="core-discipline-toggle-row" onClick={() => setIsCore(!isCore)}>
-        <div className="core-toggle-left">
-          <Star size={15} color={isCore ? '#CCFF00' : '#555'} fill={isCore ? '#CCFF00' : 'none'} />
-          <div>
-            <p className="core-toggle-title">core discipline</p>
-            <p className="core-toggle-sub">pin this habit to your home dashboard</p>
-          </div>
-        </div>
-        <div className={`core-toggle-switch ${isCore ? 'on' : ''}`}>
-          <div className="core-toggle-knob" />
-        </div>
-      </div>
-
+      {/* Search */}
       <div className="search-bar-container">
         <Search size={14} className="search-icon-dim" />
         <input type="text" placeholder="search habits..." className="habit-search-input" />
       </div>
 
+      {/* Categories */}
       <div className="categories-list">
         {categories.map((cat) => {
           const isExpanded = expandedCategoryId === cat.id;
@@ -106,10 +112,9 @@ export default function AddHabitPage() {
 
           return (
             <div key={cat.id} className={`category-row-new-container ${isExpanded ? 'expanded' : ''}`}>
-              <div className="category-row-new" onClick={() => {
-                setExpandedCategoryId(isExpanded ? null : cat.id);
-                setOpenDropdown(null);
-              }}>
+
+              {/* Category header row */}
+              <div className="category-row-new" onClick={() => handleExpand(cat.id)}>
                 <div className="category-left">
                   <div className="cat-icon-box" style={{ backgroundColor: `${cat.color}20` }}>
                     <CatIcon size={18} color={cat.color} />
@@ -124,6 +129,7 @@ export default function AddHabitPage() {
                 </button>
               </div>
 
+              {/* Expanded drawer */}
               <AnimatePresence>
                 {isExpanded && (
                   <motion.div
@@ -131,27 +137,56 @@ export default function AddHabitPage() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                   >
                     <div className="expand-inner">
+
+                      {/* Settings list */}
                       <div className="habit-settings-list-mini">
-                        {/* Frequency */}
+
+                        {/* Core discipline — lives here, makes sense in context */}
+                        <div
+                          className="setting-item-row-mini"
+                          onClick={() => setIsCore(c => !c)}
+                        >
+                          <div className="setting-left-group">
+                            <Star
+                              size={15}
+                              color={isCore ? '#CCFF00' : 'var(--text2)'}
+                              fill={isCore ? '#CCFF00' : 'none'}
+                              style={{ opacity: isCore ? 1 : 0.6 }}
+                            />
+                            <span className="setting-label-mini">core discipline</span>
+                          </div>
+                          <div className={`inline-toggle ${isCore ? 'on' : ''}`}>
+                            <div className="inline-toggle-knob" />
+                          </div>
+                        </div>
+
+                        {/* Frequency dropdown */}
                         <div className="dropdown-wrapper">
-                          <div className="setting-item-row-mini dropdown-trigger" onClick={() => setOpenDropdown(openDropdown === 'frequency' ? null : 'frequency')}>
+                          <div
+                            className="setting-item-row-mini dropdown-trigger"
+                            onClick={() => setOpenDropdown(openDropdown === 'frequency' ? null : 'frequency')}
+                          >
                             <div className="setting-left-group">
-                              <Clock size={16} className="setting-icon" />
+                              <Clock size={15} className="setting-icon" />
                               <span className="setting-label-mini">frequency</span>
                             </div>
                             <div className="setting-value-mini highlight-val">
                               <span>{config.frequency}</span>
-                              <ChevronDown size={14} className={`chevron-transition ${openDropdown === 'frequency' ? 'rotate' : ''}`} />
+                              <ChevronDown size={13} className={`chevron-transition ${openDropdown === 'frequency' ? 'rotate' : ''}`} />
                             </div>
                           </div>
                           <AnimatePresence>
                             {openDropdown === 'frequency' && (
-                              <motion.div className="dropdown-menu-mini" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                              <motion.div className="dropdown-menu-mini"
+                                initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+                              >
                                 {frequencyOptions.map(opt => (
-                                  <div key={opt} className={`dropdown-option ${config.frequency === opt ? 'active' : ''}`} onClick={() => { setConfig(p => ({ ...p, frequency: opt })); setOpenDropdown(null); }}>
+                                  <div key={opt} className={`dropdown-option ${config.frequency === opt ? 'active' : ''}`}
+                                    onClick={() => { setConfig(p => ({ ...p, frequency: opt })); setOpenDropdown(null); }}
+                                  >
                                     <span>{opt}</span>
                                     {config.frequency === opt && <Check size={12} />}
                                   </div>
@@ -161,23 +196,30 @@ export default function AddHabitPage() {
                           </AnimatePresence>
                         </div>
 
-                        {/* Repeats */}
+                        {/* Repeats dropdown */}
                         <div className="dropdown-wrapper">
-                          <div className="setting-item-row-mini dropdown-trigger" onClick={() => setOpenDropdown(openDropdown === 'repeats' ? null : 'repeats')}>
+                          <div
+                            className="setting-item-row-mini dropdown-trigger"
+                            onClick={() => setOpenDropdown(openDropdown === 'repeats' ? null : 'repeats')}
+                          >
                             <div className="setting-left-group">
-                              <RefreshCw size={16} className="setting-icon" />
+                              <RefreshCw size={15} className="setting-icon" />
                               <span className="setting-label-mini">repeats</span>
                             </div>
                             <div className="setting-value-mini highlight-val">
                               <span>{config.repeats}</span>
-                              <ChevronDown size={14} className={`chevron-transition ${openDropdown === 'repeats' ? 'rotate' : ''}`} />
+                              <ChevronDown size={13} className={`chevron-transition ${openDropdown === 'repeats' ? 'rotate' : ''}`} />
                             </div>
                           </div>
                           <AnimatePresence>
                             {openDropdown === 'repeats' && (
-                              <motion.div className="dropdown-menu-mini" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                              <motion.div className="dropdown-menu-mini"
+                                initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+                              >
                                 {repeatOptions.map(opt => (
-                                  <div key={opt} className={`dropdown-option ${config.repeats === opt ? 'active' : ''}`} onClick={() => { setConfig(p => ({ ...p, repeats: opt })); setOpenDropdown(null); }}>
+                                  <div key={opt} className={`dropdown-option ${config.repeats === opt ? 'active' : ''}`}
+                                    onClick={() => { setConfig(p => ({ ...p, repeats: opt })); setOpenDropdown(null); }}
+                                  >
                                     <span>{opt}</span>
                                     {config.repeats === opt && <Check size={12} />}
                                   </div>
@@ -187,44 +229,51 @@ export default function AddHabitPage() {
                           </AnimatePresence>
                         </div>
 
-                        {/* Reminders */}
-                        <div className="setting-item-row-mini dropdown-trigger" onClick={() => setConfig(p => ({ ...p, reminders: !p.reminders }))}>
+                        {/* Reminders toggle */}
+                        <div
+                          className="setting-item-row-mini"
+                          onClick={() => setConfig(p => ({ ...p, reminders: !p.reminders }))}
+                        >
                           <div className="setting-left-group">
-                            <Bell size={16} className="setting-icon" />
+                            <Bell size={15} className="setting-icon" />
                             <span className="setting-label-mini">reminders</span>
                           </div>
-                          <div className="setting-value-mini highlight-val">
-                            <span className={config.reminders ? 'status-on' : 'status-off'}>{config.reminders ? 'on' : 'off'}</span>
-                            <ChevronRight size={14} className="chevron-faint" />
+                          <span className={config.reminders ? 'status-on' : 'status-off'}>
+                            {config.reminders ? 'on' : 'off'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Active days */}
+                      <div className="active-days-label-mini-header">active days</div>
+                      <div className="days-row-mini">
+                        {days.map((day, idx) => (
+                          <div
+                            key={idx}
+                            className={`day-circle-mini ${activeDays.includes(idx) ? 'active' : ''} ${idx >= 5 ? 'weekend' : ''}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveDays(activeDays.includes(idx)
+                                ? activeDays.filter(d => d !== idx)
+                                : [...activeDays, idx]
+                              );
+                            }}
+                          >
+                            {day.toLowerCase()}
                           </div>
-                        </div>
+                        ))}
                       </div>
 
-                      <div className="active-days-label-mini-header">ACTIVE DAYS</div>
-                      <div className="active-days-section-mini">
-                        <div className="days-row-mini">
-                          {days.map((day, idx) => (
-                            <div
-                              key={idx}
-                              className={`day-circle-mini ${activeDays.includes(idx) ? 'active' : ''} ${idx >= 5 ? 'weekend' : ''}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setActiveDays(activeDays.includes(idx) ? activeDays.filter(d => d !== idx) : [...activeDays, idx]);
-                              }}
-                            >
-                              {day.toLowerCase()}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
+                      {/* CTA */}
                       <button
                         className="add-category-habit-btn vibrant-pop"
                         disabled={saving}
                         onClick={(e) => { e.stopPropagation(); handleAddHabit(cat); }}
+                        style={{ borderLeftColor: cat.color }}
                       >
-                        {saving ? 'saving...' : 'add this habit'}
+                        {saving ? 'saving...' : `add ${cat.label}`}
                       </button>
+
                     </div>
                   </motion.div>
                 )}
@@ -234,12 +283,13 @@ export default function AddHabitPage() {
         })}
       </div>
 
+      {/* Custom habit CTA */}
       <div className="custom-habit-trigger-dashed" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'create-habit' })}>
         <div className="trigger-icon-box">
           <Plus size={16} />
         </div>
         <p className="trigger-text-new">
-          couldn't find anything? <span className="highlight-text">create a new tag habit</span>
+          can't find it? <span className="highlight-text">create a custom habit</span>
         </p>
       </div>
     </motion.div>

@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Check, Star } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, Check, Star, Zap } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { createHabit } from '../api/habits';
 import './CreateHabitPage.css';
 
 const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-const colors = ['#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#ef4444'];
+const colors = ['#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#CCFF00'];
 const frequencyOptions = ['every day', '3 times / week', 'on weekends', 'custom'];
 
 export default function CreateHabitPage() {
@@ -17,6 +17,7 @@ export default function CreateHabitPage() {
   const [habitName, setHabitName] = React.useState('');
   const [details, setDetails] = React.useState('');
   const [frequency, setFrequency] = React.useState('every day');
+  const [showFreqDropdown, setShowFreqDropdown] = React.useState(false);
   const [repeats, setRepeats] = React.useState(1);
   const [reminder, setReminder] = React.useState(true);
   const [isCore, setIsCore] = React.useState(false);
@@ -47,111 +48,227 @@ export default function CreateHabitPage() {
     }
   };
 
+  const toggleDay = (idx) => {
+    setActiveDays(prev =>
+      prev.includes(idx) ? prev.filter(d => d !== idx) : [...prev, idx]
+    );
+  };
+
   return (
     <motion.div
-      className="create-habit-page-container"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 20 }}
+      className="chp-page"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 16 }}
       transition={{ duration: 0.3 }}
     >
-      <header className="create-habit-header">
-        <button className="back-btn-minimal" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}>
-          <ChevronLeft size={20} />
+      {/* Header */}
+      <header className="chp-header">
+        <button
+          className="chp-back"
+          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}
+        >
+          <ChevronLeft size={18} />
         </button>
-        <h1 className="create-habit-title">create personal habit</h1>
-        <button className="header-create-btn-highlight" onClick={handleCreate} disabled={saving}>
-          {saving ? '...' : 'create'}
+        <h1 className="chp-header-label">create new habit</h1>
+        <button
+          className={`chp-create-btn ${!habitName.trim() ? 'disabled' : ''}`}
+          onClick={handleCreate}
+          disabled={saving || !habitName.trim()}
+        >
+          {saving ? <span className="chp-spinner" /> : 'create'}
         </button>
       </header>
 
-      <div className="habit-initial-settings">
-        <div className={`setting-pill ${showColors ? 'active' : ''}`} onClick={() => setShowColors(!showColors)}>
-          <div className="color-dot" style={{ backgroundColor: selectedColor }} />
-          <span className="pill-label">colour</span>
-        </div>
-        {/* Core Discipline pill */}
-        <div className={`setting-pill ${isCore ? 'active' : ''}`} onClick={() => setIsCore(!isCore)}>
-          <Star size={13} color={isCore ? '#000' : '#CCFF00'} fill={isCore ? '#000' : 'none'} />
-          <span className="pill-label">core discipline</span>
-        </div>
-      </div>
-
-      {showColors && (
-        <div className="color-selector-row">
-          {colors.map(c => (
-            <div key={c} className={`color-option ${selectedColor === c ? 'active' : ''}`}
-              style={{ backgroundColor: c }} onClick={() => setSelectedColor(c)}>
-              {selectedColor === c && <Check size={10} color="#fff" />}
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className="habit-inputs-container">
+      {/* Name input */}
+      <div className="chp-name-section">
+        <div className="chp-color-preview" style={{ backgroundColor: selectedColor }} />
         <input
-          type="text"
-          className="habit-name-input"
+          className="chp-name-input"
           placeholder="habit name..."
           value={habitName}
           onChange={e => setHabitName(e.target.value)}
-        />
-        <textarea
-          className="habit-details-input"
-          placeholder="extra details..."
-          rows="3"
-          value={details}
-          onChange={e => setDetails(e.target.value)}
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck="false"
         />
       </div>
 
-      <div className="habit-settings-list">
-        <div className="setting-item-row">
-          <span className="setting-item-label">frequency</span>
-          <select
-            className="setting-select"
-            value={frequency}
-            onChange={e => setFrequency(e.target.value)}
+      {/* Details */}
+      <textarea
+        className="chp-details-input"
+        placeholder="add a note or description..."
+        rows="2"
+        value={details}
+        onChange={e => setDetails(e.target.value)}
+      />
+
+      {/* Tags row */}
+      <div className="chp-tags-row">
+        <button
+          className={`chp-tag ${showColors ? 'active' : ''}`}
+          onClick={() => setShowColors(!showColors)}
+        >
+          <div className="chp-tag-color-dot" style={{ backgroundColor: selectedColor }} />
+          colour
+        </button>
+
+        <button
+          className={`chp-tag ${isCore ? 'active core' : ''}`}
+          onClick={() => setIsCore(!isCore)}
+        >
+          <Star
+            size={11}
+            color={isCore ? '#000' : '#CCFF00'}
+            fill={isCore ? '#000' : 'none'}
+          />
+          core discipline
+        </button>
+
+        <button
+          className={`chp-tag ${reminder ? 'active' : ''}`}
+          onClick={() => setReminder(r => !r)}
+        >
+          {reminder ? '🔔' : '🔕'}
+          reminder {reminder ? 'on' : 'off'}
+        </button>
+      </div>
+
+      {/* Color palette */}
+      <AnimatePresence>
+        {showColors && (
+          <motion.div
+            className="chp-colors"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
           >
-            {frequencyOptions.map(o => <option key={o} value={o}>{o}</option>)}
-          </select>
-        </div>
+            {colors.map(c => (
+              <div
+                key={c}
+                className={`chp-color-dot ${selectedColor === c ? 'active' : ''}`}
+                style={{ backgroundColor: c }}
+                onClick={() => { setSelectedColor(c); setShowColors(false); }}
+              >
+                {selectedColor === c && <Check size={10} color="#000" />}
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        <div className="setting-item-row">
-          <span className="setting-item-label">repeats per day</span>
-          <div className="setting-item-value">
-            <button className="counter-btn" onClick={() => setRepeats(r => Math.max(1, r - 1))}>−</button>
-            <span style={{ color: '#CCFF00', minWidth: '20px', textAlign: 'center' }}>{repeats}</span>
-            <button className="counter-btn" onClick={() => setRepeats(r => r + 1)}>+</button>
+      {/* Settings card */}
+      <div className="chp-settings-card">
+
+        {/* Frequency row */}
+        <div
+          className="chp-setting-row"
+          onClick={() => setShowFreqDropdown(!showFreqDropdown)}
+        >
+          <div className="chp-setting-left">
+            <span className="chp-setting-icon">⏱</span>
+            <span className="chp-setting-label">frequency</span>
+          </div>
+          <div className="chp-freq-value">
+            <span>{frequency}</span>
+            <motion.span
+              className="chp-freq-chevron"
+              animate={{ rotate: showFreqDropdown ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              ▾
+            </motion.span>
           </div>
         </div>
 
-        <div className="setting-item-row" onClick={() => setReminder(r => !r)} style={{ cursor: 'pointer' }}>
-          <span className="setting-item-label">reminders</span>
-          <div className="setting-item-value">
-            <span style={{ color: reminder ? '#CCFF00' : '#555' }}>{reminder ? 'on' : 'off'}</span>
-            <ChevronRight size={16} />
+        {/* Frequency dropdown */}
+        <AnimatePresence>
+          {showFreqDropdown && (
+            <motion.div
+              className="chp-freq-dropdown"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {frequencyOptions.map(o => (
+                <div
+                  key={o}
+                  className={`chp-freq-option ${frequency === o ? 'active' : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFrequency(o);
+                    setShowFreqDropdown(false);
+                  }}
+                >
+                  <span>{o}</span>
+                  {frequency === o && <Check size={13} color="#CCFF00" />}
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="chp-divider" />
+
+        {/* Repeats row */}
+        <div className="chp-setting-row">
+          <div className="chp-setting-left">
+            <span className="chp-setting-icon">🔁</span>
+            <span className="chp-setting-label">repeats / day</span>
+          </div>
+          <div className="chp-counter">
+            <button
+              className="chp-counter-btn"
+              onClick={() => setRepeats(r => Math.max(1, r - 1))}
+              disabled={repeats <= 1}
+            >−</button>
+            <span className="chp-counter-val">{repeats}</span>
+            <button
+              className="chp-counter-btn"
+              onClick={() => setRepeats(r => r + 1)}
+            >+</button>
           </div>
         </div>
       </div>
 
-      <div className="active-days-section">
-        <div className="active-days-label">
-          <span>active</span>
-          <span>days</span>
-        </div>
-        <div className="days-row">
+      {/* Active days */}
+      <div className="chp-days-card">
+        <p className="chp-days-label">active days</p>
+        <div className="chp-days-row">
           {days.map((day, idx) => (
-            <div
+            <button
               key={idx}
-              className={`day-circle ${activeDays.includes(idx) ? 'active' : ''} ${idx >= 5 ? 'weekend' : ''}`}
-              onClick={() => setActiveDays(activeDays.includes(idx) ? activeDays.filter(d => d !== idx) : [...activeDays, idx])}
+              className={`chp-day ${activeDays.includes(idx) ? 'active' : ''} ${idx >= 5 ? 'weekend' : ''}`}
+              onClick={() => toggleDay(idx)}
+              style={activeDays.includes(idx) ? {
+                borderColor: selectedColor,
+                color: selectedColor,
+                backgroundColor: `${selectedColor}18`
+              } : {}}
             >
               {day}
-            </div>
+            </button>
           ))}
         </div>
       </div>
+
+      {/* Bottom CTA */}
+      <motion.button
+        className={`chp-bottom-btn ${!habitName.trim() ? 'disabled' : ''}`}
+        onClick={handleCreate}
+        disabled={saving || !habitName.trim()}
+        whileTap={{ scale: 0.98 }}
+      >
+        {saving ? (
+          <span className="chp-spinner" />
+        ) : (
+          <>
+            <Zap size={16} fill="#000" />
+            start tracking
+          </>
+        )}
+      </motion.button>
     </motion.div>
   );
 }

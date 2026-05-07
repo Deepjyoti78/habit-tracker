@@ -16,9 +16,11 @@ export default function MobileNavbar() {
   const { state, dispatch } = useApp();
   const { currentPage } = state;
 
+  // Hide navbar on these pages completely
+  const hideOnPages = ['profile', 'edit-profile', 'add-habit', 'create-habit', 'timer'];
+  if (hideOnPages.includes(currentPage)) return null;
+
   const getActivePage = () => {
-    if (currentPage === 'add-habit' || currentPage === 'create-habit') return 'habits';
-    if (currentPage === 'profile' || currentPage === 'edit-profile') return 'home';
     return navItems.find(i => i.id === currentPage) ? currentPage : 'home';
   };
 
@@ -29,7 +31,6 @@ export default function MobileNavbar() {
       {navItems.map((item) => {
         const isActive = activePage === item.id;
         const Icon = item.icon;
-
         return (
           <button
             key={item.id}

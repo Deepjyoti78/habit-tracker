@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, Camera, Check } from 'lucide-react';
+import { ChevronLeft, Camera, Check, Trash2 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import './EditProfilePage.css';
 
@@ -17,17 +17,17 @@ export default function EditProfilePage() {
 
   const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });
 
+  // Phone: strip everything except digits and leading +
+  const setPhone = (e) => {
+    const raw = e.target.value;
+    const clean = raw.replace(/[^\d+]/g, '').replace(/(?!^)\+/g, '');
+    setForm({ ...form, phone: clean });
+  };
+
   const handleSave = () => {
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
-
-  const fields = [
-    { label: 'full name', key: 'name', type: 'text', autoComplete: 'off' },
-    { label: 'username', key: 'username', type: 'text', autoComplete: 'off' },
-    { label: 'email', key: 'email', type: 'email', autoComplete: 'email' },
-    { label: 'phone', key: 'phone', type: 'tel', autoComplete: 'off' },
-  ];
 
   return (
     <motion.div
@@ -37,17 +37,24 @@ export default function EditProfilePage() {
       exit={{ opacity: 0, x: -30 }}
       transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
     >
+      {/* Header */}
       <header className="ep-header">
-        <button className="ep-back-btn" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'profile' })}>
+        <button
+          className="ep-back-btn"
+          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'profile' })}
+        >
           <ChevronLeft size={20} />
         </button>
         <h1 className="ep-title">edit profile</h1>
-        <button className={`ep-save-btn ${saved ? 'saved' : ''}`} onClick={handleSave}>
+        <button
+          className={`ep-save-btn ${saved ? 'saved' : ''}`}
+          onClick={handleSave}
+        >
           {saved ? <><Check size={13} /> saved</> : 'save'}
         </button>
       </header>
 
-      {/* Avatar */}
+      {/* Avatar — horizontal inline row */}
       <div className="ep-avatar-section">
         <div className="ep-avatar-wrap">
           <img
@@ -56,37 +63,95 @@ export default function EditProfilePage() {
             className="ep-avatar-img"
           />
           <div className="ep-camera-btn">
-            <Camera size={14} />
+            <Camera size={11} />
           </div>
         </div>
-        <p className="ep-avatar-hint">tap to change photo</p>
+        <div className="ep-avatar-info">
+          <p className="ep-avatar-name">
+            {form.name || form.username || 'your name'}
+          </p>
+          <p className="ep-avatar-hint">tap to change photo</p>
+        </div>
       </div>
 
-      {/* Form */}
+      {/* Form fields — label left, input right */}
       <div className="ep-form-card">
-        {fields.map(({ label, key, type, autoComplete }) => (
-          <div className="ep-field" key={key}>
-            <label className="ep-label">{label}</label>
-            <input
-              className="ep-input"
-              type={type}
-              value={form[key]}
-              onChange={set(key)}
-              placeholder={`enter ${label}`}
-              autoComplete="new-password"
-              autoCorrect="off"
-              autoCapitalize="off"
-              spellCheck="false"
-              readOnly={false}
-            />
-          </div>
-        ))}
+
+        <div className="ep-field">
+          <label className="ep-label" htmlFor="ep-name">full name</label>
+          <input
+            id="ep-name"
+            className="ep-input"
+            type="text"
+            value={form.name}
+            onChange={set('name')}
+            placeholder="enter full name"
+            autoComplete="new-password"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+          />
+        </div>
+
+        <div className="ep-field">
+          <label className="ep-label" htmlFor="ep-username">username</label>
+          <input
+            id="ep-username"
+            className="ep-input"
+            type="text"
+            value={form.username}
+            onChange={set('username')}
+            placeholder="enter username"
+            autoComplete="new-password"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+          />
+        </div>
+
+        <div className="ep-field">
+          <label className="ep-label" htmlFor="ep-email">email</label>
+          <input
+            id="ep-email"
+            className="ep-input"
+            type="email"
+            value={form.email}
+            onChange={set('email')}
+            placeholder="enter email"
+            autoComplete="new-password"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+          />
+        </div>
+
+        <div className="ep-field">
+          <label className="ep-label" htmlFor="ep-phone">phone</label>
+          <input
+            id="ep-phone"
+            className="ep-input"
+            type="tel"
+            inputMode="numeric"
+            value={form.phone}
+            onChange={setPhone}
+            placeholder="enter phone"
+            autoComplete="new-password"
+            spellCheck="false"
+          />
+        </div>
+
       </div>
 
-      {/* Danger */}
-      <button className="ep-delete-btn">
-        delete account
-      </button>
+      {/* Delete — card row style */}
+      <div className="ep-danger-card">
+        <button className="ep-delete-btn">
+          delete account
+          <span className="ep-delete-icon">
+            <Trash2 size={16} />
+          </span>
+        </button>
+      </div>
+
     </motion.div>
   );
 }
