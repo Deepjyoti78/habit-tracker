@@ -14,6 +14,7 @@ const initialState = {
   sidebarCollapsed: false,
   dayStarted: false,
   isLoading: false,
+  selectedHabitId: null,
 };
 
 function reducer(state, action) {
@@ -26,6 +27,7 @@ function reducer(state, action) {
     case 'TOGGLE_SIDEBAR': return { ...state, sidebarCollapsed: !state.sidebarCollapsed };
     case 'SET_LOADING': return { ...state, isLoading: action.payload };
     case 'SET_DAY_STARTED': return { ...state, dayStarted: action.payload };
+    case 'SET_SELECTED_HABIT': return { ...state, selectedHabitId: action.payload };
     case 'ADD_HABIT': return { ...state, habits: [...state.habits, action.payload] };
     case 'UPDATE_HABIT': return {
       ...state,

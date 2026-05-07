@@ -44,7 +44,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Calendar - Now Interactive */}
+      {/* Calendar - Restored */}
       <CalendarStrip 
         selectedDate={selectedDate} 
         onDateSelect={setSelectedDate} 
@@ -53,13 +53,11 @@ export default function HomePage() {
       {/* Bento Grid */}
       <div className="home-bento-grid">
         <div className="home-left-col">
-          <OverallProgressCard selectedDate={selectedDate} />
-          <RemainingTasksCard selectedDate={selectedDate} />
-          <TaskRemainingCard selectedDate={selectedDate} />
+          <OverallProgressCard />
         </div>
 
         <div className="home-right-col">
-          <HabitCard selectedDate={selectedDate} />
+          <HabitCard />
         </div>
       </div>
 

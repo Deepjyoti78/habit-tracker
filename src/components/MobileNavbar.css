@@ -9,13 +9,15 @@
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
-    background: #0a0a0b;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(10, 10, 11, 0.65); /* Semi-transparent for glass effect */
+    backdrop-filter: blur(12px) saturate(180%); /* Core glassmorphism blur */
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12); /* Brighter border for glow */
     border-radius: 40px;
     padding: 8px 12px;
     gap: 12px;
     align-items: center;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     z-index: 1000;
   }
 

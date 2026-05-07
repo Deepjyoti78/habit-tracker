@@ -209,21 +209,22 @@
   font-weight: 600;
 }
 
-.h-view-tracker-link {
-  background: transparent;
-  border: none;
+.h-circular-view-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
-  gap: 3px;
+  justify-content: center;
   color: #666;
-  font-size: 11px;
-  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
-  text-transform: lowercase;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.h-view-tracker-link:hover {
-  color: #CCFF00;
-  transform: translateX(2px);
+.h-circular-view-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--primary); /* CCFF00 */
 }

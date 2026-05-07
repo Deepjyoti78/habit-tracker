@@ -1,47 +1,86 @@
-.overall-progress-card-simple {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  padding: 12px;
-  width: 100%;
-}
-
-.opc-body-simple {
+.overall-progress-nebula {
+  height: 100%;
+  min-height: 180px;
+  padding: 14px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   gap: 12px;
 }
 
-.opc-gauge-container-small {
+.opc-nebula-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.opc-nebula-gauge {
   position: relative;
-  width: 60px;
-  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  margin-top: 0;
+  /* Removed scale to keep it big */
 }
 
-.opc-gauge-value {
+.opc-nebula-value {
   position: absolute;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text);
+  font-size: 20px;
+  /* Increased back */
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
 }
 
-.opc-text-container {
+.opc-nebula-stats {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 8px;
+  width: 100%;
+  padding: 0 4px;
 }
 
-.opc-label-large {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
+.opc-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  /* Reduced padding to remove empty space */
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.2s;
 }
 
-.opc-sublabel {
-  font-size: 11px;
-  color: var(--text3);
+.opc-icon {
+  flex-shrink: 0;
+  color: #fff !important;
+  /* Make icons whitish */
+}
+
+.opc-icon.orange {
+  color: #f59e0b;
+}
+
+.opc-icon.red {
+  color: #ef4444;
+}
+
+.opc-stat-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.opc-stat-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.opc-stat-label {
+  font-size: 10px;
+  color: #888;
+  font-weight: 500;
 }

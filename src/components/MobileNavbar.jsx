@@ -17,7 +17,7 @@ export default function MobileNavbar() {
   const { currentPage } = state;
 
   // Hide navbar on these pages completely
-  const hideOnPages = ['profile', 'edit-profile', 'add-habit', 'create-habit', 'timer'];
+  const hideOnPages = ['profile', 'edit-profile', 'add-habit', 'create-habit', 'timer', 'tracker'];
   if (hideOnPages.includes(currentPage)) return null;
 
   const getActivePage = () => {

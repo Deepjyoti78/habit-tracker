@@ -1,586 +1,1025 @@
-.ht-page-v3 {
-    background: #000;
-    min-height: 100vh;
-    padding: 24px 20px 120px;
+/* ───────────────────────────────────────────
+   BASE PAGE
+─────────────────────────────────────────── */
+.ht-page {
+    position: relative;
+    background: #0d0d0d;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    color: #fff;
 }
 
-/* Header */
-.ht-header-v3 {
+.ht-bg-glow {
+    position: fixed;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    opacity: 0.08;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ───────────────────────────────────────────
+   HEADER
+─────────────────────────────────────────── */
+.ht-header {
+    position: relative;
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 44px 20px 8px;
+    flex-shrink: 0;
 }
 
-.ht-back-btn-v3 {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background: #111;
-    border: 1px solid #222;
+.ht-back-btn,
+.ht-more-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: none;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: background 0.2s;
 }
 
-.ht-title-v3 {
-    font-size: 18px;
-    font-weight: 800;
+.ht-back-btn:hover,
+.ht-more-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.ht-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
     text-transform: lowercase;
-    letter-spacing: -0.5px;
+    color: #fff;
+    margin: 0;
 }
 
-/* Calendar Wrap */
-.ht-calendar-strip-wrap {
-    margin: 0 -20px;
+/* ───────────────────────────────────────────
+   CALENDAR STRIP
+─────────────────────────────────────────── */
+.ht-calendar-wrap {
+    position: relative;
+    z-index: 10;
+    padding: 0;
 }
 
-/* Content Area */
-.ht-scroll-content {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-
+/* ───────────────────────────────────────────
+   CONTENT & CARDS
+─────────────────────────────────────────── */
 .ht-content {
+    position: relative;
+    z-index: 10;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 12px;
+    padding: 4px 16px 20px;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
-/* ── Water Specifics ── */
-.ht-hero-section {
+.ht-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 20px;
+    padding: 16px 18px;
+    backdrop-filter: blur(12px);
+}
+
+.ht-card.ht-center {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ht-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.ht-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 2px;
+    letter-spacing: 0.2px;
+}
+
+.ht-card-sub {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.ht-card-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.35);
+    text-align: center;
+    margin: 0 0 12px;
+    letter-spacing: 0.3px;
+}
+
+.ht-period-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+/* ───────────────────────────────────────────
+   PROGRESS BAR
+─────────────────────────────────────────── */
+.ht-progress-track {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.ht-progress-fill {
+    height: 100%;
+    border-radius: 99px;
+}
+
+/* ───────────────────────────────────────────
+   WATER – HERO
+─────────────────────────────────────────── */
+.ht-water-hero {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 
-.ht-hero-title {
-    font-size: 32px;
-    font-weight: 900;
-    letter-spacing: -1.5px;
-    margin-bottom: 8px;
+.ht-water-big {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 2px;
+    line-height: 1;
 }
 
-.ht-hero-desc {
-    font-size: 14px;
-    color: #888;
-    line-height: 1.5;
-    max-width: 280px;
+.ht-water-of {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.4);
 }
 
-.ht-edit-btn {
-    background: transparent;
-    border: none;
+.ht-water-sub {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0;
+}
+
+.ht-mini-ring {
+    position: relative;
+    width: 64px;
+    height: 64px;
+}
+
+.ht-mini-ring-val {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* ───────────────────────────────────────────
+   WATER – GLASSES
+─────────────────────────────────────────── */
+.ht-glass-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.ht-glass {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.ht-glass.filled {
+    background: color-mix(in srgb, var(--c) 20%, transparent);
+    border-color: var(--c);
+    color: var(--c);
+}
+
+.ht-log-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.ht-log-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
     color: #fff;
-    cursor: pointer;
-    padding: 8px;
-}
-
-.ht-water-grid-v2 {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-}
-
-.ht-glass-v2 {
-    aspect-ratio: 1;
-    background: #111;
-    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #222;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.ht-glass-v2.filled {
-    background: color-mix(in srgb, var(--glass-color) 20%, transparent);
-    color: var(--glass-color);
-}
-
-.ht-glass-add-btn {
-    aspect-ratio: 1;
-    background: #fff;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;
-    border: none;
     cursor: pointer;
 }
 
-.ht-notification-card {
-    background: #111;
-    border-radius: 24px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.ht-log-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.3px;
 }
 
+/* ───────────────────────────────────────────
+   NOTIFICATION TOGGLE
+─────────────────────────────────────────── */
 .ht-notif-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.ht-notif-label {
-    font-size: 16px;
-    font-weight: 800;
-}
-
-.ht-notif-sub {
-    font-size: 13px;
-    color: #666;
+    margin-bottom: 12px;
 }
 
 .ht-toggle {
-    width: 44px;
-    height: 24px;
-    background: #222;
-    border-radius: 20px;
+    width: 46px;
+    height: 26px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.1);
     position: relative;
     cursor: pointer;
     transition: background 0.3s;
+    flex-shrink: 0;
+}
+
+.ht-toggle-knob {
+    position: absolute;
+    top: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .ht-toggle.on {
     background: #CCFF00;
 }
 
-.ht-toggle-knob {
-    width: 18px;
-    height: 18px;
-    background: #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.ht-toggle.on .ht-toggle-knob {
-    transform: translateX(20px);
-    background: #000;
-}
-
-.ht-dropdown-pill {
-    background: #1a1a1a;
-    padding: 12px 16px;
-    border-radius: 14px;
+.ht-freq-pill {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    color: #aaa;
-}
-
-/* ── Chart Cards ── */
-.ht-chart-card {
-    background: #111;
-    border-radius: 24px;
-    padding: 20px;
-}
-
-.ht-chart-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.ht-chart-title {
-    font-size: 16px;
-    font-weight: 800;
-}
-
-.ht-chart-period {
-    background: #1a1a1a;
-    padding: 4px 10px;
-    border-radius: 8px;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 6px 14px;
     font-size: 12px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    width: fit-content;
 }
 
+/* ───────────────────────────────────────────
+   BAR CHART (shared)
+─────────────────────────────────────────── */
 .ht-bar-chart {
     display: flex;
     align-items: flex-end;
-    justify-content: space-between;
-    height: 120px;
-    padding-top: 20px;
+    gap: 6px;
+    height: 80px;
 }
 
-.ht-bar-wrap {
-    width: 32px;
-    height: 100%;
+.ht-bar-col {
+    flex: 1;
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+}
+
+.ht-bar-track {
+    flex: 1;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 .ht-bar-fill {
     width: 100%;
     border-radius: 6px;
-    transition: height 1s ease-out;
+    min-height: 4px;
 }
 
-/* ── Sleep Hero ── */
-.ht-sleep-hero {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 20px 0;
+.ht-bar-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3);
+    text-transform: uppercase;
 }
 
-.ht-sleep-ring-container {
+/* ───────────────────────────────────────────
+   SLEEP – RING
+─────────────────────────────────────────── */
+.ht-ring-wrap {
     position: relative;
+    width: 190px;
+    height: 190px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 1;
 }
 
-.ht-sleep-ring-info {
+.ht-ring-center {
     position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    justify-content: center;
+    gap: 2px;
 }
 
-.ht-ring-label {
-    font-size: 12px;
-    color: #666;
-    text-transform: lowercase;
+.ht-ring-sm-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.3px;
 }
 
-.ht-ring-val {
-    font-size: 48px;
-    font-weight: 900;
-    letter-spacing: -2px;
+.ht-ring-big-val {
+    font-size: 32px;
+    font-weight: 700;
     line-height: 1;
-    margin: 4px 0;
 }
 
-.ht-ring-status {
+.ht-ring-good {
     font-size: 10px;
-    color: #CCFF00;
-    background: rgba(204, 255, 0, 0.1);
-    padding: 4px 8px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    color: rgba(255, 255, 255, 0.4);
 }
 
-.ht-sleep-stats-row {
+/* ───────────────────────────────────────────
+   SLEEP – STATS ROW
+─────────────────────────────────────────── */
+.ht-sleep-stats {
     display: flex;
-    justify-content: space-between;
-    background: #111;
-    border-radius: 24px;
-    padding: 24px;
+    gap: 10px;
 }
 
-.ht-sleep-stat-item {
+.ht-sleep-stat {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: 14px 10px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    align-items: center;
+    gap: 5px;
+}
+
+.ht-sleep-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.ht-sleep-stat-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
     text-align: center;
 }
 
-.ht-stat-label {
-    font-size: 10px;
-    font-weight: 800;
-    color: #444;
+.ht-sleep-stat-val {
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
 }
 
-.ht-stat-val {
-    font-size: 15px;
-    font-weight: 900;
-}
-
-.ht-bar-chart-complex {
+/* ───────────────────────────────────────────
+   SLEEP – LEGEND
+─────────────────────────────────────────── */
+.ht-sleep-legend {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    height: 140px;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.ht-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.ht-legend-text {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-right: 8px;
+}
+
+/* ───────────────────────────────────────────
+   STUDY – RING TIMER
+─────────────────────────────────────────── */
+.ht-study-ring-wrap {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ht-study-timer-info {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.ht-study-session {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.3px;
+}
+
+.ht-study-time {
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.ht-study-status {
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+/* ───────────────────────────────────────────
+   STUDY – CONTROLS
+─────────────────────────────────────────── */
+.ht-study-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+    width: 100%;
+    justify-content: center;
+}
+
+.ht-study-start {
+    flex: 1;
+    max-width: 140px;
+    height: 44px;
+    border-radius: 99px;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: opacity 0.2s;
+}
+
+.ht-study-start:hover {
+    opacity: 0.85;
+}
+
+.ht-study-sec {
+    display: flex;
     gap: 8px;
 }
 
-.ht-bar-stack {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    height: 100%;
-    justify-content: flex-end;
-}
-
-.ht-bar-top, .ht-bar-mid, .ht-bar-bot {
-    width: 100%;
-    border-radius: 4px;
-}
-
-.ht-sleep-legend {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
-}
-
-.ht-time-label {
-    font-size: 10px;
-    color: #444;
-    font-weight: 700;
-}
-
-/* ── Study Tracker ── */
-.ht-study-hero {
-    display: flex;
-    justify-content: center;
-    padding: 40px 0;
-}
-
-.ht-timer-ring-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.ht-timer-display {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.ht-timer-session {
-    font-size: 13px;
-    font-weight: 700;
-    color: #666;
-}
-
-.ht-timer-main {
-    font-size: 52px;
-    font-weight: 900;
-    letter-spacing: -2px;
-    margin: 4px 0;
-}
-
-.ht-timer-finished {
-    font-size: 11px;
-    color: #444;
-}
-
-.ht-timer-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 24px;
-}
-
-.ht-stop-btn {
-    background: #fff;
-    color: #000;
-    border: none;
-    padding: 12px 32px;
-    border-radius: 100px;
-    font-size: 15px;
-    font-weight: 900;
-    cursor: pointer;
-}
-
-.ht-icon-btn {
+.ht-study-icon-btn {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: #111;
-    border: 1px solid #222;
-    color: #666;
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: background 0.2s;
 }
 
-.ht-todo-card {
-    background: #111;
-    border-radius: 24px;
-    padding: 24px;
+.ht-study-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-.ht-todo-title {
-    font-size: 18px;
-    font-weight: 800;
+/* ───────────────────────────────────────────
+   STUDY – SESSION DOTS
+─────────────────────────────────────────── */
+.ht-session-count {
+    font-size: 13px;
+    font-weight: 600;
 }
 
+.ht-session-dots {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+
+.ht-session-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.ht-session-dot.done {
+    border-color: transparent;
+}
+
+/* ───────────────────────────────────────────
+   STUDY – TO-DO
+─────────────────────────────────────────── */
 .ht-todo-list {
-    margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
+    margin-top: 4px;
 }
 
 .ht-todo-row {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
+    cursor: pointer;
+    padding: 2px 0;
 }
 
-.ht-todo-check-v2 {
+.ht-todo-check {
     width: 20px;
     height: 20px;
-    border: 2px solid #222;
-    border-radius: 6px;
+    border-radius: 50%;
+    border: 2px solid;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s;
 }
 
-.ht-todo-row.done .ht-todo-check-v2 {
-    background: #fff;
-    border-color: #fff;
-    color: #000;
+.ht-todo-text {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.2s, text-decoration 0.2s;
 }
 
-.ht-todo-label-v2 {
-    font-size: 15px;
-    font-weight: 700;
-    color: #fff;
-}
-
-.ht-todo-row.done .ht-todo-label-v2 {
+.ht-todo-row.done .ht-todo-text {
+    color: rgba(255, 255, 255, 0.3);
     text-decoration: line-through;
-    color: #444;
 }
 
-/* ── Mind Tracker ── */
+/* ───────────────────────────────────────────
+   MIND – PROMO BANNER
+─────────────────────────────────────────── */
 .ht-mind-promo {
-    background: #111;
-    border-radius: 28px;
-    padding: 24px;
     display: flex;
     align-items: center;
-    gap: 20px;
-}
-
-.ht-mind-promo-content {
-    flex: 1;
-}
-
-.ht-mind-promo-title {
-    font-size: 20px;
-    font-weight: 900;
-    margin-bottom: 8px;
-}
-
-.ht-mind-promo-sub {
-    font-size: 13px;
-    color: #666;
-    line-height: 1.4;
-    margin-bottom: 16px;
-}
-
-.ht-mind-promo-btn {
-    background: #fff;
-    color: #000;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 900;
-    cursor: pointer;
-}
-
-.ht-mind-promo-img {
-    font-size: 48px;
-}
-
-.ht-mood-tracker-card {
-    background: #111;
-    border-radius: 28px;
-    padding: 24px;
-}
-
-.ht-mood-graph-row {
-    display: flex;
     justify-content: space-between;
-    height: 100px;
-    margin-top: 30px;
-    position: relative;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 18px 16px;
 }
 
-.ht-mood-point-wrap {
-    width: 32px;
-    height: 100%;
-    position: relative;
+.ht-mind-promo-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ht-mind-emoji {
+    font-size: 40px;
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+.ht-mind-cta {
+    margin-top: 6px;
+    width: fit-content;
+    padding: 8px 16px;
+    border-radius: 99px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    transition: opacity 0.2s;
+}
+
+.ht-mind-cta:hover {
+    opacity: 0.85;
+}
+
+/* ───────────────────────────────────────────
+   MIND – MOOD BUTTONS
+─────────────────────────────────────────── */
+.ht-mood-row {
+    display: flex;
+    gap: 6px;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+
+.ht-mood-btn {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 4px;
+    padding: 10px 4px;
+    border-radius: 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
 }
 
-.ht-mood-point {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    border: 2px solid rgba(255,255,255,0.05);
+.ht-mood-emoji {
+    font-size: 20px;
+    line-height: 1;
 }
 
-.ht-mood-date {
-    position: absolute;
-    bottom: -20px;
+.ht-mood-label {
     font-size: 9px;
-    font-weight: 800;
-    color: #333;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.2px;
+    text-align: center;
 }
 
-.ht-hr-card {
-    background: #111;
-    border-radius: 28px;
-    padding: 24px;
+.ht-mood-btn.selected .ht-mood-label {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ───────────────────────────────────────────
+   MIND – HEART RATE GRAPH
+─────────────────────────────────────────── */
+.ht-hr-graph {
+    margin: 4px 0 10px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .ht-hr-stats {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    margin-bottom: 24px;
-}
-
-.ht-hr-stat {
-    display: flex;
-    flex-direction: column;
     gap: 4px;
 }
 
+.ht-hr-stat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 10px 6px;
+}
+
 .ht-hr-val {
-    font-size: 14px;
-    font-weight: 900;
+    font-size: 13px;
+    font-weight: 700;
 }
 
 .ht-hr-label {
-    font-size: 9px;
-    font-weight: 800;
-    color: #444;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.35);
 }
 
-.ht-hr-graph {
-    margin: 0 -10px;
+/* ───────────────────────────────────────────
+   LIVE DOT
+─────────────────────────────────────────── */
+.ht-live-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    margin-left: 4px;
+    animation: ht-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ht-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(0.7);
+    }
+}
+
+/* ───────────────────────────────────────────
+   SLEEP TRACKER — REDESIGN (Dribbble-inspired)
+─────────────────────────────────────────── */
+
+/* Quality badge */
+.ht-sleep-quality-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0px 0 4px;
+    text-align: center;
+}
+
+.ht-sleep-sparkle {
+    font-size: 18px;
+    color: #c084fc;
+    opacity: 0.7;
+}
+
+.ht-sleep-sparkle.sm {
+    font-size: 12px;
+    opacity: 0.4;
+}
+
+.ht-sleep-quality-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0 0 2px;
+    letter-spacing: 0.4px;
+    text-align: center;
+}
+
+.ht-sleep-quality-val {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, #c084fc, #e879f9, #f0abfc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+}
+
+/* Deep / Light pills */
+.ht-sleep-pills {
+    display: flex;
+    gap: 10px;
+    padding: 0 16px;
+}
+
+.ht-sleep-pill {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: 12px 14px;
+}
+
+.ht-pill-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.ht-pill-dot.deep {
+    background: #9b5de5;
+}
+
+.ht-pill-dot.light {
+    background: #e879f9;
+}
+
+.ht-pill-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0 0 2px;
+}
+
+.ht-pill-val {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+/* Arc card */
+.ht-sleep-arc-card {
+    padding: 12px 20px 8px;
+    background: rgba(155, 93, 229, 0.06) !important;
+    border-color: rgba(192, 132, 252, 0.15) !important;
+}
+
+.ht-sleep-arc-wrap {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ht-sleep-arc-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding-top: 10px;
+}
+
+.ht-sleep-duration {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    background: linear-gradient(135deg, #e0c3fc, #f0abfc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.ht-sleep-of-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.3px;
+}
+
+/* Sleep tabs */
+.ht-sleep-tabs {
+    display: flex;
+    gap: 2px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 3px;
+}
+
+.ht-sleep-tab {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 16px;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.ht-sleep-tab.active {
+    background: rgba(192, 132, 252, 0.2);
+    color: #c084fc;
+    font-weight: 600;
+}
+
+/* Sleep stacked bar chart */
+.ht-sleep-bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 90px;
+    margin-top: 4px;
+}
+
+.ht-sleep-bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    height: 100%;
+}
+
+.ht-sleep-bar-stack {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 2px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ht-sleep-bar-deep {
+    width: 100%;
+    background: #9b5de5;
+    border-radius: 4px 4px 0 0;
+    min-height: 4px;
+}
+
+.ht-sleep-bar-light {
+    width: 100%;
+    background: #e879f9;
+    min-height: 4px;
+}
+
+/* Legend grid */
+.ht-sleep-legend-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    margin-top: 14px;
+}
+
+.ht-sleep-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+/* Tip card */
+.ht-sleep-tip-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(192, 132, 252, 0.08);
+    border: 1px solid rgba(192, 132, 252, 0.15);
+    border-radius: 20px;
+    padding: 12px 16px;
+    margin: 0 16px 4px;
+}
+
+.ht-sleep-tip-icon {
+    font-size: 36px;
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    background: rgba(192, 132, 252, 0.12);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ht-sleep-tip-body {
+    flex: 1;
+}
+
+.ht-sleep-tip-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 4px;
+}
+
+.ht-sleep-tip-sub {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.6;
+    margin: 0;
 }

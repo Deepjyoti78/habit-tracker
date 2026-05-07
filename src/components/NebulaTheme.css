@@ -1,0 +1,64 @@
+/* ── Nebula Design System ── */
+
+.nebula-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nebula-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ensure all content sits ABOVE grain/gradients */
+.nebula-card > *:not(.cs-grain) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Color Variations ── */
+
+.nebula-orange {
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(245, 158, 11, 0.2), transparent 70%),
+    radial-gradient(circle at 80% 80%, rgba(239, 68, 68, 0.15), transparent 70%),
+    #121212;
+}
+
+.nebula-teal {
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(20, 184, 166, 0.2), transparent 70%),
+    radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.15), transparent 70%),
+    #121212;
+}
+
+.nebula-purple {
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.18), transparent 70%),
+    radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15), transparent 70%),
+    #121212;
+}
+
+/* ── Global Typography Fix ── */
+.nebula-card h3, 
+.nebula-card .title,
+.nebula-card .label {
+  color: #fff !important;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.nebula-card p,
+.nebula-card .subtitle,
+.nebula-card .sublabel {
+  color: #888 !important;
+  font-size: 13px;
+}

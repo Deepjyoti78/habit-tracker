@@ -16,6 +16,7 @@ import AddHabitPage from './pages/AddHabitPage';
 import CreateHabitPage from './pages/CreateHabitPage';
 import HabitTrackerPage from './pages/HabitTrackerPage';
 import './App.css';
+import './components/NebulaTheme.css';
 
 const pages = {
   home: HomePage,
@@ -36,10 +37,9 @@ function AppContent() {
   const PageComponent = pages[state.currentPage] || HomePage;
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${state.currentPage === 'tracker' ? 'is-tracker' : ''}`}>
       <Sidebar />
       <main className="app-main" id="main-content">
-
         <div className="app-content-area">
           <AnimatePresence mode="wait">
             <motion.div
@@ -54,7 +54,7 @@ function AppContent() {
           </AnimatePresence>
         </div>
       </main>
-      <MobileNavbar />
+      {state.currentPage !== 'tracker' && <MobileNavbar />}
       <Toast />
     </div>
   );

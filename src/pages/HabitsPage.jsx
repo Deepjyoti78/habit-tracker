@@ -15,17 +15,22 @@ export default function HabitsPage() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [successRate, setSuccessRate] = useState(0);
   const [avgStreak, setAvgStreak] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!habits || habits.length === 0);
 
   useEffect(() => {
     const fetchHabits = async () => {
       try {
         const res = await getHabits();
         dispatch({ type: 'SET_HABITS', payload: res.data });
+        setLoading(false); // Show cards immediately after habits are fetched
+
+        // Calculate stats in background
+        const logsResults = await Promise.all(
+          res.data.map(h => getHabitLogs(h.id))
+        );
 
         let totalDone = 0, totalLogs = 0, totalStreak = 0;
-        for (const habit of res.data) {
-          const logsRes = await getHabitLogs(habit.id);
+        logsResults.forEach((logsRes) => {
           const logs = logsRes.data;
           totalLogs += logs.length;
           totalDone += logs.filter(l => l.done).length;
@@ -37,13 +42,12 @@ export default function HabitsPage() {
             else break;
           }
           totalStreak += streak;
-        }
+        });
 
         setSuccessRate(totalLogs > 0 ? Math.round((totalDone / totalLogs) * 100) : 0);
         setAvgStreak(res.data.length > 0 ? Math.round(totalStreak / res.data.length) : 0);
       } catch (err) {
         console.error(err);
-      } finally {
         setLoading(false);
       }
     };
@@ -81,6 +85,7 @@ export default function HabitsPage() {
         )}
       </header>
 
+      {/* Calendar - Restored */}
       <div className="h-page-calendar-section-home">
         <CalendarStrip
           hideHeader={true}
@@ -116,10 +121,9 @@ export default function HabitsPage() {
           <motion.div
             key="list"
             className="h-cards-container"
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 10 }}
-            transition={{ duration: 0.2 }}
+            initial={false} // Pop in instantly
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0 }}
           >
             {loading ? (
               <div className="h-loading-state">

@@ -1,6 +1,6 @@
 .habits-page-v2 {
   padding: 32px 16px 120px;
-  max-width: 450px;
+  max-width: 900px; /* Extended to match home page */
   margin: 0 auto;
   width: 100%;
 }
@@ -114,7 +114,15 @@
 .h-cards-container {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .h-cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
 }
 
 /* Stats View */
@@ -286,5 +294,6 @@
   color: #444;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  margin: 10px 0 6px 4px;
+  margin: 16px 0 8px 4px;
+  grid-column: 1 / -1;
 }

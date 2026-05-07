@@ -1,18 +1,21 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Search, Check, ChevronDown, Clock, RefreshCw, Bell, Star } from 'lucide-react';
-import { Heart, Palette, Trophy, Target, Globe, Sprout } from 'lucide-react';
+import { 
+  Heart, Palette, Trophy, Target, Globe, Sprout, 
+  Book, Moon, Terminal, MessageSquare, Brain, Droplets 
+} from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { createHabit } from '../api/habits';
 import './AddHabitPage.css';
 
 const categories = [
-  { id: 'health', label: 'health', iconName: 'health', color: '#ff4b4b', desc: 'fitness, sleep, nutrition' },
-  { id: 'arts', label: 'arts', iconName: 'arts', color: '#6c63ff', desc: 'drawing, music, writing' },
-  { id: 'sport', label: 'sport', iconName: 'sport', color: '#f97316', desc: 'running, swimming, gym' },
-  { id: 'skills', label: 'skills development', iconName: 'skills', color: '#10b981', desc: 'coding, reading, courses' },
-  { id: 'language', label: 'language', iconName: 'language', color: '#3b82f6', desc: 'vocab, practice, fluency' },
-  { id: 'mindfulness', label: 'mindfulness', iconName: 'mindfulness', color: '#8b5cf6', desc: 'meditation, journaling' },
+  { id: 'academic', label: 'Academic', iconName: 'academic', color: '#3b82f6', desc: 'study, research, learning', trackingType: 'study' },
+  { id: 'sleep', label: 'Sleep', iconName: 'sleep', color: '#8b5cf6', desc: 'rest, recovery, health', trackingType: 'sleep' },
+  { id: 'coding', label: 'Coding', iconName: 'coding', color: '#10b981', desc: 'programming, projects', trackingType: 'study' },
+  { id: 'communication', label: 'Communication', iconName: 'communication', color: '#f97316', desc: 'networking, speaking', trackingType: 'study' },
+  { id: 'mind', label: 'Mind', iconName: 'mind', color: '#ec4899', desc: 'meditation, mental health', trackingType: 'mind' },
+  { id: 'water', label: 'Water', iconName: 'water', color: '#06b6d4', desc: 'hydration, health', trackingType: 'water' },
 ];
 
 const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -20,8 +23,8 @@ const frequencyOptions = ['every day', '3 times / week', 'on weekends', 'custom'
 const repeatOptions = ['1 time / day', '2 times / day', '3 times / day', '5 times / day'];
 
 const catIconMap = {
-  health: Heart, arts: Palette, sport: Trophy,
-  skills: Target, language: Globe, mindfulness: Sprout,
+  academic: Book, sleep: Moon, coding: Terminal,
+  communication: MessageSquare, mind: Brain, water: Droplets,
 };
 
 export default function AddHabitPage() {
@@ -68,6 +71,7 @@ export default function AddHabitPage() {
         active_days: activeDays,
         reminder: config.reminders,
         is_core: isCore,
+        tracking_type: cat.trackingType,
       };
       const res = await createHabit(payload);
       dispatch({ type: 'ADD_HABIT', payload: res.data });

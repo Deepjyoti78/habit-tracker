@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Flame, ChevronRight, Plus, Minus } from 'lucide-react';
+import { Flame, ChevronRight, Plus, Minus, ArrowUpRight } from 'lucide-react';
 import { logHabit } from '../api/habits';
 import { useApp } from '../context/AppContext';
 import { Heart, Palette, Trophy, Target, Globe, Sprout, Activity, Star } from 'lucide-react';
@@ -140,16 +140,20 @@ export default function HabitLargeCard({ habit }) {
             <Plus size={12} />
           </button>
         </div>
-        <button
-          className="h-view-tracker-link"
+        
+        {/* NEW Circular Boundary Button */}
+        <motion.button
+          className="h-circular-view-btn"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => {
             dispatch({ type: 'SET_SELECTED_HABIT', payload: habit.id });
             dispatch({ type: 'SET_PAGE', payload: 'tracker' });
           }}
+          title="View Tracker"
         >
-          <span>view tracker</span>
-          <ChevronRight size={12} />
-        </button>
+          <ArrowUpRight size={16} />
+        </motion.button>
       </div>
     </motion.div>
   );
