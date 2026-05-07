@@ -1,153 +1,124 @@
-.ht-page {
-    padding: 24px 16px 120px;
-    max-width: 450px;
-    margin: 0 auto;
-    width: 100%;
+.ht-page-v3 {
+    background: #000;
+    min-height: 100vh;
+    padding: 24px 20px 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: #fff;
 }
 
 /* Header */
-.ht-header {
+.ht-header-v3 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
 }
 
-.ht-back-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+.ht-back-btn-v3 {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
     background: #111;
-    border: 1px solid #1e1e1e;
-    color: #aaa;
+    border: 1px solid #222;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s;
 }
 
-.ht-back-btn:hover {
-    background: #1a1a1a;
-    color: #fff;
-}
-
-.ht-title {
-    font-size: 17px;
+.ht-title-v3 {
+    font-size: 18px;
     font-weight: 800;
-    color: #fff;
     text-transform: lowercase;
-    letter-spacing: -0.3px;
-    margin: 0;
+    letter-spacing: -0.5px;
 }
 
-/* Calendar */
-.ht-calendar-wrap {
-    margin-bottom: 24px;
+/* Calendar Wrap */
+.ht-calendar-strip-wrap {
+    margin: 0 -20px;
 }
 
-/* Content wrapper */
+/* Content Area */
+.ht-scroll-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 .ht-content {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
 }
 
-/* ── Water ── */
-.ht-hero-number {
-    text-align: center;
-    padding: 8px 0;
+/* ── Water Specifics ── */
+.ht-hero-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
 }
 
-.ht-big-num {
-    font-size: 52px;
+.ht-hero-title {
+    font-size: 32px;
     font-weight: 900;
+    letter-spacing: -1.5px;
+    margin-bottom: 8px;
+}
+
+.ht-hero-desc {
+    font-size: 14px;
+    color: #888;
+    line-height: 1.5;
+    max-width: 280px;
+}
+
+.ht-edit-btn {
+    background: transparent;
+    border: none;
     color: #fff;
-    letter-spacing: -2px;
-    line-height: 1;
+    cursor: pointer;
+    padding: 8px;
 }
 
-.ht-big-unit {
-    display: block;
-    font-size: 15px;
-    color: #666;
-    margin-top: 4px;
-}
-
-.ht-hero-sub {
-    text-align: center;
-    font-size: 13px;
-    color: #555;
-    margin: 0;
-}
-
-.ht-water-grid {
+.ht-water-grid-v2 {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    padding: 4px;
+    gap: 12px;
 }
 
-.ht-glass {
+.ht-glass-v2 {
     aspect-ratio: 1;
-    border-radius: 14px;
     background: #111;
-    border: 1px solid #1e1e1e;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #333;
+    color: #222;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ht-glass.filled {
-    background: color-mix(in srgb, var(--glass-color) 15%, transparent);
-    border-color: color-mix(in srgb, var(--glass-color) 40%, transparent);
+.ht-glass-v2.filled {
+    background: color-mix(in srgb, var(--glass-color) 20%, transparent);
     color: var(--glass-color);
 }
 
-/* Controls */
-.ht-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #111;
-    border: 1px solid #1e1e1e;
-    border-radius: 20px;
-    padding: 8px;
-    margin-top: 10px;
-}
-
-.ht-ctrl-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    border: none;
-    background: #1a1a1a;
-    color: #fff;
+.ht-glass-add-btn {
+    aspect-ratio: 1;
+    background: #fff;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #000;
+    border: none;
     cursor: pointer;
-    transition: transform 0.2s;
 }
 
-.ht-ctrl-btn:active {
-    transform: scale(0.95);
-}
-
-.ht-ctrl-label {
-    font-size: 14px;
-    font-weight: 700;
-    color: #666;
-    text-transform: lowercase;
-}
-
-/* Summary Card */
-.ht-summary-card {
+.ht-notification-card {
     background: #111;
-    border: 1px solid #1e1e1e;
     border-radius: 24px;
     padding: 20px;
     display: flex;
@@ -155,61 +126,131 @@
     gap: 16px;
 }
 
-.ht-summary-title {
-    font-size: 14px;
-    font-weight: 800;
-    color: #444;
-    text-transform: lowercase;
-    margin: 0;
-    letter-spacing: 0.5px;
-}
-
-.ht-summary-stats {
+.ht-notif-row {
     display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 
-.ht-summary-stat {
+.ht-notif-label {
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.ht-notif-sub {
+    font-size: 13px;
+    color: #666;
+}
+
+.ht-toggle {
+    width: 44px;
+    height: 24px;
+    background: #222;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.ht-toggle.on {
+    background: #CCFF00;
+}
+
+.ht-toggle-knob {
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ht-toggle.on .ht-toggle-knob {
+    transform: translateX(20px);
+    background: #000;
+}
+
+.ht-dropdown-pill {
+    background: #1a1a1a;
+    padding: 12px 16px;
+    border-radius: 14px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #aaa;
+}
+
+/* ── Chart Cards ── */
+.ht-chart-card {
+    background: #111;
+    border-radius: 24px;
+    padding: 20px;
+}
+
+.ht-chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.ht-chart-title {
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.ht-chart-period {
+    background: #1a1a1a;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
     gap: 4px;
 }
 
-.ht-summary-val {
-    font-size: 20px;
-    font-weight: 900;
-    color: #fff;
+.ht-bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 120px;
+    padding-top: 20px;
 }
 
-.ht-summary-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: #444;
-    text-transform: uppercase;
-}
-
-.ht-progress-track {
-    height: 6px;
-    background: #1a1a1a;
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-.ht-progress-fill {
+.ht-bar-wrap {
+    width: 32px;
     height: 100%;
-    border-radius: 3px;
+    display: flex;
+    align-items: flex-end;
 }
 
-/* ── Sleep ── */
-.ht-sleep-ring-wrap {
+.ht-bar-fill {
+    width: 100%;
+    border-radius: 6px;
+    transition: height 1s ease-out;
+}
+
+/* ── Sleep Hero ── */
+.ht-sleep-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+.ht-sleep-ring-container {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 0;
+    flex: 1;
 }
 
-.ht-sleep-ring-center {
+.ht-sleep-ring-info {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -217,238 +258,329 @@
     text-align: center;
 }
 
-.ht-sleep-quality-label {
+.ht-ring-label {
     font-size: 12px;
     color: #666;
     text-transform: lowercase;
 }
 
-.ht-sleep-quality-val {
-    font-size: 32px;
+.ht-ring-val {
+    font-size: 48px;
     font-weight: 900;
-    color: #fff;
+    letter-spacing: -2px;
     line-height: 1;
     margin: 4px 0;
 }
 
-.ht-sleep-quality-sub {
+.ht-ring-status {
     font-size: 10px;
-    color: #444;
-    max-width: 80px;
-}
-
-.ht-sleep-times {
+    color: #CCFF00;
+    background: rgba(204, 255, 0, 0.1);
+    padding: 4px 8px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background: #111;
-    border: 1px solid #1e1e1e;
-    border-radius: 20px;
-    padding: 16px;
+    gap: 4px;
 }
 
-.ht-sleep-time-item {
+.ht-sleep-stats-row {
+    display: flex;
+    justify-content: space-between;
+    background: #111;
+    border-radius: 24px;
+    padding: 24px;
+}
+
+.ht-sleep-stat-item {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    flex: 1;
+    gap: 6px;
     text-align: center;
 }
 
-.ht-sleep-time-label {
+.ht-stat-label {
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 800;
     color: #444;
-    text-transform: uppercase;
 }
 
-.ht-sleep-time-val {
-    font-size: 13px;
-    font-weight: 800;
-    color: #fff;
+.ht-stat-val {
+    font-size: 15px;
+    font-weight: 900;
 }
 
-.ht-sleep-time-divider {
-    width: 1px;
-    height: 20px;
-    background: #222;
-}
-
-.ht-sleep-slider {
-    width: 100%;
-    height: 6px;
-    background: #1a1a1a;
-    border-radius: 3px;
-    outline: none;
-    -webkit-appearance: none;
-}
-
-.ht-sleep-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    background: var(--slider-color);
-    border-radius: 50%;
-    cursor: pointer;
-    border: 4px solid #111;
-}
-
-/* ── Study / Todo ── */
-.ht-todo-header {
+.ht-bar-chart-complex {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-}
-
-.ht-todo-add {
-    display: flex;
-    align-items: center;
-    background: #1a1a1a;
-    border-radius: 10px;
-    padding-left: 10px;
-}
-
-.ht-todo-input {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #fff;
-    font-size: 12px;
-    width: 80px;
-    padding: 6px 0;
-}
-
-.ht-todo-add-btn {
-    width: 24px;
-    height: 24px;
-    border-radius: 8px;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;
-    margin: 3px;
-    cursor: pointer;
-}
-
-.ht-todo-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 4px 0;
-    cursor: pointer;
-}
-
-.ht-todo-check {
-    width: 18px;
-    height: 18px;
-    border: 1.5px solid #333;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.ht-todo-text {
-    font-size: 14px;
-    color: #888;
-    transition: all 0.2s;
-}
-
-.ht-todo-item.done .ht-todo-text {
-    text-decoration: line-through;
-    color: #333;
-}
-
-/* ── Mind ── */
-.ht-mind-card {
-    background: #111;
-    border: 1px solid #1e1e1e;
-    border-radius: 24px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.ht-mind-card-text {
-    flex: 1;
-}
-
-.ht-mind-card-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: #fff;
-    margin: 0 0 6px;
-}
-
-.ht-mind-card-sub {
-    font-size: 12px;
-    color: #666;
-    line-height: 1.5;
-    margin: 0 0 16px;
-}
-
-.ht-mind-cta {
-    padding: 8px 16px;
-    border-radius: 12px;
-    border: none;
-    font-size: 12px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.ht-mind-card-emoji {
-    font-size: 44px;
-    opacity: 0.8;
-}
-
-.ht-mood-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.ht-mood-period {
-    font-size: 11px;
-    color: #444;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.ht-mood-row {
-    display: flex;
-    justify-content: space-between;
+    height: 140px;
     gap: 8px;
 }
 
-.ht-mood-btn {
+.ht-bar-stack {
     flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    background: #1a1a1a;
-    border: 1.5px solid transparent;
-    border-radius: 14px;
-    padding: 10px 0;
-    cursor: pointer;
-    transition: all 0.2s;
+    gap: 2px;
+    height: 100%;
+    justify-content: flex-end;
 }
 
-.ht-mood-emoji {
-    font-size: 20px;
+.ht-bar-top, .ht-bar-mid, .ht-bar-bot {
+    width: 100%;
+    border-radius: 4px;
 }
 
-.ht-mood-label {
-    font-size: 9px;
-    font-weight: 700;
+.ht-sleep-legend {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.ht-time-label {
+    font-size: 10px;
     color: #444;
-    text-transform: uppercase;
+    font-weight: 700;
 }
 
-.ht-mood-btn.selected {
+/* ── Study Tracker ── */
+.ht-study-hero {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.ht-timer-ring-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ht-timer-display {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.ht-timer-session {
+    font-size: 13px;
+    font-weight: 700;
+    color: #666;
+}
+
+.ht-timer-main {
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    margin: 4px 0;
+}
+
+.ht-timer-finished {
+    font-size: 11px;
+    color: #444;
+}
+
+.ht-timer-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.ht-stop-btn {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.ht-icon-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     background: #111;
-}
+    border: 1px solid #222;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.ht-todo-card {
+    background: #111;
+    border-radius: 24px;
+    padding: 24px;
+}
+
+.ht-todo-title {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.ht-todo-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ht-todo-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ht-todo-check-v2 {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #222;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ht-todo-row.done .ht-todo-check-v2 {
+    background: #fff;
+    border-color: #fff;
+    color: #000;
+}
+
+.ht-todo-label-v2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.ht-todo-row.done .ht-todo-label-v2 {
+    text-decoration: line-through;
+    color: #444;
+}
+
+/* ── Mind Tracker ── */
+.ht-mind-promo {
+    background: #111;
+    border-radius: 28px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.ht-mind-promo-content {
+    flex: 1;
+}
+
+.ht-mind-promo-title {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+
+.ht-mind-promo-sub {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 16px;
+}
+
+.ht-mind-promo-btn {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.ht-mind-promo-img {
+    font-size: 48px;
+}
+
+.ht-mood-tracker-card {
+    background: #111;
+    border-radius: 28px;
+    padding: 24px;
+}
+
+.ht-mood-graph-row {
+    display: flex;
+    justify-content: space-between;
+    height: 100px;
+    margin-top: 30px;
+    position: relative;
+}
+
+.ht-mood-point-wrap {
+    width: 32px;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ht-mood-point {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border: 2px solid rgba(255,255,255,0.05);
+}
+
+.ht-mood-date {
+    position: absolute;
+    bottom: -20px;
+    font-size: 9px;
+    font-weight: 800;
+    color: #333;
+}
+
+.ht-hr-card {
+    background: #111;
+    border-radius: 28px;
+    padding: 24px;
+}
+
+.ht-hr-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 24px;
+}
+
+.ht-hr-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ht-hr-val {
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.ht-hr-label {
+    font-size: 9px;
+    font-weight: 800;
+    color: #444;
+}
+
+.ht-hr-graph {
+    margin: 0 -10px;
+}

@@ -140,7 +140,13 @@ export default function HabitLargeCard({ habit }) {
             <Plus size={12} />
           </button>
         </div>
-        <button className="h-view-tracker-link">
+        <button
+          className="h-view-tracker-link"
+          onClick={() => {
+            dispatch({ type: 'SET_SELECTED_HABIT', payload: habit.id });
+            dispatch({ type: 'SET_PAGE', payload: 'tracker' });
+          }}
+        >
           <span>view tracker</span>
           <ChevronRight size={12} />
         </button>

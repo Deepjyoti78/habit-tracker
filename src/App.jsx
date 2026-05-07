@@ -14,6 +14,7 @@ import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from './pages/EditProfilePage';
 import AddHabitPage from './pages/AddHabitPage';
 import CreateHabitPage from './pages/CreateHabitPage';
+import HabitTrackerPage from './pages/HabitTrackerPage';
 import './App.css';
 
 const pages = {
@@ -26,6 +27,7 @@ const pages = {
   'edit-profile': EditProfilePage,
   'add-habit': AddHabitPage,
   'create-habit': CreateHabitPage,
+  tracker: HabitTrackerPage,
 };
 
 function AppContent() {

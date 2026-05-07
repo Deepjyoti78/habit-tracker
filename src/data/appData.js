@@ -10,9 +10,10 @@ export const defaultHabits = [
     progress: 33,
     unit: 'sessions',
     color: '#3b82f6',
-    streak: 0,
+    streak: 5,
     done: false,
     trackingType: 'study',
+    is_core: true
   },
   {
     id: 'h2',
@@ -25,9 +26,10 @@ export const defaultHabits = [
     progress: 75,
     unit: 'hours',
     color: '#8b5cf6',
-    streak: 0,
+    streak: 3,
     done: false,
     trackingType: 'sleep',
+    is_core: true
   },
   {
     id: 'h3',
@@ -40,9 +42,10 @@ export const defaultHabits = [
     progress: 25,
     unit: 'hours',
     color: '#10b981',
-    streak: 0,
+    streak: 7,
     done: false,
     trackingType: 'study',
+    is_core: true
   },
   {
     id: 'h4',
@@ -55,9 +58,10 @@ export const defaultHabits = [
     progress: 33,
     unit: 'sessions',
     color: '#f97316',
-    streak: 0,
+    streak: 2,
     done: false,
     trackingType: 'study',
+    is_core: true
   },
   {
     id: 'h5',
@@ -70,24 +74,26 @@ export const defaultHabits = [
     progress: 50,
     unit: 'mins',
     color: '#ec4899',
-    streak: 0,
+    streak: 4,
     done: false,
     trackingType: 'mind',
+    is_core: true
   },
   {
     id: 'h6',
     name: 'Water',
     emoji: '💧',
     category: 'health',
-    target: '8 glasses',
+    target: '10 glasses',
     currentValue: 4,
-    targetValue: 8,
-    progress: 50,
+    targetValue: 10,
+    progress: 40,
     unit: 'glasses',
     color: '#06b6d4',
-    streak: 0,
+    streak: 12,
     done: false,
     trackingType: 'water',
+    is_core: true
   },
 ];
 
