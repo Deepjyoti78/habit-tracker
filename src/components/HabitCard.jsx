@@ -1,50 +1,80 @@
-import { Check, Flame, Plus, Activity, BookOpen, Droplets } from 'lucide-react';
+import React from 'react';
+import { Check, Plus } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import GrainOverlay from './GrainOverlay';
 import './HabitCard.css';
 
+const COLORS = ['#ef4444', '#22c55e', '#a855f7', '#f59e0b', '#3b82f6'];
+
+function PulseIcon({ color }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
+    </svg>
+  );
+}
+
 export default function HabitCard() {
   const { state, dispatch } = useApp();
-  const coreHabits = state.habits.filter(h => h.is_core || h.done !== undefined).slice(0, 1); // Reduced to 1 for height
+  const habits = state.habits.slice(0, 5);
 
-  const toggleHabit = (id) => {
-    dispatch({ type: 'TOGGLE_HABIT', payload: id });
+  const getColor = (habit, idx) => {
+    return habit.color || COLORS[idx % COLORS.length];
   };
 
   return (
-    <div className="nebula-card nebula-teal habit-card-nebula">
-      <GrainOverlay opacity={0.15} />
-      
-      <div className="habit-nebula-header">
-        <h3 className="habit-title">core disciplines</h3>
-        <p className="habit-subtitle">your habits dashboard.<br/>start here!</p>
+    <div className="hc-card">
+      <GrainOverlay opacity={0.015} />
+
+      <div className="hc-header">
+        <span className="hc-title">my disciplines</span>
       </div>
 
-      <div className="habit-nebula-content">
-        <div className="habit-nebula-main-action">
-          {coreHabits.map(habit => (
-            <div
-              key={habit.id}
-              className={`habit-nebula-btn ${habit.done ? 'done' : ''}`}
-              onClick={() => toggleHabit(habit.id)}
-            >
-              <div className="habit-nebula-icon-box" style={{ backgroundColor: `${habit.color}22`, color: habit.color }}>
-                {habit.done ? <Check size={20} /> : <Flame size={20} />}
-              </div>
-            </div>
-          ))}
-          
-          <button className="habit-nebula-add-btn" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}>
-            <Plus size={24} />
-          </button>
-        </div>
+      <div className="hc-list">
+        {habits.map((habit, idx) => {
+          const name = habit.name || habit.title || 'New Habit';
+          const color = getColor(habit, idx);
+          const isDone = habit.done;
 
-        {/* ── DECORATIVE FLOATING ICONS ── */}
-        <div className="habit-nebula-deco">
-          <div className="deco-icon d1"><Activity size={24} /></div>
-          <div className="deco-icon d2"><BookOpen size={24} /></div>
-          <div className="deco-icon d3"><Droplets size={24} /></div>
-        </div>
+          return (
+            <div key={habit.id || idx} className="hc-row">
+              <div className="hc-icon">
+                <PulseIcon color={color} />
+              </div>
+
+              <div className="hc-info">
+                <span className="hc-name">{name}</span>
+                <span className="hc-sub">
+                  {isDone
+                    ? 'completed'
+                    : `${habit.progress || 0}/${habit.target_value || 1}`}
+                </span>
+              </div>
+
+              <button
+                className={`hc-plus${isDone ? ' done' : ''}`}
+                onClick={() =>
+                  dispatch({ type: 'TOGGLE_HABIT', payload: habit.id })
+                }
+              >
+                {isDone ? (
+                  <Check size={11} strokeWidth={3} />
+                ) : (
+                  <Plus size={11} />
+                )}
+              </button>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

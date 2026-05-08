@@ -80,8 +80,6 @@
   margin-bottom: 6px;
 }
 
-
-
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -189,11 +187,11 @@
   gap: 16px;
 }
 
-/* Bento Grid - 2 columns layout for all views */
+/* Bento Grid - Exact ratio for premium balance */
 .home-bento-grid {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 8px;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 16px;
   align-items: stretch;
 }
 
@@ -242,8 +240,15 @@
 
   .hero-heading {
     font-size: 24px;
-    /* Significantly increase size for mobile */
     line-height: 1.2;
     letter-spacing: -0.5px;
+  }
+}
+
+/* Responsive side-by-side split for mobile */
+@media (max-width: 500px) {
+  .home-bento-grid {
+    grid-template-columns: 1fr 1.15fr;
+    gap: 10px;
   }
 }

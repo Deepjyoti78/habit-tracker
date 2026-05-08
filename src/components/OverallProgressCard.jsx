@@ -1,69 +1,76 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, Zap } from 'lucide-react';
+import { CheckCircle2, Hourglass } from 'lucide-react';
 import GrainOverlay from './GrainOverlay';
 import './OverallProgressCard.css';
 
 export default function OverallProgressCard() {
   const progress = 89;
+  const secondaryProgress = 75;
   
   return (
-    <motion.div 
-      className="nebula-card nebula-orange overall-progress-nebula" 
-      initial={{ opacity: 0, y: 12 }} 
-      animate={{ opacity: 1, y: 0 }} 
+    <motion.div
+      className="nebula-card overall-progress-nebula"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
     >
-      <GrainOverlay opacity={0.15} />
-      
+      <GrainOverlay opacity={0.015} />
+
       <div className="opc-nebula-content">
-        <div className="opc-nebula-gauge">
-          <svg width="100" height="100" viewBox="0 0 100 100">
-            <defs>
-              <linearGradient id="opcGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#f59e0b" />
-                <stop offset="100%" stopColor="#ef4444" />
-              </linearGradient>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-                <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
-            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="10" />
-            <motion.circle 
-              cx="50" cy="50" r="42" 
-              fill="none" 
-              stroke="url(#opcGrad)" 
-              strokeWidth="10" 
-              strokeLinecap="round" 
-              strokeDasharray="263.89" 
-              initial={{ strokeDashoffset: 263.89 }}
-              animate={{ strokeDashoffset: 263.89 - (263.89 * progress) / 100 }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-              filter="url(#glow)"
-              style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%' }}
-            />
-          </svg>
-          <div className="opc-nebula-value">{progress}%</div>
+        <div className="opc-nebula-gauge-container">
+          <div className="opc-nebula-gauge">
+            <svg width="96" height="96" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="4" />
+              <motion.circle
+                cx="50" cy="50" r="46"
+                fill="none"
+                stroke="#84cc16"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeDasharray="289.02"
+                initial={{ strokeDashoffset: 289.02 }}
+                animate={{ strokeDashoffset: 289.02 - (289.02 * secondaryProgress) / 100 }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+                style={{ transform: 'rotate(-90deg)', transformOrigin: '50px 50px' }}
+              />
+
+              <circle cx="50" cy="50" r="37" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="4" />
+              <motion.circle
+                cx="50" cy="50" r="37"
+                fill="none"
+                stroke="#f59e0b"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeDasharray="232.47"
+                initial={{ strokeDashoffset: 232.47 }}
+                animate={{ strokeDashoffset: 232.47 - (232.47 * progress) / 100 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+                style={{ transform: 'rotate(-90deg)', transformOrigin: '50px 50px' }}
+              />
+            </svg>
+            
+            <div className="opc-gauge-text">
+              <span className="opc-gauge-value">{progress}%</span>
+              <span className="opc-gauge-label">met</span>
+            </div>
+          </div>
         </div>
 
         <div className="opc-nebula-stats">
-          <div className="opc-stat-row">
-            <Zap size={16} className="opc-icon orange" />
-            <div className="opc-stat-text">
-              <span className="opc-stat-val">6 tasks</span>
-              <span className="opc-stat-label">in progress</span>
+          <div className="opc-stat-compact">
+            <CheckCircle2 size={12} className="opc-icon yellow" />
+            <div className="opc-stat-inline">
+              <span className="opc-label">Done</span>
+              <span className="opc-val">64/72</span>
             </div>
           </div>
-          
-          <div className="opc-stat-row">
-            <CheckCircle2 size={16} className="opc-icon red" />
-            <div className="opc-stat-text">
-              <span className="opc-stat-val">22/72 tasks</span>
-              <span className="opc-stat-label">finished (44 remaining)</span>
+
+          <div className="opc-stat-compact">
+            <Hourglass size={12} className="opc-icon purple" />
+            <div className="opc-stat-inline">
+              <span className="opc-label">Left</span>
+              <span className="opc-val">8 tasks</span>
             </div>
           </div>
         </div>

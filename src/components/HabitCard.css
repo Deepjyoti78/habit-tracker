@@ -1,103 +1,135 @@
-.habit-card-nebula {
+.hc-card {
+  width: 100%;
   height: 100%;
-  min-height: 180px;
-  padding: 14px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 10px;
+  background: linear-gradient(145deg, #0f1414 0%, #0a0d0d 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
   position: relative;
+  box-sizing: border-box;
 }
 
-.habit-nebula-header {
-  margin-bottom: 0;
-  z-index: 2;
+.hc-header {
+  padding: 12px 14px 8px;
 }
 
-.habit-title {
-  margin: 0;
-  font-size: 18px;
+.hc-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.75);
   text-transform: lowercase;
+  letter-spacing: -0.2px;
 }
 
-.habit-subtitle {
-  margin: 2px 0 0;
-  line-height: 1.3;
-  font-size: 12px;
-  color: #888;
+.hc-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 10px 10px;
+  gap: 0;
 }
 
-.habit-nebula-content {
+.hc-list::-webkit-scrollbar {
+  width: 2px;
+}
+
+.hc-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.hc-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 5px;
+  box-sizing: border-box;
+}
+
+.hc-row:last-child {
+  margin-bottom: 0;
+}
+
+.hc-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.hc-info {
   flex: 1;
   display: flex;
-  align-items: flex-start; /* Shifted up from flex-end */
-  justify-content: space-between;
-  width: 100%;
-  padding-top: 8px; /* More top-heavy layout */
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
 }
 
-.habit-nebula-main-action {
-  display: flex;
-  gap: 10px;
-  z-index: 2;
+.hc-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.habit-nebula-btn,
-.habit-nebula-add-btn {
-  width: 48px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
+.hc-sub {
+  font-size: 9.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.hc-plus {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
-  color: #fff !important; /* Make plus/icons whitish */
+  flex-shrink: 0;
+  padding: 0;
+  transition: all 0.2s ease;
 }
 
-.habit-nebula-btn:hover,
-.habit-nebula-add-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: scale(1.05);
+.hc-plus:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #fff;
 }
 
-/* ── DECORATIVE FLOATING ICONS (SPREAD OUT) ── */
-.habit-nebula-deco {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
+.hc-plus.done {
+  background: rgba(74, 222, 128, 0.12);
+  border-color: rgba(74, 222, 128, 0.35);
+  color: #4ade80;
 }
 
-.deco-icon {
-  position: absolute;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 10px;
-  color: rgba(255, 255, 255, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(2px);
-}
+@media (max-width: 480px) {
+  .hc-header {
+    padding: 10px 12px 6px;
+  }
 
-.deco-icon.d1 {
-  top: 15px;
-  right: 15px;
-  transform: rotate(15deg);
-}
+  .hc-list {
+    padding: 0 8px 8px;
+  }
 
-.deco-icon.d2 {
-  bottom: 20px;
-  right: 60px;
-  transform: rotate(-10deg);
-}
-
-.deco-icon.d3 {
-  bottom: 45px;
-  right: 15px;
-  transform: rotate(-20deg);
+  .hc-row {
+    padding: 7px 8px;
+    gap: 8px;
+  }
 }
