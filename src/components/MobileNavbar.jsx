@@ -2,6 +2,7 @@ import React from 'react';
 import { Home, Activity, PieChart, CalendarDays, Timer } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import GrainOverlay from './GrainOverlay';
 import './MobileNavbar.css';
 
 const navItems = [
@@ -17,7 +18,7 @@ export default function MobileNavbar() {
   const { currentPage } = state;
 
   // Hide navbar on these pages completely
-  const hideOnPages = ['profile', 'edit-profile', 'add-habit', 'create-habit', 'timer', 'tracker'];
+  const hideOnPages = ['profile', 'edit-profile', 'add-habit', 'create-habit', 'tracker'];
   if (hideOnPages.includes(currentPage)) return null;
 
   const getActivePage = () => {
@@ -28,6 +29,7 @@ export default function MobileNavbar() {
 
   return (
     <nav className="mobile-navbar">
+      <GrainOverlay opacity={0.15} />
       {navItems.map((item) => {
         const isActive = activePage === item.id;
         const Icon = item.icon;
@@ -47,7 +49,7 @@ export default function MobileNavbar() {
                   exit={{ opacity: 0, width: 0, marginLeft: 0 }}
                   transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                 >
-                  {item.label}
+                  {item.label.toLowerCase()}
                 </motion.span>
               )}
             </AnimatePresence>

@@ -54,7 +54,7 @@ export default function HabitLargeCard({ habit }) {
   return (
     <motion.div
       className={`habit-large-card ${isDone ? 'habit-done' : ''}`}
-      style={{ borderColor: isDone ? `${habitColor}40` : 'var(--border)' }}
+      style={{ '--theme-color': habitColor, borderColor: isDone ? `${habitColor}40` : 'var(--border)' }}
       whileTap={{ scale: 0.99 }}
     >
       {/* Header */}

@@ -1,50 +1,101 @@
 .overall-progress-nebula {
-  height: 100%;
-  padding: 12px 10px;
+  height: 210px;
+  padding: 10px 10px 4px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
   background:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
-    linear-gradient(145deg, #1a1510 0%, #110f0d 100%);
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E"),
+    linear-gradient(160deg, #1c1508 0%, #0e0c08 55%, #0b1008 100%);
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(245, 158, 11, 0.15);
   position: relative;
   overflow: hidden;
 }
 
+.overall-progress-nebula::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.overall-progress-nebula::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 130px;
+  height: 130px;
+  background: radial-gradient(circle, rgba(132, 204, 22, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* COLUMN layout: gauge top, stats bottom */
+/* COLUMN layout: gauge top, stats bottom */
 .opc-nebula-content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 8px;
+  /* was 0 — this adds breathing room */
   width: 100%;
+  height: 100%;
 }
 
-.opc-nebula-gauge-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding-top: 4px;
-}
-
+/* Gauge centered */
 .opc-nebula-gauge {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 96px;
-  height: 96px;
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+  margin: 6px 0 0 0;
+  /* small top margin, remove auto */
+}
+
+/* Stats at bottom — full width */
+.opc-nebula-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  /* remove margin-top: auto — gap handles spacing now */
+}
+
+/* Gauge centered */
+.opc-nebula-gauge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+  margin: auto 0;
 }
 
 .opc-gauge-text {
   position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  pointer-events: none;
 }
 
 .opc-gauge-value {
@@ -56,28 +107,31 @@
 }
 
 .opc-gauge-label {
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.35);
   margin-top: 2px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
+/* Stats at bottom — full width */
 .opc-nebula-stats {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
   width: 100%;
+  margin-top: auto;
 }
 
 .opc-stat-compact {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 10px;
-  padding: 7px 10px;
+  padding: 6px 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -92,7 +146,6 @@
 
 .opc-icon {
   flex-shrink: 0;
-  opacity: 0.6;
 }
 
 .opc-icon.yellow {
@@ -104,34 +157,43 @@
 }
 
 .opc-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.35);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
   white-space: nowrap;
 }
 
 .opc-val {
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 700;
   color: #fff;
   white-space: nowrap;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
 
 @media (max-width: 480px) {
   .overall-progress-nebula {
-    padding: 10px 8px;
+    padding: 8px 8px 8px;
   }
 
-  .opc-nebula-content {
-    gap: 8px;
+  .opc-nebula-gauge {
+    width: 100px;
+    height: 100px;
+  }
+
+  .opc-gauge-value {
+    font-size: 22px;
   }
 
   .opc-stat-compact {
-    padding: 6px 8px;
+    padding: 6px 10px;
   }
 
-  .opc-label,
-  .opc-val {
+  .opc-label {
     font-size: 10px;
+  }
+
+  .opc-val {
+    font-size: 11px;
   }
 }

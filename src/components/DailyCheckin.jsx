@@ -34,7 +34,7 @@ export default function DailyCheckin() {
         {checkins.map((item) => {
           const progress = (item.current / item.total) * 100;
           return (
-            <div key={item.id} className="checkin-card">
+            <div key={item.id} className="checkin-card" style={{ '--theme-color': item.color }}>
               <div className="checkin-card-header">
                 <div className="checkin-icon-wrapper">
                   <item.icon size={14} color={item.color} />

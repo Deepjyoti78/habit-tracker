@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Plus } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import GrainOverlay from './GrainOverlay';
@@ -33,7 +34,6 @@ export default function HabitCard() {
 
   return (
     <div className="hc-card">
-      <GrainOverlay opacity={0.015} />
 
       <div className="hc-header">
         <span className="hc-title">my disciplines</span>
@@ -66,11 +66,22 @@ export default function HabitCard() {
                   dispatch({ type: 'TOGGLE_HABIT', payload: habit.id })
                 }
               >
-                {isDone ? (
-                  <Check size={11} strokeWidth={3} />
-                ) : (
-                  <Plus size={11} />
-                )}
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={isDone ? 'done' : 'plus'}
+                    initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    {isDone ? (
+                      <Check size={11} strokeWidth={3} />
+                    ) : (
+                      <Plus size={11} />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
               </button>
             </div>
           );

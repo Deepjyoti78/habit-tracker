@@ -1,28 +1,37 @@
 .cs-wrap {
-  background: #0a0a0a;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.12) 0px, transparent 40%),
-    radial-gradient(at 100% 0%, rgba(20, 184, 166, 0.12) 0px, transparent 40%),
-    radial-gradient(at 50% 100%, rgba(108, 99, 255, 0.08) 0px, transparent 40%);
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, #121212 0%, #080808 100%);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 20px;
-  padding: 10px; /* Further reduced from 12px */
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 6px; /* Tighter gap */
+  gap: 4px;
   position: relative;
   overflow: hidden;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+  .cs-wrap {
+    padding: 6px 8px;
+    gap: 2px;
+    border-radius: 18px;
+  }
 }
 
 .cs-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
+  padding: 0 2px;
 }
 
 .cs-header-label {
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 700;
   color: #fff;
   cursor: pointer;
@@ -31,11 +40,17 @@
   gap: 4px;
   background: transparent;
   border: none;
+  text-transform: lowercase;
+}
+
+.cs-chevron {
+  font-size: 16px;
+  color: #666;
 }
 
 .cs-nav-btn {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   color: #888;
   cursor: pointer;
   display: flex;
@@ -44,25 +59,36 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
+  transition: all 0.2s ease;
 }
 
-/* Strip */
+.cs-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+
+/* ── STRIP VIEW ── */
 .cs-strip {
   display: flex;
-  gap: 2px; /* Tightened for extreme compactness */
+  gap: 4px;
   overflow-x: auto;
   scrollbar-width: none;
+  padding: 2px 0;
 }
 
-/* Day cell */
+.cs-strip::-webkit-scrollbar {
+  display: none;
+}
+
 .cs-day {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px; /* Minimal gap */
-  padding: 6px 0; /* Vertical emphasis */
-  border-radius: 10px;
-  min-width: 42px; /* Compact width */
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 0;
+  border-radius: 14px;
+  min-width: 44px;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
@@ -70,42 +96,38 @@
 }
 
 .cs-day-name {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
-  color: #bbb; /* High-contrast Silver */
+  color: #555;
   text-transform: lowercase;
   letter-spacing: 0.2px;
 }
 
 .cs-day-num {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
-  color: #fff; /* Stellar White */
+  color: #fff;
+  line-height: 1;
+}
+
+.cs-day-num-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
 
 .cs-today-dot {
   width: 4px;
   height: 4px;
-  background: #CCFF00;
+  background: #c4fb31;
   border-radius: 50%;
-  margin-top: 2px;
 }
 
-/* Today highlight */
-.cs-day.today {
-  background: rgba(204, 255, 0, 0.08) !important;
-  border-color: rgba(204, 255, 0, 0.3) !important;
-}
-
-.cs-day.today .cs-day-name {
-  color: #CCFF00 !important;
-}
-
-/* Selected highlight */
 .cs-day.selected {
-  background: #CCFF00 !important;
-  border-color: #CCFF00 !important;
-  box-shadow: 0 0 15px rgba(204, 255, 0, 0.3);
+  background: #c4fb31 !important;
+  border-color: #c4fb31 !important;
+  transform: translateY(-1px);
 }
 
 .cs-day.selected .cs-day-name,
@@ -118,42 +140,151 @@
   background: #000 !important;
 }
 
-/* Grid */
+.cs-day.today:not(.selected) {
+  border-color: rgba(196, 251, 49, 0.3);
+  background: rgba(196, 251, 49, 0.05);
+}
+
+.cs-day.today:not(.selected) .cs-day-name {
+  color: #c4fb31;
+}
+
+.cs-day.past .cs-day-num,
+.cs-day.past .cs-day-name {
+  color: #333;
+}
+
+.cs-day.weekend:not(.selected):not(.today) .cs-day-name {
+  color: #999 !important;
+  font-size: 10px;
+}
+
+.cs-day.weekend:not(.selected):not(.today) .cs-day-num {
+  color: #fff !important;
+  opacity: 0.9;
+}
+
+/* ── EXPANDED MONTH GRID ── */
+.cs-month-grid {
+  overflow: hidden;
+  flex: 1;
+}
+
 .cs-month-inner-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 3px;
 }
 
+/* Weekday labels — more visible */
 .cs-month-label {
   font-size: 10px;
-  color: #888; /* Brightened from #444 */
+  /* was 9px */
+  color: #888;
+  /* was #555 — too dark */
   font-weight: 700;
   text-align: center;
   padding-bottom: 4px;
   text-transform: lowercase;
+  letter-spacing: 0.3px;
 }
 
+/* Strip day names — more visible */
+.cs-day-name {
+  font-size: 10px;
+  /* was 9px */
+  font-weight: 700;
+  color: #777;
+  /* was #555 */
+  text-transform: lowercase;
+  letter-spacing: 0.2px;
+}
+
+/* Past dates — less faded so they're readable */
+.cs-day.past .cs-day-num {
+  color: #666;
+  /* was #333 — nearly invisible */
+}
+
+.cs-day.past .cs-day-name {
+  color: #555;
+  /* was #333 */
+}
+
+/* Month grid cells — brighter */
 .cs-month-cell {
-  aspect-ratio: 1;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ddd;
+  /* was #ccc — slightly brighter */
+  border-radius: 8px;
   cursor: pointer;
   border: 1.5px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+/* Future dates slightly dimmed but still visible */
+.cs-month-cell.future {
+  color: rgba(255, 255, 255, 0.25);
+  cursor: default;
+}
+
+/* Hover feedback */
+.cs-month-cell:hover:not(.selected):not(.future) {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .cs-month-cell.today {
-  border-color: rgba(204, 255, 0, 0.3);
-  color: #CCFF00;
+  border-color: rgba(196, 251, 49, 0.4);
+  color: #c4fb31;
 }
 
 .cs-month-cell.selected {
-  background: #CCFF00;
+  background: #c4fb31;
   color: #000;
   font-weight: 900;
+  border-color: #c4fb31;
+}
+
+/* ── DESKTOP HOME VARIANT ── */
+@media (min-width: 768px) {
+  .v-home-desktop {
+    border-radius: 20px;
+    padding: 12px;
+    gap: 8px;
+    height: 100%;
+  }
+
+  .v-home-desktop .cs-header-label {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .v-home-desktop .cs-month-cell {
+    height: 34px;
+    font-size: 12px;
+    border-radius: 9px;
+  }
+
+  .v-home-desktop .cs-month-label {
+    font-size: 9px;
+    padding-bottom: 5px;
+  }
+
+  .v-home-desktop .cs-month-inner-grid {
+    gap: 4px;
+  }
+}
+
+/* ── MOBILE ── */
+@media (max-width: 767px) {
+
+  /* On mobile, home-desktop variant behaves like strip */
+  .v-home-desktop {
+    height: auto;
+  }
 }

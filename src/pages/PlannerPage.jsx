@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Clock, Calendar, MoreHorizontal, Plus, ChevronLeft, MessageSquare, Flag, Briefcase, ChevronRight } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 import './PlannerPage.css';
 
 // --- Custom Components ---
@@ -344,6 +345,7 @@ function TaskGroup({ group, tasks }) {
 }
 
 export default function PlannerPage() {
+  const { dispatch } = useApp();
   const [groups, setGroups] = useState(tasksData);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -407,12 +409,13 @@ export default function PlannerPage() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <div className="tasks-page-header">
-          <h1 className="tasks-page-title">all tasks</h1>
-          <button className="tasks-more-btn">
-            <MoreHorizontal size={18} />
+        <header className="tasks-page-header">
+          <button className="tasks-back-btn" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'home' })}>
+            <ChevronLeft size={20} />
           </button>
-        </div>
+          <h1 className="tasks-page-title">all tasks</h1>
+          <div className="header-spacer" />
+        </header>
 
         <div className="tasks-groups">
           {groups.map((group) => (

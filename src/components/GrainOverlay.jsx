@@ -7,8 +7,8 @@ export default function GrainOverlay({ opacity = 0.08 }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const W = 300;
-    const H = 300;
+    const W = 512;
+    const H = 512;
     canvas.width = W;
     canvas.height = H;
 
@@ -17,11 +17,11 @@ export default function GrainOverlay({ opacity = 0.08 }) {
     const data = img.data;
 
     for (let i = 0; i < data.length; i += 4) {
-      const val = Math.floor(Math.random() * 255);
+      const val = Math.random() > 0.5 ? 255 : 0;
       data[i] = val;
       data[i + 1] = val;
       data[i + 2] = val;
-      data[i + 3] = Math.floor(Math.random() * 55);
+      data[i + 3] = Math.floor(Math.random() * 40);
     }
 
     ctx.putImageData(img, 0, 0);
@@ -35,11 +35,12 @@ export default function GrainOverlay({ opacity = 0.08 }) {
         inset: 0,
         width: '100%',
         height: '100%',
-        borderRadius: '16px',
+        borderRadius: 'inherit',
         opacity,
         pointerEvents: 'none',
         zIndex: 0,
-        mixBlendMode: 'screen',
+        mixBlendMode: 'overlay', /* Changed from screen to overlay for punchier grain */
+        imageRendering: 'pixelated', /* Keeps it sharp when scaled */
       }}
     />
   );

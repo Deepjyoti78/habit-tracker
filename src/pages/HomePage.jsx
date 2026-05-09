@@ -44,14 +44,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Calendar - Restored */}
-      <CalendarStrip 
-        selectedDate={selectedDate} 
-        onDateSelect={setSelectedDate} 
-      />
-
       {/* Bento Grid */}
       <div className="home-bento-grid">
+        <div className="home-cal-col">
+          <CalendarStrip 
+            variant="home-desktop"
+            selectedDate={selectedDate} 
+            onDateSelect={setSelectedDate} 
+          />
+        </div>
+
         <div className="home-left-col">
           <OverallProgressCard />
         </div>

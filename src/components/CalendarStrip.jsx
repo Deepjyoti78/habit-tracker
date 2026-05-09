@@ -40,9 +40,19 @@ export default function CalendarStrip({
   hideHeader = false,
   selectedDate = new Date(),
   onDateSelect,
+  variant = 'default',
 }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [baseDate, setBaseDate] = useState(() => new Date(TODAY));
+  // Safely detect desktop — avoids SSR/mobile breaking
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
+  const isHomeDesktop = variant === 'home-desktop' && isDesktop;
+
+  const [isExpanded, setIsExpanded] = useState(isHomeDesktop);
+  const [baseDate, setBaseDate] = useState(() => {
+    if (isHomeDesktop) {
+      return new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
+    }
+    return new Date(TODAY);
+  });
   const stripRef = useRef(null);
 
   const normSelected = zeroTime(selectedDate);
@@ -51,22 +61,17 @@ export default function CalendarStrip({
   const scrollToDate = useCallback((dateStr, instant = false) => {
     const strip = stripRef.current;
     if (!strip) return;
-
     const idx = ALL_DAYS.findIndex(d => d.dateStr === dateStr);
     if (idx === -1) return;
-
     setTimeout(() => {
       const strip2 = stripRef.current;
       if (!strip2) return;
-
       const child = strip2.children[idx];
       if (!child) return;
-
       const stripW = strip2.offsetWidth;
       const cellL = child.offsetLeft;
       const cellW = child.offsetWidth;
       const target = cellL - stripW / 2 + cellW / 2;
-
       if (instant) {
         strip2.scrollLeft = target;
       } else {
@@ -76,8 +81,8 @@ export default function CalendarStrip({
   }, []);
 
   useEffect(() => {
-    scrollToDate(TODAY_STR, true);
-  }, [scrollToDate]);
+    if (!isExpanded) scrollToDate(TODAY_STR, true);
+  }, [scrollToDate, isExpanded]);
 
   useEffect(() => {
     if (!isExpanded) scrollToDate(normSelectedStr, false);
@@ -88,6 +93,8 @@ export default function CalendarStrip({
   }, [normSelectedStr, scrollToDate]);
 
   const handleToggleExpand = () => {
+    // Desktop home variant: don't allow collapsing
+    if (isHomeDesktop) return;
     if (!isExpanded) {
       setBaseDate(new Date(
         normSelected.getFullYear(),
@@ -122,21 +129,40 @@ export default function CalendarStrip({
     }
   };
 
-  const monthLabel = baseDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const monthLabel = baseDate.toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
+  });
   const headerLabel = isExpanded
     ? monthLabel
-    : normSelected.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    : normSelected.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
 
-  const firstDayOfWeek = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1).getDay();
-  const daysInMonth = new Date(baseDate.getFullYear(), baseDate.getMonth() + 1, 0).getDate();
+  const firstDayOfWeek = new Date(
+    baseDate.getFullYear(),
+    baseDate.getMonth(),
+    1
+  ).getDay();
+  const daysInMonth = new Date(
+    baseDate.getFullYear(),
+    baseDate.getMonth() + 1,
+    0
+  ).getDate();
 
   return (
-    <div className={[
-      'cs-wrap',
-      isExpanded ? 'cs-expanded' : '',
-      hideHeader ? 'cs-no-header' : '',
-    ].filter(Boolean).join(' ')}>
-
+    <div
+      className={[
+        'cs-wrap',
+        isExpanded ? 'cs-expanded' : '',
+        hideHeader ? 'cs-no-header' : '',
+        `v-${variant}`,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       <GrainOverlay opacity={0.20} />
 
       {!hideHeader && (
@@ -146,7 +172,9 @@ export default function CalendarStrip({
           </button>
           <button className="cs-header-label" onClick={handleToggleExpand}>
             {headerLabel}
-            <span className={`cs-chevron ${isExpanded ? 'open' : ''}`}>›</span>
+            {!isHomeDesktop && (
+              <span className={`cs-chevron ${isExpanded ? 'open' : ''}`}>›</span>
+            )}
           </button>
           <button className="cs-nav-btn" onClick={handleNext}>
             <ChevronRight size={15} />
@@ -161,10 +189,10 @@ export default function CalendarStrip({
             key="strip"
             className="cs-strip"
             ref={stripRef}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
             onAnimationComplete={handleStripAnimationComplete}
           >
             {ALL_DAYS.map((day, idx) => {
@@ -175,7 +203,9 @@ export default function CalendarStrip({
                 day.isToday ? 'today' : '',
                 day.isPast && !isSelected && !day.isToday ? 'past' : '',
                 day.isWeekend && !isSelected && !day.isToday ? 'weekend' : '',
-              ].filter(Boolean).join(' ');
+              ]
+                .filter(Boolean)
+                .join(' ');
 
               return (
                 <div
@@ -194,24 +224,39 @@ export default function CalendarStrip({
           </motion.div>
 
         ) : (
-
           <motion.div
             key="grid"
             className="cs-month-grid"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            initial={{ opacity: 0, height: 0, scale: 0.97 }}
+            animate={{ opacity: 1, height: 'auto', scale: 1 }}
+            exit={{ opacity: 0, height: 0, scale: 0.97 }}
+            transition={{
+              height: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
+              opacity: { duration: 0.25, ease: 'easeOut' },
+              scale: { duration: 0.3, ease: [0.34, 1.56, 0.64, 1] },
+            }}
           >
             <div className="cs-month-inner-grid">
               {['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].map(d => (
-                <span key={d} className="cs-month-label">{d}</span>
+                <motion.span
+                  key={d}
+                  className="cs-month-label"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.15 }}
+                >
+                  {d}
+                </motion.span>
               ))}
+
               {Array.from({ length: firstDayOfWeek }).map((_, i) => (
                 <div key={`e-${i}`} />
               ))}
+
               {Array.from({ length: daysInMonth }).map((_, i) => {
-                const cellDate = zeroTime(new Date(baseDate.getFullYear(), baseDate.getMonth(), i + 1));
+                const cellDate = zeroTime(
+                  new Date(baseDate.getFullYear(), baseDate.getMonth(), i + 1)
+                );
                 const cellStr = cellDate.toDateString();
                 const isSel = cellStr === normSelectedStr;
                 const isTod = cellStr === TODAY_STR;
@@ -219,19 +264,28 @@ export default function CalendarStrip({
                   'cs-month-cell',
                   isSel ? 'selected' : '',
                   isTod && !isSel ? 'today' : '',
-                ].filter(Boolean).join(' ');
+                ]
+                  .filter(Boolean)
+                  .join(' ');
 
                 return (
-                  <div
+                  <motion.div
                     key={i}
                     className={cls}
+                    initial={{ opacity: 0, scale: 0.6 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      duration: 0.22,
+                      delay: 0.1 + i * 0.012,
+                      ease: [0.34, 1.56, 0.64, 1],
+                    }}
                     onClick={() => {
                       onDateSelect?.(new Date(cellDate));
-                      setIsExpanded(false);
+                      // Never collapse on date click — only collapse via header toggle
                     }}
                   >
                     {i + 1}
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>

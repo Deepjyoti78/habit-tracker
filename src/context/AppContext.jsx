@@ -33,6 +33,10 @@ function reducer(state, action) {
       ...state,
       habits: state.habits.map(h => h.id === action.payload.id ? action.payload : h)
     };
+    case 'TOGGLE_HABIT': return {
+      ...state,
+      habits: state.habits.map(h => h.id === action.payload ? { ...h, done: !h.done } : h)
+    };
     case 'DELETE_HABIT': return {
       ...state,
       habits: state.habits.filter(h => h.id !== action.payload)
