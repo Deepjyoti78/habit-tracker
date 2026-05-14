@@ -1,6 +1,8 @@
-const router = require('express').Router();
-const pool = require('../db/index');
-const auth = require('../middleware/auth');
+import express from 'express';
+import pool from '../db/index.js';
+import auth from '../middleware/auth.js';
+
+const router = express.Router();
 
 // GET all tasks for logged in user
 router.get('/', auth, async (req, res) => {
@@ -74,4 +76,4 @@ router.delete('/:id', auth, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

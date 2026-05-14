@@ -1,6 +1,8 @@
-const router = require('express').Router();
-const pool = require('../db/index');
-const auth = require('../middleware/auth');
+import express from 'express';
+import pool from '../db/index.js';
+import auth from '../middleware/auth.js';
+
+const router = express.Router();
 
 // GET today's checkin
 router.get('/today', auth, async (req, res) => {
@@ -49,4 +51,4 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

@@ -1,7 +1,10 @@
-const router = require('express').Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const pool = require('../db/index');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import pool from '../db/index.js';
+import authMiddleware from '../middleware/auth.js';
+
+const router = express.Router();
 
 // REGISTER
 router.post('/register', async (req, res) => {
@@ -90,7 +93,7 @@ router.post('/login', async (req, res) => {
 });
 
 // GET current user (protected)
-router.get('/me', require('../middleware/auth'), async (req, res) => {
+router.get('/me', authMiddleware, async (req, res) => {
     try {
         const result = await pool.query(
             'SELECT id, name, username, email, phone, avatar_seed FROM users WHERE id = $1',
@@ -102,4 +105,4 @@ router.get('/me', require('../middleware/auth'), async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
