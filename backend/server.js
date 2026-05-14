@@ -4,13 +4,32 @@ require('dotenv').config();
 
 const app = express();
 
+// Allowed origins: local dev + all deployed frontends
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://habit-tracker-1-wa6g.onrender.com',
+  'https://habit-tracker-phi-sepia.vercel.app',
+  // Add any extra origin from env (e.g. custom domain)
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://habit-tracker-1-wa6g.onrender.com',
-  ],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS: Origin ${origin} not allowed`));
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Handle preflight for all routes
+app.options('*', cors());
 
 app.use(express.json());
 

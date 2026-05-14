@@ -2,6 +2,7 @@ import { createContext, useContext, useReducer, useEffect, useState } from 'reac
 import { getHabits } from '../api/habits';
 import { getTasks } from '../api/tasks';
 import { getMe } from '../api/auth';
+import { pingBackend } from '../api/axios';
 
 const AppContext = createContext();
 
@@ -57,6 +58,9 @@ function reducer(state, action) {
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [token, setToken] = useState(localStorage.getItem('token'));
+
+  // Silently ping backend on load so Render free-tier wakes before login
+  useEffect(() => { pingBackend(); }, []);
 
   useEffect(() => {
     if (!token) return;
