@@ -41,16 +41,14 @@ export default function CalendarStrip({
   selectedDate = new Date(),
   onDateSelect,
   variant = 'default',
+  progressValue = 0.89, // 0.0 to 1.0
 }) {
-  // Safely detect desktop — avoids SSR/mobile breaking
   const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
   const isHomeDesktop = variant === 'home-desktop' && isDesktop;
 
   const [isExpanded, setIsExpanded] = useState(isHomeDesktop);
   const [baseDate, setBaseDate] = useState(() => {
-    if (isHomeDesktop) {
-      return new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
-    }
+    if (isHomeDesktop) return new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
     return new Date(TODAY);
   });
   const stripRef = useRef(null);
@@ -72,118 +70,69 @@ export default function CalendarStrip({
       const cellL = child.offsetLeft;
       const cellW = child.offsetWidth;
       const target = cellL - stripW / 2 + cellW / 2;
-      if (instant) {
-        strip2.scrollLeft = target;
-      } else {
-        strip2.scrollTo({ left: target, behavior: 'smooth' });
-      }
+      if (instant) strip2.scrollLeft = target;
+      else strip2.scrollTo({ left: target, behavior: 'smooth' });
     }, instant ? 0 : 50);
   }, []);
 
-  useEffect(() => {
-    if (!isExpanded) scrollToDate(TODAY_STR, true);
-  }, [scrollToDate, isExpanded]);
-
-  useEffect(() => {
-    if (!isExpanded) scrollToDate(normSelectedStr, false);
-  }, [normSelectedStr, isExpanded, scrollToDate]);
+  useEffect(() => { if (!isExpanded) scrollToDate(TODAY_STR, true); }, [scrollToDate, isExpanded]);
+  useEffect(() => { if (!isExpanded) scrollToDate(normSelectedStr, false); }, [normSelectedStr, isExpanded, scrollToDate]);
 
   const handleStripAnimationComplete = useCallback(() => {
     scrollToDate(normSelectedStr, true);
   }, [normSelectedStr, scrollToDate]);
 
   const handleToggleExpand = () => {
-    // Desktop home variant: don't allow collapsing
     if (isHomeDesktop) return;
-    if (!isExpanded) {
-      setBaseDate(new Date(
-        normSelected.getFullYear(),
-        normSelected.getMonth(),
-        1,
-      ));
-    }
+    if (!isExpanded) setBaseDate(new Date(normSelected.getFullYear(), normSelected.getMonth(), 1));
     setIsExpanded(prev => !prev);
   };
 
   const handlePrev = () => {
-    if (isExpanded) {
-      setBaseDate(prev => {
-        const d = new Date(prev);
-        d.setMonth(d.getMonth() - 1);
-        return d;
-      });
-    } else {
-      stripRef.current?.scrollBy({ left: -200, behavior: 'smooth' });
-    }
+    if (isExpanded) setBaseDate(prev => { const d = new Date(prev); d.setMonth(d.getMonth() - 1); return d; });
+    else stripRef.current?.scrollBy({ left: -200, behavior: 'smooth' });
   };
 
   const handleNext = () => {
-    if (isExpanded) {
-      setBaseDate(prev => {
-        const d = new Date(prev);
-        d.setMonth(d.getMonth() + 1);
-        return d;
-      });
-    } else {
-      stripRef.current?.scrollBy({ left: 200, behavior: 'smooth' });
-    }
+    if (isExpanded) setBaseDate(prev => { const d = new Date(prev); d.setMonth(d.getMonth() + 1); return d; });
+    else stripRef.current?.scrollBy({ left: 200, behavior: 'smooth' });
   };
 
-  const monthLabel = baseDate.toLocaleDateString('en-US', {
-    month: 'long',
-    year: 'numeric',
-  });
+  const monthLabel = baseDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   const headerLabel = isExpanded
     ? monthLabel
-    : normSelected.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    });
+    : normSelected.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
-  const firstDayOfWeek = new Date(
-    baseDate.getFullYear(),
-    baseDate.getMonth(),
-    1
-  ).getDay();
-  const daysInMonth = new Date(
-    baseDate.getFullYear(),
-    baseDate.getMonth() + 1,
-    0
-  ).getDate();
+  const firstDayOfWeek = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1).getDay();
+  const daysInMonth = new Date(baseDate.getFullYear(), baseDate.getMonth() + 1, 0).getDate();
+
+  // Ring dimensions
+  const SIZE = 48;
+  const CX = SIZE / 2;         // 24
+  const STROKE = 3;
+  const R_OUTER = CX - STROKE; // 21  ← progress ring radius
+  const R_INNER = R_OUTER - STROKE - 1; // 17 ← filled bg circle
+  const CIRC = 2 * Math.PI * R_OUTER;
 
   return (
     <div
-      className={[
-        'cs-wrap',
-        isExpanded ? 'cs-expanded' : '',
-        hideHeader ? 'cs-no-header' : '',
-        `v-${variant}`,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      className={['cs-wrap', isExpanded ? 'cs-expanded' : '', hideHeader ? 'cs-no-header' : '', `v-${variant}`]
+        .filter(Boolean).join(' ')}
     >
       <GrainOverlay opacity={0.20} />
 
       {!hideHeader && (
         <div className="cs-header">
-          <button className="cs-nav-btn" onClick={handlePrev}>
-            <ChevronLeft size={15} />
-          </button>
+          <button className="cs-nav-btn" onClick={handlePrev}><ChevronLeft size={15} /></button>
           <button className="cs-header-label" onClick={handleToggleExpand}>
             {headerLabel}
-            {!isHomeDesktop && (
-              <span className={`cs-chevron ${isExpanded ? 'open' : ''}`}>›</span>
-            )}
+            {!isHomeDesktop && <span className={`cs-chevron ${isExpanded ? 'open' : ''}`}>›</span>}
           </button>
-          <button className="cs-nav-btn" onClick={handleNext}>
-            <ChevronRight size={15} />
-          </button>
+          <button className="cs-nav-btn" onClick={handleNext}><ChevronRight size={15} /></button>
         </div>
       )}
 
       <AnimatePresence mode="wait">
-
         {!isExpanded ? (
           <motion.div
             key="strip"
@@ -197,26 +146,88 @@ export default function CalendarStrip({
           >
             {ALL_DAYS.map((day, idx) => {
               const isSelected = day.dateStr === normSelectedStr;
+              const isToday = day.isToday;
+              const showRing = isSelected || isToday;
+
+              // clamp progress between 0 and 1
+              const prog = Math.min(1, Math.max(0, progressValue));
+              const arcLen = CIRC * prog;
+
               const cls = [
                 'cs-day',
                 isSelected ? 'selected' : '',
-                day.isToday ? 'today' : '',
-                day.isPast && !isSelected && !day.isToday ? 'past' : '',
-                day.isWeekend && !isSelected && !day.isToday ? 'weekend' : '',
-              ]
-                .filter(Boolean)
-                .join(' ');
+                isToday ? 'today' : '',
+                day.isPast && !isSelected && !isToday ? 'past' : '',
+                day.isWeekend && !isSelected && !isToday ? 'weekend' : '',
+              ].filter(Boolean).join(' ');
 
               return (
-                <div
-                  key={idx}
-                  className={cls}
-                  onClick={() => onDateSelect?.(day.fullDate)}
-                >
+                <div key={idx} className={cls} onClick={() => onDateSelect?.(day.fullDate)}>
                   <span className="cs-day-name">{day.label}</span>
-                  <div className="cs-day-num-wrap">
-                    <span className="cs-day-num">{day.date}</span>
-                    {day.isToday && <div className="cs-today-dot" />}
+
+                  <div className="cs-circle-wrap">
+                    {showRing ? (
+                      <svg
+                        width={SIZE}
+                        height={SIZE}
+                        viewBox={`0 0 ${SIZE} ${SIZE}`}
+                        className="cs-ring-svg"
+                        style={{ display: 'block' }}
+                      >
+                        {/* filled background circle */}
+                        <circle
+                          cx={CX} cy={CX} r={R_INNER}
+                          fill={isSelected ? '#c4fb31' : 'rgba(196,251,49,0.08)'}
+                        />
+
+                        {/* track ring — full circle, always visible */}
+                        <circle
+                          cx={CX} cy={CX} r={R_OUTER}
+                          fill="none"
+                          stroke={isSelected ? 'rgba(0,0,0,0.18)' : 'rgba(196,251,49,0.22)'}
+                          strokeWidth={STROKE}
+                        />
+
+                        {/* progress arc on top of track */}
+                        <circle
+                          cx={CX} cy={CX} r={R_OUTER}
+                          fill="none"
+                          stroke={isSelected ? 'rgba(0,0,0,0.72)' : '#c4fb31'}
+                          strokeWidth={STROKE}
+                          strokeLinecap="round"
+                          strokeDasharray={`${arcLen} ${CIRC}`}
+                          transform={`rotate(-90 ${CX} ${CX})`}
+                          style={{ transition: 'stroke-dasharray 0.5s ease' }}
+                        />
+
+                        {/* date number as SVG text — perfectly centered */}
+                        <text
+                          x={CX}
+                          y={CX}
+                          textAnchor="middle"
+                          dominantBaseline="central"
+                          fill={isSelected ? '#000' : '#fff'}
+                          fontSize="15"
+                          fontWeight="800"
+                          fontFamily="inherit"
+                        >
+                          {day.date}
+                        </text>
+
+                        {/* today dot */}
+                        {isToday && (
+                          <circle
+                            cx={CX}
+                            cy={CX + R_INNER - 5}
+                            r={2}
+                            fill={isSelected ? '#000' : '#c4fb31'}
+                          />
+                        )}
+                      </svg>
+                    ) : (
+                      /* plain number for non-selected, non-today dates */
+                      <div className="cs-plain-num">{day.date}</div>
+                    )}
                   </div>
                 </div>
               );
@@ -238,52 +249,25 @@ export default function CalendarStrip({
           >
             <div className="cs-month-inner-grid">
               {['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].map(d => (
-                <motion.span
-                  key={d}
-                  className="cs-month-label"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2, delay: 0.15 }}
-                >
+                <motion.span key={d} className="cs-month-label"
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.15 }}>
                   {d}
                 </motion.span>
               ))}
-
-              {Array.from({ length: firstDayOfWeek }).map((_, i) => (
-                <div key={`e-${i}`} />
-              ))}
-
+              {Array.from({ length: firstDayOfWeek }).map((_, i) => <div key={`e-${i}`} />)}
               {Array.from({ length: daysInMonth }).map((_, i) => {
-                const cellDate = zeroTime(
-                  new Date(baseDate.getFullYear(), baseDate.getMonth(), i + 1)
-                );
+                const cellDate = zeroTime(new Date(baseDate.getFullYear(), baseDate.getMonth(), i + 1));
                 const cellStr = cellDate.toDateString();
                 const isSel = cellStr === normSelectedStr;
                 const isTod = cellStr === TODAY_STR;
-                const cls = [
-                  'cs-month-cell',
-                  isSel ? 'selected' : '',
-                  isTod && !isSel ? 'today' : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ');
-
+                const cls = ['cs-month-cell', isSel ? 'selected' : '', isTod && !isSel ? 'today' : ''].filter(Boolean).join(' ');
                 return (
-                  <motion.div
-                    key={i}
-                    className={cls}
+                  <motion.div key={i} className={cls}
                     initial={{ opacity: 0, scale: 0.6 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{
-                      duration: 0.22,
-                      delay: 0.1 + i * 0.012,
-                      ease: [0.34, 1.56, 0.64, 1],
-                    }}
-                    onClick={() => {
-                      onDateSelect?.(new Date(cellDate));
-                      // Never collapse on date click — only collapse via header toggle
-                    }}
-                  >
+                    transition={{ duration: 0.22, delay: 0.1 + i * 0.012, ease: [0.34, 1.56, 0.64, 1] }}
+                    onClick={() => onDateSelect?.(new Date(cellDate))}>
                     {i + 1}
                   </motion.div>
                 );
@@ -291,7 +275,6 @@ export default function CalendarStrip({
             </div>
           </motion.div>
         )}
-
       </AnimatePresence>
     </div>
   );

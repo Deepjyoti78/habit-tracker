@@ -152,6 +152,43 @@
   color: #4ade80;
 }
 
+/* ── DESKTOP override: stretch to match calendar height ── */
+@media (min-width: 768px) {
+  .hc-card {
+    height: 100%; /* fill the grid row, not fixed 210px */
+    padding-bottom: 8px;
+  }
+
+  .hc-header {
+    padding: 14px 14px 6px;
+  }
+
+  .hc-list {
+    padding: 0 10px 10px;
+    gap: 2px;
+  }
+
+  .hc-row {
+    padding: 8px 12px;
+    margin-bottom: 3px;
+    border-radius: 11px;
+  }
+
+  .hc-name {
+    font-size: 14px;
+  }
+
+  .hc-sub {
+    font-size: 11px;
+  }
+
+  .hc-plus {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* ── MOBILE (≤ 480px) ── */
 @media (max-width: 480px) {
   .hc-header {
     padding: 8px 10px 4px;

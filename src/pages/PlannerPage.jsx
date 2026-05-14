@@ -6,7 +6,7 @@ import './PlannerPage.css';
 
 // --- Custom Components ---
 
-function CustomSelect({ value, onChange, options }) {
+function CustomSelect({ value, onChange, options, placeholder = 'Select', openUp = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
@@ -24,18 +24,28 @@ function CustomSelect({ value, onChange, options }) {
 
   return (
     <div className="custom-select-container" ref={containerRef}>
-      <div className="custom-select-trigger" onClick={() => setIsOpen(!isOpen)}>
-        <span>{selectedOption ? `${selectedOption.icon} ${selectedOption.label}` : 'Select type'}</span>
-        <ChevronDown size={16} />
+      <div className={`custom-select-trigger ${isOpen ? 'open' : ''}`} onClick={() => setIsOpen(!isOpen)}>
+        <div className="trigger-value">
+          {selectedOption ? (
+            <>
+              <span className="opt-icon">{selectedOption.icon}</span>
+              <span className="opt-label">{selectedOption.label}</span>
+            </>
+          ) : (
+            <span className="placeholder">{placeholder}</span>
+          )}
+        </div>
+        <ChevronDown size={14} className={`chevron ${isOpen ? 'rotate' : ''}`} />
       </div>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="custom-select-options"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            className={`custom-select-options ${openUp ? 'open-up' : ''}`}
+            initial={{ opacity: 0, y: openUp ? -10 : 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: openUp ? -10 : 10, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
           >
             {options.map((opt) => (
               <div
@@ -46,8 +56,9 @@ function CustomSelect({ value, onChange, options }) {
                   setIsOpen(false);
                 }}
               >
-                <span>{opt.icon}</span>
-                <span>{opt.label}</span>
+                <span className="opt-icon">{opt.icon}</span>
+                <span className="opt-label">{opt.label}</span>
+                {value === opt.value && <div className="selected-dot" />}
               </div>
             ))}
           </motion.div>
@@ -100,10 +111,10 @@ function ClockPicker({ value, onChange, onClose }) {
           <div className="clock-center" />
           <motion.div
             className="clock-hand"
-            initial={{ rotate: rotation, height: mode === 'hour' ? '70px' : '90px' }}
+            initial={{ rotate: rotation, height: mode === 'hour' ? '85px' : '95px' }}
             animate={{ 
               rotate: rotation, 
-              height: mode === 'hour' ? '70px' : '90px' 
+              height: mode === 'hour' ? '85px' : '95px' 
             }}
             transition={{ type: "spring", damping: 20, stiffness: 400, mass: 0.8 }}
           />
@@ -485,32 +496,27 @@ export default function PlannerPage() {
                 <div className="task-modal-field">
                   <div className="task-modal-icon"><Flag size={16} /></div>
                   <span className="task-modal-label">Priority level</span>
-                  <div className="task-priority-selector">
-                    <button
-                      className={`task-priority-btn high ${priority === 'High' ? 'active' : ''}`}
-                      onClick={() => setPriority('High')}
-                    >High</button>
-                    <button
-                      className={`task-priority-btn medium ${priority === 'Medium' ? 'active' : ''}`}
-                      onClick={() => setPriority('Medium')}
-                    >Medium</button>
-                    <button
-                      className={`task-priority-btn low ${priority === 'Low' ? 'active' : ''}`}
-                      onClick={() => setPriority('Low')}
-                    >Low</button>
-                  </div>
+                  <CustomSelect
+                    value={priority}
+                    onChange={setPriority}
+                    options={[
+                      { value: 'High', label: 'High Priority', icon: '🔴' },
+                      { value: 'Medium', label: 'Medium Priority', icon: '🟡' },
+                      { value: 'Low', label: 'Low Priority', icon: '🔵' },
+                    ]}
+                  />
                 </div>
 
                 <div className="task-modal-field">
                   <div className="task-modal-icon"><Clock size={16} /></div>
                   <span className="task-modal-label">Time</span>
-                  <div className="task-time-inputs">
-                    <div className="custom-select-trigger" onClick={() => setActivePicker('start')}>
-                      {startTime || '--:--'}
+                  <div className="task-time-row">
+                    <div className="time-picker-trigger" onClick={() => setActivePicker('start')}>
+                      {startTime || '00:00 AM'}
                     </div>
-                    <span className="time-separator">to</span>
-                    <div className="custom-select-trigger" onClick={() => setActivePicker('end')}>
-                      {endTime || '--:--'}
+                    <span className="time-sep">to</span>
+                    <div className="time-picker-trigger" onClick={() => setActivePicker('end')}>
+                      {endTime || '00:00 AM'}
                     </div>
                   </div>
                 </div>
@@ -522,19 +528,19 @@ export default function PlannerPage() {
                     value={workType}
                     onChange={setWorkType}
                     options={workTypeOptions}
+                    openUp={true}
                   />
                 </div>
 
                 <div className="task-modal-field">
                   <div className="task-modal-icon"><Calendar size={16} /></div>
                   <span className="task-modal-label">Due date</span>
-                  <div className="custom-select-trigger" onClick={() => setActivePicker('date')}>
+                  <div className="date-picker-trigger" onClick={() => setActivePicker('date')}>
                     {dueDate || 'Select date'}
                   </div>
                 </div>
               </div>
 
-              <div style={{ height: "40px" }} />
             </motion.div>
 
             {/* Pickers */}

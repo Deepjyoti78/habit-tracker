@@ -1,43 +1,36 @@
 .analytics-page {
-  padding: 16px 16px 100px;
+  padding: 16px 20px 100px;
   max-width: 500px;
   margin: 0 auto;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-sizing: border-box;
 }
 
-/* ── HEADER ── */
 .analytics-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
-  padding: 4px 0;
+  margin-bottom: 32px;
 }
 
 .analytics-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: #fff;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.8px;
   text-transform: lowercase;
   margin: 0;
   flex: 1;
   text-align: center;
 }
 
-.analytics-back-btn,
-.header-spacer {
-  width: 38px;
-  height: 38px;
+.analytics-back-btn, .header-spacer {
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
 }
 
 .analytics-back-btn {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 50%;
   display: flex;
@@ -45,163 +38,66 @@
   justify-content: center;
   color: #fff;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .analytics-back-btn:hover {
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.08);
   transform: translateX(-2px);
 }
 
-/* ── SHARED CARD BASE ── */
-.an-card {
-  background:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E"),
-    linear-gradient(160deg, #141414 0%, #0d0d0d 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 20px;
-  padding: 18px 16px;
-  position: relative;
-  overflow: hidden;
-}
-
-.an-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.an-card-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
-  text-transform: lowercase;
-  letter-spacing: -0.2px;
-}
-
-.an-card-sub {
-  font-size: 10px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 3px 8px;
-  border-radius: 20px;
-}
-
-/* ── MOOD CHART ── */
-.mood-chart-card {
-  background:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E"),
-    linear-gradient(160deg, #0e1208 0%, #0a0d06 100%);
-  border: 1px solid rgba(196, 251, 49, 0.08);
-  border-radius: 20px;
-  padding: 18px 16px;
-  position: relative;
-  overflow: hidden;
-}
-
-.mood-chart-card::before {
-  content: '';
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 160px;
-  height: 160px;
-  background: radial-gradient(circle, rgba(196, 251, 49, 0.08) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.mood-chart-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.mood-chart-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
-  text-transform: lowercase;
-  margin: 0;
-  letter-spacing: -0.2px;
-}
-
-.mood-chart-date {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 3px 8px;
-  border-radius: 20px;
-}
-
-.mood-svg {
-  width: 100%;
-  height: auto;
-  overflow: visible;
-}
-
-/* ── BAR CHARTS SIDE BY SIDE ── */
 .analytics-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
 }
 
-.analytics-chart-card {
-  background:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E"),
-    linear-gradient(160deg, #141414 0%, #0d0d0d 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 18px;
-  padding: 14px 12px;
-  position: relative;
-  overflow: hidden;
+.analytics-chart-card, .analytics-categories-card {
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 28px;
+  padding: 24px;
 }
 
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 
 .card-title {
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.85);
+  color: #fff;
   text-transform: lowercase;
 }
 
 .analytics-chart-label {
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2px 6px;
-  border-radius: 10px;
+  font-size: 11px;
+  color: #666;
 }
 
 .analytics-chart-container {
-  height: 100px;
+  height: 120px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .mini-bar-chart {
   flex: 1;
   display: flex;
   align-items: flex-end;
-  gap: 3px;
+  gap: 8px;
 }
 
 .mini-bar {
   flex: 1;
   background: var(--bar-color, #c4fb31);
-  border-radius: 3px 3px 0 0;
-  min-height: 3px;
-  opacity: 0.85;
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
 }
 
 .analytics-chart-x-labels {
@@ -210,39 +106,23 @@
 }
 
 .analytics-chart-x-labels span {
-  font-size: 8px;
-  color: rgba(255, 255, 255, 0.3);
-  flex: 1;
+  font-size: 10px;
+  color: #555;
+  width: 14%;
   text-align: center;
-}
-
-.analytics-chart-x-labels.wide span {
-  font-size: 7px;
-}
-
-/* ── CATEGORY RINGS ── */
-.analytics-categories-card {
-  background:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E"),
-    linear-gradient(160deg, #141414 0%, #0d0d0d 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 20px;
-  padding: 18px 16px;
-  position: relative;
-  overflow: hidden;
 }
 
 .analytics-cats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 16px;
 }
 
 .analytics-cat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
 .analytics-cat-ring {
@@ -254,118 +134,46 @@
 
 .analytics-cat-ring-val {
   position: absolute;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   color: #fff;
 }
 
 .analytics-cat-name {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: #888;
   text-transform: lowercase;
-  text-align: center;
-}
-/* -- HABIT HEATMAPS SECTION -- */
-.habit-heatmaps-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
-.habit-heatmap-card {
-  background:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.1'/%3E%3C/svg%3E"),
-    linear-gradient(160deg, #141414 0%, #0d0d0d 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  position: relative;
-  overflow: hidden;
+/* Mood Chart Override */
+.mood-chart-card {
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 28px;
+  padding: 24px;
+  margin-bottom: 16px;
 }
 
-.habit-heatmap-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.mood-chart-header {
+  margin-bottom: 20px;
 }
 
-.habit-heatmap-left {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.habit-heatmap-name {
-  font-size: 12px;
+.mood-chart-title {
+  font-size: 16px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.85);
+  color: #fff;
   text-transform: lowercase;
-  letter-spacing: -0.1px;
+  margin: 0;
 }
 
-.habit-heatmap-streak {
-  font-size: 9px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2px 8px;
-  border-radius: 20px;
+.mood-chart-date {
+  font-size: 11px;
+  color: #666;
 }
 
-/* Grid: rows = days of week, cols = weeks */
-.habit-heatmap-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.habit-heatmap-row {
-  display: flex;
-  gap: 2px;
-}
-
-.habit-heatmap-cell {
+.mood-svg {
   width: 100%;
-  aspect-ratio: 1;
-  border-radius: 2px;
-  flex: 1;
-  min-width: 0;
-}
-
-.habit-heatmap-footer {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.habit-heatmap-less,
-.habit-heatmap-more {
-  font-size: 8px;
-  color: rgba(255, 255, 255, 0.25);
-  font-weight: 500;
-}
-
-.habit-heatmap-less {
-  margin-right: 2px;
-}
-
-.habit-heatmap-more {
-  margin-left: 2px;
-}
-
-.habit-heatmap-legend-cell {
-  width: 9px;
-  height: 9px;
-  border-radius: 2px;
-}
-
-.habit-heatmap-empty {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.25);
-  text-align: center;
-  padding: 24px 0;
+  height: auto;
+  overflow: visible;
 }

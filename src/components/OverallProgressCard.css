@@ -171,6 +171,32 @@
   text-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
 
+/* ── DESKTOP override: stretch to match calendar height ── */
+@media (min-width: 768px) {
+  .overall-progress-nebula {
+    height: 100%; /* inherit grid row height, not 210px */
+    padding: 16px 14px 14px;
+  }
+
+  .opc-nebula-gauge {
+    width: 90px;
+    height: 90px;
+  }
+
+  .opc-gauge-value {
+    font-size: 24px;
+  }
+
+  .opc-nebula-stats {
+    margin-top: auto; /* push stats to the bottom */
+  }
+
+  .opc-stat-compact {
+    padding: 8px 14px;
+  }
+}
+
+/* ── MOBILE (≤ 480px) ── */
 @media (max-width: 480px) {
   .overall-progress-nebula {
     padding: 8px 8px 8px;

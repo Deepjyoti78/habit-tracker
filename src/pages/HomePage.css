@@ -115,12 +115,22 @@
   .home-bento-grid {
     grid-template-columns: 220px 1fr 1.3fr;
     gap: 14px;
-    align-items: start;
+    align-items: stretch; /* all three columns share the same row height */
   }
 
   .home-cal-col {
     grid-column: auto;
     /* reset — sits in column 1 */
+  }
+
+  .home-left-col,
+  .home-right-col {
+    height: 100%; /* fill the full grid row height */
+  }
+
+  .home-left-col > *,
+  .home-right-col > * {
+    height: 100%; /* let the card itself stretch */
   }
 }
 
