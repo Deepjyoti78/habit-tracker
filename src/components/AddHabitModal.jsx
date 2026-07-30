@@ -7,9 +7,12 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { createHabit } from '../api/habits';
-import './AddHabitPage.css';
+import './AddHabitModal.css';
 
 const categories = [
+// ... (I'll keep this as is, but I need to do a correct replacement)
+// Let's look at lines 8 to 104
+
   { id: 'academic', label: 'Academic', iconName: 'academic', color: '#3b82f6', desc: 'study, research, learning', trackingType: 'study' },
   { id: 'sleep', label: 'Sleep', iconName: 'sleep', color: '#8b5cf6', desc: 'rest, recovery, health', trackingType: 'sleep' },
   { id: 'coding', label: 'Coding', iconName: 'coding', color: '#10b981', desc: 'programming, projects', trackingType: 'study' },
@@ -27,7 +30,7 @@ const catIconMap = {
   communication: MessageSquare, mind: Brain, water: Droplets,
 };
 
-export default function AddHabitPage() {
+export default function AddHabitModal() {
   const { dispatch } = useApp();
 
   // Per-category state — each category tracks its own config independently
@@ -74,8 +77,7 @@ export default function AddHabitPage() {
         tracking_type: cat.trackingType,
       };
       const res = await createHabit(payload);
-      dispatch({ type: 'ADD_HABIT', payload: res.data });
-      dispatch({ type: 'SET_PAGE', payload: 'habits' });
+      dispatch({ type: 'SET_ADD_HABIT_MODAL', payload: false });
     } catch (err) {
       console.error('Failed to add habit:', err);
     } finally {
@@ -83,24 +85,34 @@ export default function AddHabitPage() {
     }
   };
 
+  const closeModal = () => dispatch({ type: 'SET_ADD_HABIT_MODAL', payload: false });
+
   return (
     <motion.div
-      className="add-habit-page-container"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.2 }}
+      className="add-habit-modal-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={closeModal}
     >
-      {/* Header */}
-      <header className="add-habit-header-new">
-        <button className="header-icon-box" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'habits' })}>
-          <X size={18} />
-        </button>
-        <h1 className="add-habit-title">add new habit</h1>
-        <button className="header-done-btn-new" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'habits' })}>
-          done
-        </button>
-      </header>
+      <motion.div
+        className="add-habit-modal-content"
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <header className="add-habit-header-new">
+          <button className="header-icon-box" onClick={closeModal}>
+            <X size={18} />
+          </button>
+          <h1 className="add-habit-title">add new habit</h1>
+          <button className="header-done-btn-new" onClick={closeModal}>
+            done
+          </button>
+        </header>
 
       {/* Search */}
       <div className="search-bar-container">
@@ -139,8 +151,8 @@ export default function AddHabitPage() {
                   <motion.div
                     className="category-expand-content"
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1, transitionEnd: { overflow: 'visible' } }}
+                    exit={{ height: 0, opacity: 0, overflow: 'hidden' }}
                     transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                   >
                     <div className="expand-inner">
@@ -288,7 +300,10 @@ export default function AddHabitPage() {
       </div>
 
       {/* Custom habit CTA */}
-      <div className="custom-habit-trigger-dashed" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'create-habit' })}>
+      <div className="custom-habit-trigger-dashed" onClick={() => {
+        dispatch({ type: 'SET_PAGE', payload: 'create-habit' });
+        closeModal();
+      }}>
         <div className="trigger-icon-box">
           <Plus size={16} />
         </div>
@@ -296,6 +311,7 @@ export default function AddHabitPage() {
           can't find it? <span className="highlight-text">create a custom habit</span>
         </p>
       </div>
+      </motion.div>
     </motion.div>
   );
 }

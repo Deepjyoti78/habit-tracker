@@ -66,7 +66,7 @@ export default function CreateHabitPage() {
       <header className="chp-header">
         <button
           className="chp-back"
-          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}
+          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'habits' })}
         >
           <ChevronLeft size={18} />
         </button>

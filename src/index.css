@@ -11,11 +11,11 @@
 
 :root {
   /* Core palette */
-  --bg: #09090b;
-  --surface: #161618;
-  --surface2: #1e1e20;
-  --surface3: #27272a;
-  --surface4: #3f3f46;
+  --bg: #0e0e0e;
+  --surface: #161616;
+  --surface2: #1e1e1e;
+  --surface3: #2a2a2a;
+  --surface4: #333333;
 
   /* Borders */
   --border: rgba(255, 255, 255, 0.05);
@@ -43,10 +43,10 @@
   --cyan: #06b6d4;
 
   /* Radii */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 16px;
 
   /* Shadows */
   --shadow-sm: none;
@@ -57,6 +57,10 @@
   /* Transitions */
   --ease: ease;
   --spring: ease;
+}
+
+*, *::before, *::after {
+  box-shadow: none !important;
 }
 
 html {

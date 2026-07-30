@@ -53,8 +53,8 @@ function ProgressArc({ r, progress, color, delay = 0 }) {
 }
 
 export default function OverallProgressCard() {
-  const progress = 89;
-  const secondaryProgress = 75;
+  const progress = 0;
+  const secondaryProgress = 0;
 
   return (
     <motion.div
@@ -86,7 +86,7 @@ export default function OverallProgressCard() {
             <CheckCircle2 size={11} className="opc-icon yellow" />
             <div className="opc-stat-inline">
               <span className="opc-label">done</span>
-              <span className="opc-val">64/72</span>
+              <span className="opc-val">0/0</span>
             </div>
           </div>
 
@@ -94,7 +94,7 @@ export default function OverallProgressCard() {
             <Hourglass size={11} className="opc-icon purple" />
             <div className="opc-stat-inline">
               <span className="opc-label">left</span>
-              <span className="opc-val">8 tasks</span>
+              <span className="opc-val">0 tasks</span>
             </div>
           </div>
         </div>

@@ -46,10 +46,10 @@
   }
 
   .mobile-nav-btn.active {
-    background: #c4fb31; /* Neon lime from image */
+    background: #ffffff; /* Neon lime from image */
     color: #000000;
     padding: 0 20px;
-    box-shadow: 0 4px 12px rgba(196, 251, 49, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
   }
 
   .mobile-nav-label {

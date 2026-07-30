@@ -5,7 +5,8 @@ import { Bell, User } from 'lucide-react';
 import CalendarStrip from '../components/CalendarStrip';
 import DailyCheckin from '../components/DailyCheckin';
 import HabitCard from '../components/HabitCard';
-import OverallProgressCard from '../components/OverallProgressCard';
+import ProjectProgressCard from '../components/ProjectProgressCard';
+import StartSessionCard from '../components/StartSessionCard';
 import RemainingTasksCard from '../components/RemainingTasksCard';
 import TaskRemainingCard from '../components/TaskRemainingCard';
 import TopPriorityCard from '../components/TopPriorityCard';
@@ -52,10 +53,13 @@ export default function HomePage() {
             selectedDate={selectedDate} 
             onDateSelect={setSelectedDate} 
           />
+          <div className="home-session-wrapper">
+            <StartSessionCard />
+          </div>
         </div>
 
         <div className="home-left-col">
-          <OverallProgressCard />
+          <ProjectProgressCard />
         </div>
 
         <div className="home-right-col">

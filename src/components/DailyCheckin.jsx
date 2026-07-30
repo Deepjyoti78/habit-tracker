@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Droplet, Moon, Sun, Flame, Plus, Minus } from 'lucide-react';
+import { Droplet, Moon, Sun, Flame, Plus, Minus, Activity } from 'lucide-react';
 import './DailyCheckin.css';
 
 export default function DailyCheckin() {
   const [checkins, setCheckins] = useState([
     { id: 'water', label: 'Water', icon: Droplet, current: 6, total: 10, unit: 'Glass', color: '#a881ff' },
-    { id: 'sleep', label: 'Sleep', icon: Moon, current: 5, total: 8, unit: 'Hours', color: '#c4fb31' },
+    { id: 'sleep', label: 'Sleep', icon: Moon, current: 5, total: 8, unit: 'Hours', color: '#ffffff' },
     { id: 'meditate', label: 'Meditate', icon: Sun, current: 10, total: 15, unit: 'Mins', color: '#ff9a4d' },
     { id: 'read', label: 'Reading', icon: Flame, current: 20, total: 30, unit: 'Pages', color: '#ff6b6b' },
+    { id: 'workout', label: 'Workout', icon: Activity, current: 0, total: 1, unit: 'Session', color: '#4dffb8' },
   ]);
 
   const handleUpdate = (id, increment) => {

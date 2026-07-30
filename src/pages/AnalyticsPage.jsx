@@ -2,159 +2,13 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { analyticsData } from '../data/appData';
 import Heatmap from '../components/Heatmap';
 import OverallProgressCard from '../components/OverallProgressCard';
+import HabitProgressCard from '../components/HabitProgressCard';
+import ScoreCard from '../components/ScoreCard';
 import './AnalyticsPage.css';
 
-/* ── Mini Bar Chart ── */
-function MiniBarChart({ data, maxVal, color }) {
-  const max = maxVal || Math.max(...data);
-  return (
-    <div className="mini-bar-chart">
-      {data.map((val, i) => (
-        <motion.div
-          key={i}
-          className="mini-bar"
-          style={{ '--bar-color': color || '#c4fb31' }}
-          initial={{ height: 0 }}
-          animate={{ height: `${(val / max) * 100}%` }}
-          transition={{ duration: 0.5, delay: 0.2 + i * 0.04, ease: 'easeOut' }}
-        />
-      ))}
-    </div>
-  );
-}
 
-/* ── Category Ring ── */
-function CategoryRing({ category, index }) {
-  const r = 26;
-  const circumference = 2 * Math.PI * r;
-  const offset = circumference - (circumference * category.score) / 100;
-
-  return (
-    <motion.div
-      className="analytics-cat-item"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15 + index * 0.07 }}
-    >
-      <div className="analytics-cat-ring">
-        <svg width="62" height="62" viewBox="0 0 62 62">
-          <path
-            d={`M 31 31 m -${r} 0 a ${r} ${r} 0 1 1 ${r * 2} 0 a ${r} ${r} 0 1 1 -${r * 2} 0`}
-            fill="none"
-            stroke="rgba(255,255,255,0.06)"
-            strokeWidth="4.5"
-          />
-          <motion.path
-            d={`M 31 31 m -${r} 0 a ${r} ${r} 0 1 1 ${r * 2} 0 a ${r} ${r} 0 1 1 -${r * 2} 0`}
-            fill="none"
-            stroke={category.color}
-            strokeWidth="4.5"
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            initial={{ strokeDashoffset: circumference }}
-            animate={{ strokeDashoffset: offset }}
-            transition={{ duration: 1, delay: 0.3 + index * 0.1, ease: 'easeOut' }}
-            style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%' }}
-          />
-        </svg>
-        <span className="analytics-cat-ring-val">{category.score}%</span>
-      </div>
-      <span className="analytics-cat-name">{category.name}</span>
-    </motion.div>
-  );
-}
-
-/* ── Mini Habit Heatmap ── */
-function MiniHeatmap({ habit, index }) {
-  const WEEKS = 15;
-  const DAYS = 7;
-  const total = WEEKS * DAYS;
-
-  // Generate mock data based on habit — replace with real log data if available
-  const cells = Array.from({ length: total }, (_, i) => {
-    if (!habit.logs || habit.logs.length === 0) {
-      // Random mock data seeded by habit id + index
-      const seed = (habit.id?.charCodeAt?.(0) || index + 1) * (i + 1);
-      const rand = ((seed * 1664525 + 1013904223) & 0xffffffff) / 0xffffffff;
-      if (rand > 0.65) return Math.random() > 0.5 ? 2 : 3;
-      if (rand > 0.45) return 1;
-      return 0;
-    }
-    // Real log matching
-    const cellDate = new Date();
-    cellDate.setDate(cellDate.getDate() - (total - 1 - i));
-    const dateStr = cellDate.toDateString();
-    const logged = habit.logs?.some(log => {
-      const d = new Date(log.date || log.timestamp || log);
-      return d.toDateString() === dateStr;
-    });
-    return logged ? 3 : 0;
-  });
-
-  const color = habit.color || ['#f59e0b', '#22c55e', '#a855f7', '#3b82f6', '#ef4444', '#06b6d4'][index % 6];
-
-  const getOpacity = (val) => {
-    if (val === 0) return 'rgba(255,255,255,0.04)';
-    if (val === 1) return `${color}40`;
-    if (val === 2) return `${color}80`;
-    return color;
-  };
-
-  return (
-    <motion.div
-      className="habit-heatmap-card"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1 + index * 0.06 }}
-    >
-      <div className="habit-heatmap-header">
-        <div className="habit-heatmap-left">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-            stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
-          </svg>
-          <span className="habit-heatmap-name">{habit.name || habit.title || 'habit'}</span>
-        </div>
-        <span className="habit-heatmap-streak">
-          {habit.streak || Math.floor(Math.random() * 14)}d streak
-        </span>
-      </div>
-
-      <div className="habit-heatmap-grid">
-        {Array.from({ length: DAYS }, (_, row) => (
-          <div key={row} className="habit-heatmap-row">
-            {Array.from({ length: WEEKS }, (_, col) => {
-              const cellIdx = col * DAYS + row;
-              const val = cells[cellIdx] || 0;
-              return (
-                <div
-                  key={col}
-                  className="habit-heatmap-cell"
-                  style={{ background: getOpacity(val) }}
-                />
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
-      <div className="habit-heatmap-footer">
-        <span className="habit-heatmap-less">less</span>
-        {[0.08, 0.25, 0.5, 1].map((op, i) => (
-          <div
-            key={i}
-            className="habit-heatmap-legend-cell"
-            style={{ background: op < 0.15 ? 'rgba(255,255,255,0.06)' : `${color}${Math.round(op * 255).toString(16).padStart(2, '0')}` }}
-          />
-        ))}
-        <span className="habit-heatmap-more">more</span>
-      </div>
-    </motion.div>
-  );
-}
 
 /* ── Smooth Line Path ── */
 function smoothLine(points) {
@@ -191,7 +45,6 @@ function MoodChart() {
 
   const pathD = smoothLine(points);
 
-  /* gradient area fill */
   const areaD = pathD + ` L ${points[points.length - 1][0]} ${vHeight - paddingY} L ${points[0][0]} ${vHeight - paddingY} Z`;
 
   return (
@@ -214,7 +67,6 @@ function MoodChart() {
           </linearGradient>
         </defs>
 
-      {/* Grid lines */}
       {moodLevels.map((lbl, i) => {
         const y = paddingY + (i / (moodLevels.length - 1)) * (vHeight - 2 * paddingY);
         return (
@@ -238,7 +90,6 @@ function MoodChart() {
         );
       })}
 
-      {/* Area fill */}
       <motion.path
         d={areaD}
         fill="url(#moodGrad)"
@@ -247,7 +98,6 @@ function MoodChart() {
         transition={{ duration: 1, delay: 0.4 }}
       />
 
-      {/* Line */}
       <motion.path
         d={pathD}
         fill="none"
@@ -260,7 +110,6 @@ function MoodChart() {
         transition={{ duration: 1.4, ease: 'easeInOut', delay: 0.2 }}
       />
 
-      {/* Dots + hit areas */}
       {points.map((p, i) => (
         <g key={i}>
           <motion.circle
@@ -320,7 +169,6 @@ function MoodChart() {
         </g>
       ))}
 
-      {/* X labels */}
       {xLabels.map((lbl, i) => {
         const x = paddingX + (i / (xLabels.length - 1)) * chartWidth;
         return (
@@ -343,7 +191,6 @@ function MoodChart() {
 /* ── Page ── */
 export default function AnalyticsPage() {
   const { dispatch, state } = useApp();
-  const { weeklyScores, monthlyScores, categoryBreakdown } = analyticsData;
 
   return (
     <motion.div
@@ -368,89 +215,31 @@ export default function AnalyticsPage() {
       {/* Overall Progress */}
       <OverallProgressCard />
 
+      {/* Discipline Score Card */}
+      <ScoreCard />
+
       {/* Mood Chart */}
       <MoodChart />
 
-      {/* Bar Charts */}
-      <div className="analytics-grid">
+      {/* Per-Habit Progress & Heatmap Cards */}
+      {state.habits.length > 0 && (
         <motion.div
-          className="analytics-chart-card"
+          className="habit-progress-section"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="card-header">
-            <span className="card-title">weekly trend</span>
-            <span className="analytics-chart-label">7 days</span>
-          </div>
-          <div className="analytics-chart-container">
-            <MiniBarChart data={weeklyScores} maxVal={100} color="#c4fb31" />
-            <div className="analytics-chart-x-labels">
-              {['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((d) => (
-                <span key={d}>{d}</span>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="analytics-chart-card"
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-        >
-          <div className="card-header">
-            <span className="card-title">monthly trend</span>
-            <span className="analytics-chart-label">12 weeks</span>
-          </div>
-          <div className="analytics-chart-container">
-            <MiniBarChart data={monthlyScores} maxVal={100} color="#a78bfa" />
-            <div className="analytics-chart-x-labels wide">
-              {['w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'w8', 'w9', 'w10', 'w11', 'w12'].map((d) => (
-                <span key={d}>{d}</span>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Category Breakdown */}
-      <motion.div
-        className="analytics-categories-card"
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <div className="card-header">
-          <span className="card-title">category performance</span>
-        </div>
-        <div className="analytics-cats-grid">
-          {categoryBreakdown.map((cat, i) => (
-            <CategoryRing key={cat.name} category={cat} index={i} />
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Per-Habit Heatmaps */}
-      <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.28 }}
-      >
-        <div className="habit-heatmaps-section">
-          <div className="card-header" style={{ marginBottom: '10px' }}>
-            <span className="card-title">habit streaks</span>
+          <div className="card-header" style={{ marginBottom: '12px' }}>
+            <span className="card-title">habit statistics & streaks</span>
             <span className="analytics-chart-label">{state.habits.length} habits</span>
           </div>
-          {state.habits.length === 0 ? (
-            <div className="habit-heatmap-empty">no habits yet — add some!</div>
-          ) : (
-            state.habits.map((habit, i) => (
-              <MiniHeatmap key={habit.id || i} habit={habit} index={i} />
-            ))
-          )}
-        </div>
-      </motion.div>
+          <div className="habit-progress-grid">
+            {state.habits.map((habit, i) => (
+              <HabitProgressCard key={habit.id || i} habit={habit} index={i} />
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       {/* Heatmap */}
       <motion.div

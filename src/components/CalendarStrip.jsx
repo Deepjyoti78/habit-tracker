@@ -46,9 +46,8 @@ export default function CalendarStrip({
   const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
   const isHomeDesktop = variant === 'home-desktop' && isDesktop;
 
-  const [isExpanded, setIsExpanded] = useState(isHomeDesktop);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [baseDate, setBaseDate] = useState(() => {
-    if (isHomeDesktop) return new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
     return new Date(TODAY);
   });
   const stripRef = useRef(null);
@@ -83,7 +82,6 @@ export default function CalendarStrip({
   }, [normSelectedStr, scrollToDate]);
 
   const handleToggleExpand = () => {
-    if (isHomeDesktop) return;
     if (!isExpanded) setBaseDate(new Date(normSelected.getFullYear(), normSelected.getMonth(), 1));
     setIsExpanded(prev => !prev);
   };
@@ -126,7 +124,7 @@ export default function CalendarStrip({
           <button className="cs-nav-btn" onClick={handlePrev}><ChevronLeft size={15} /></button>
           <button className="cs-header-label" onClick={handleToggleExpand}>
             {headerLabel}
-            {!isHomeDesktop && <span className={`cs-chevron ${isExpanded ? 'open' : ''}`}>›</span>}
+            <span className={`cs-chevron ${isExpanded ? 'open' : ''}`}>›</span>
           </button>
           <button className="cs-nav-btn" onClick={handleNext}><ChevronRight size={15} /></button>
         </div>

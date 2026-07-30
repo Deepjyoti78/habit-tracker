@@ -16,8 +16,13 @@ export default function HabitTrackerPage() {
 
     const habit = state.habits.find(h => h.id === selectedHabitId) || state.habits[0];
 
+    React.useEffect(() => {
+        if (!habit) {
+            dispatch({ type: 'SET_PAGE', payload: 'habits' });
+        }
+    }, [habit, dispatch]);
+
     if (!habit) {
-        dispatch({ type: 'SET_PAGE', payload: 'habits' });
         return null;
     }
 

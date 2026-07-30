@@ -29,7 +29,7 @@
 }
 
 .h-cal-day.active .h-cal-name {
-  color: #c4fb31;
+  color: #ffffff;
   opacity: 1;
 }
 
@@ -45,7 +45,7 @@
 .h-cal-today-circle {
   width: 36px;
   height: 48px;
-  background: #c4fb31;
+  background: #ffffff;
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -55,7 +55,7 @@
   font-weight: 900;
   margin-top: -12px; /* Pull up to overlap name a bit or align */
   transform: translateY(6px);
-  box-shadow: 0 4px 15px rgba(196, 251, 49, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
 }
 
 .h-cal-ring-wrapper {

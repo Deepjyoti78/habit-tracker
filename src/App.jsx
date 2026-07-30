@@ -12,7 +12,8 @@ import PlannerPage from './pages/PlannerPage';
 import TimerPage from './pages/TimerPage';
 import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from './pages/EditProfilePage';
-import AddHabitPage from './pages/AddHabitPage';
+import AddHabitModal from './components/AddHabitModal';
+import AddTaskModal from './components/AddTaskModal';
 import CreateHabitPage from './pages/CreateHabitPage';
 import HabitTrackerPage from './pages/HabitTrackerPage';
 import './App.css';
@@ -26,7 +27,6 @@ const pages = {
   timer: TimerPage,
   profile: ProfilePage,
   'edit-profile': EditProfilePage,
-  'add-habit': AddHabitPage,
   'create-habit': CreateHabitPage,
   tracker: HabitTrackerPage,
 };
@@ -55,6 +55,10 @@ function AppContent() {
         </div>
       </main>
       {state.currentPage !== 'tracker' && <MobileNavbar />}
+      <AnimatePresence>
+        {state.isAddHabitModalOpen && <AddHabitModal />}
+        {state.isAddTaskModalOpen && <AddTaskModal />}
+      </AnimatePresence>
       <Toast />
     </div>
   );

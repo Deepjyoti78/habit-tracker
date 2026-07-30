@@ -35,7 +35,7 @@
 .login-blob-1 {
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, #CCFF0018 0%, transparent 70%);
+    background: radial-gradient(circle, #ffffff18 0%, transparent 70%);
     top: -100px;
     left: -100px;
 }
@@ -77,12 +77,12 @@
 .login-logo-box {
     width: 52px;
     height: 52px;
-    background: #CCFF00;
+    background: #ffffff;
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 40px #CCFF0044;
+    box-shadow: 0 0 40px #ffffff44;
     margin-bottom: 4px;
 }
 
@@ -102,7 +102,7 @@
 }
 
 .login-brand-accent {
-    color: #CCFF00;
+    color: #ffffff;
 }
 
 .login-brand-sub {
@@ -142,7 +142,7 @@
 }
 
 .login-tab.active {
-    background: #CCFF00;
+    background: #ffffff;
     color: #000;
     font-weight: 800;
 }
@@ -179,7 +179,7 @@
 }
 
 .login-field:focus-within {
-    border-color: #CCFF0066;
+    border-color: #ffffff66;
     background: rgba(204, 255, 0, 0.03);
     box-shadow: 0 0 0 3px rgba(204, 255, 0, 0.08);
     outline: none;
@@ -199,7 +199,7 @@
     font-weight: 500;
     padding: 15px 0;
     width: 100%;
-    caret-color: #CCFF00;
+    caret-color: #ffffff;
     transition: color 0.2s;
 }
 
@@ -230,7 +230,7 @@
 }
 
 .login-field:focus-within .login-field-icon {
-    color: #CCFF00;
+    color: #ffffff;
 }
 
 /* ── Eye button ── */
@@ -261,7 +261,7 @@
 .login-submit {
     width: 100%;
     padding: 15px;
-    background: #CCFF00;
+    background: #ffffff;
     color: #000;
     border: none;
     outline: none;
@@ -276,13 +276,13 @@
     align-items: center;
     justify-content: center;
     min-height: 50px;
-    box-shadow: 0 4px 24px #CCFF0033;
+    box-shadow: 0 4px 24px #ffffff33;
 }
 
 .login-submit:hover:not(:disabled) {
     background: #d4ff1a;
     transform: translateY(-1px);
-    box-shadow: 0 8px 32px #CCFF0044;
+    box-shadow: 0 8px 32px #ffffff44;
 }
 
 .login-submit:focus {
@@ -319,7 +319,7 @@
 }
 
 .login-switch-link {
-    color: #CCFF00;
+    color: #ffffff;
     cursor: pointer;
     font-weight: 700;
 }
@@ -336,7 +336,7 @@
     -webkit-box-shadow: 0 0 0px 1000px #0d0d0d inset !important;
     box-shadow: 0 0 0px 1000px #0d0d0d inset !important;
     -webkit-text-fill-color: #fff !important;
-    caret-color: #CCFF00;
+    caret-color: #ffffff;
     border: none !important;
     outline: none !important;
     transition: background-color 5000s ease-in-out 0s;

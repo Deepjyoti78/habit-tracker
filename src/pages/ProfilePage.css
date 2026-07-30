@@ -78,7 +78,7 @@
   height: 60px;
   border-radius: 20px;
   overflow: hidden;
-  background: #c4fb31;
+  background: #ffffff;
   /* Vibrant background for avatar */
 }
 
@@ -186,8 +186,8 @@
 }
 
 .toggle-track.active-lime {
-  background: #c4fb31;
-  border-color: #c4fb31;
+  background: #ffffff;
+  border-color: #ffffff;
 }
 
 .toggle-track.active-lime .toggle-thumb {

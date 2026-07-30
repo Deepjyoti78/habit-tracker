@@ -95,7 +95,7 @@
 
 .mini-bar {
   flex: 1;
-  background: var(--bar-color, #c4fb31);
+  background: var(--bar-color, #ffffff);
   border-radius: 4px 4px 0 0;
   min-height: 4px;
 }
@@ -176,4 +176,108 @@
   width: 100%;
   height: auto;
   overflow: visible;
+}
+
+/* Habit Progress Section */
+.habit-progress-section {
+  margin-top: 16px;
+}
+
+.habit-progress-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Habit Heatmaps Section */
+.habit-heatmaps-section {
+  margin-top: 16px;
+}
+
+.habit-heatmap-card {
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 10px;
+}
+
+.habit-heatmap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.habit-heatmap-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.habit-heatmap-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-transform: lowercase;
+}
+
+.habit-heatmap-streak {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+}
+
+.habit-heatmap-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.habit-heatmap-row {
+  display: flex;
+  gap: 2px;
+}
+
+.habit-heatmap-cell {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  min-width: 4px;
+}
+
+.habit-heatmap-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.habit-heatmap-less,
+.habit-heatmap-more {
+  font-size: 9px;
+  color: #555;
+  text-transform: lowercase;
+}
+
+.habit-heatmap-legend-cell {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.habit-heatmap-empty {
+  text-align: center;
+  padding: 32px;
+  color: #555;
+  font-size: 14px;
+}
+
+/* Card Spacing Improvements */
+.overall-progress-nebula {
+  margin-bottom: 20px;
+}
+
+.score-card {
+  margin-bottom: 20px;
 }

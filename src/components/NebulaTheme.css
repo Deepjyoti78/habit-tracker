@@ -1,21 +1,22 @@
-/* ── Nebula Design System ── */
+/* ── Nebula Design System (Now Cursor Theme) ── */
 
 .nebula-card {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl, 16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: var(--surface);
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .nebula-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--surface2);
 }
 
 /* ensure all content sits ABOVE grain/gradients */
@@ -24,27 +25,18 @@
   z-index: 1;
 }
 
-/* ── Color Variations ── */
+/* ── Color Variations (Removed for flat theme) ── */
 
-.nebula-orange {
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(245, 158, 11, 0.2), transparent 70%),
-    radial-gradient(circle at 80% 80%, rgba(239, 68, 68, 0.15), transparent 70%),
-    #121212;
-}
-
-.nebula-teal {
-  background: 
-    radial-gradient(circle at 30% 20%, rgba(20, 184, 166, 0.2), transparent 70%),
-    radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.15), transparent 70%),
-    #121212;
-}
-
+.nebula-orange,
+.nebula-teal,
 .nebula-purple {
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.18), transparent 70%),
-    radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15), transparent 70%),
-    #121212;
+  background: var(--surface);
+}
+
+.nebula-orange:hover,
+.nebula-teal:hover,
+.nebula-purple:hover {
+  background: var(--surface2);
 }
 
 /* ── Global Typography Fix ── */
@@ -52,8 +44,8 @@
 .nebula-card .title,
 .nebula-card .label {
   color: #fff !important;
-  font-weight: 700;
-  letter-spacing: -0.2px;
+  font-weight: 500;
+  letter-spacing: 0px;
 }
 
 .nebula-card p,

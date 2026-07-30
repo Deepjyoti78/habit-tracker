@@ -75,7 +75,7 @@ export default function HabitsPage() {
         {habits.length > 0 ? (
           <button
             className="h-add-habit-btn-pill"
-            onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}
+            onClick={() => dispatch({ type: 'SET_ADD_HABIT_MODAL', payload: true })}
           >
             <Plus size={18} />
             <span>add habit</span>
@@ -142,7 +142,7 @@ export default function HabitsPage() {
                 </p>
                 <button
                   className="h-empty-cta"
-                  onClick={() => dispatch({ type: 'SET_PAGE', payload: 'add-habit' })}
+                  onClick={() => dispatch({ type: 'SET_ADD_HABIT_MODAL', payload: true })}
                 >
                   <Plus size={14} />
                   add first habit

@@ -129,6 +129,10 @@ export default function TimerPage() {
           <div className="tp-toggle-thumb"></div>
         </button>
       </div>
+
+      <button className="start-timer-btn" onClick={() => dispatch({ type: 'SET_PAGE', payload: 'tracker' })}>
+        start timer
+      </button>
     </motion.div>
   );
 }

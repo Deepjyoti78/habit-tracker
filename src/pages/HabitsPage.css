@@ -45,7 +45,7 @@
 }
 
 .h-add-habit-btn-pill {
-  background: #CCFF00;
+  background: #ffffff;
   color: #000;
   border: none;
   border-radius: 12px;
@@ -178,7 +178,7 @@
 .h-mini-val {
   font-size: 20px;
   font-weight: 900;
-  color: #CCFF00;
+  color: #ffffff;
 }
 
 .h-mini-label {
@@ -212,7 +212,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
-  color: #CCFF00;
+  color: #ffffff;
 }
 
 .h-empty-title {
@@ -233,7 +233,7 @@
 }
 
 .h-empty-cta {
-  background: #CCFF00;
+  background: #ffffff;
   color: #000;
   border: none;
   border-radius: 12px;

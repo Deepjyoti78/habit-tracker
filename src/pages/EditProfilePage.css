@@ -44,7 +44,7 @@
 }
 
 .ep-save-btn {
-  background: #ccff00;
+  background: #ffffff;
   color: #000;
   border: none;
   border-radius: 20px;
@@ -66,8 +66,8 @@
 
 .ep-save-btn.saved {
   background: #1a2e00;
-  color: #ccff00;
-  border: 1px solid #ccff0033;
+  color: #ffffff;
+  border: 1px solid #ffffff33;
 }
 
 /* ── Avatar — compact inline card ───────────────────────── */
@@ -94,7 +94,7 @@
   width: 56px;
   height: 56px;
   border-radius: 16px;
-  background: #ccff0022;
+  background: #ffffff22;
   object-fit: cover;
   display: block;
 }
@@ -105,7 +105,7 @@
   right: -4px;
   width: 22px;
   height: 22px;
-  background: #ccff00;
+  background: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -165,7 +165,7 @@
 }
 
 .ep-field:focus-within .ep-label {
-  color: #ccff00;
+  color: #ffffff;
 }
 
 /* Label — fixed width, left side, never wraps */
@@ -197,7 +197,7 @@
   text-align: right;
   min-width: 0;
   height: 100%;
-  caret-color: #ccff00;
+  caret-color: #ffffff;
   -webkit-appearance: none !important;
   appearance: none !important;
   display: block;
@@ -225,7 +225,7 @@
 .ep-input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #161616 inset !important;
   -webkit-text-fill-color: #fff !important;
-  caret-color: #ccff00;
+  caret-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
 }
 

@@ -53,7 +53,7 @@
 .chp-create-btn {
   height: 34px;
   padding: 0 18px;
-  background: #CCFF00;
+  background: #ffffff;
   color: #000;
   border: none;
   border-radius: 100px;
@@ -92,7 +92,7 @@
 }
 
 .chp-name-section:focus-within {
-  border-color: #CCFF0044;
+  border-color: #ffffff44;
 }
 
 .chp-color-preview {
@@ -116,7 +116,7 @@
   font-size: 22px;
   font-weight: 900;
   letter-spacing: -0.8px;
-  caret-color: #CCFF00;
+  caret-color: #ffffff;
   width: 100%;
 }
 
@@ -137,7 +137,7 @@
   font-size: 14px;
   font-weight: 400;
   resize: none;
-  caret-color: #CCFF00;
+  caret-color: #ffffff;
   line-height: 1.6;
   margin-bottom: 20px;
   padding: 14px 16px;
@@ -147,7 +147,7 @@
 }
 
 .chp-details-input:focus {
-  border-color: #CCFF0044;
+  border-color: #ffffff44;
 }
 
 .chp-details-input::placeholder {
@@ -183,14 +183,14 @@
 }
 
 .chp-tag.active {
-  background: #CCFF0015;
-  border-color: #CCFF0040;
-  color: #CCFF00;
+  background: #ffffff15;
+  border-color: #ffffff40;
+  color: #ffffff;
 }
 
 .chp-tag.active.core {
-  background: #CCFF00;
-  border-color: #CCFF00;
+  background: #ffffff;
+  border-color: #ffffff;
   color: #000;
 }
 
@@ -278,7 +278,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #CCFF00;
+  color: #ffffff;
   font-size: 13px;
   font-weight: 700;
   text-transform: lowercase;
@@ -319,7 +319,7 @@
 }
 
 .chp-freq-option.active {
-  color: #CCFF00;
+  color: #ffffff;
   background: rgba(204, 255, 0, 0.04);
 }
 
@@ -358,8 +358,8 @@
 
 .chp-counter-btn:hover:not(:disabled) {
   background: #2a2a2a;
-  color: #CCFF00;
-  border-color: #CCFF0033;
+  color: #ffffff;
+  border-color: #ffffff33;
 }
 
 .chp-counter-btn:disabled {
@@ -370,7 +370,7 @@
 .chp-counter-val {
   font-size: 15px;
   font-weight: 800;
-  color: #CCFF00;
+  color: #ffffff;
   min-width: 20px;
   text-align: center;
 }
@@ -427,7 +427,7 @@
 .chp-bottom-btn {
   width: 100%;
   padding: 16px;
-  background: #CCFF00;
+  background: #ffffff;
   color: #000;
   border: none;
   border-radius: 16px;
@@ -441,13 +441,13 @@
   justify-content: center;
   gap: 8px;
   transition: all 0.2s;
-  box-shadow: 0 4px 24px #CCFF0033;
+  box-shadow: 0 4px 24px #ffffff33;
 }
 
 .chp-bottom-btn:hover:not(.disabled) {
   background: #d4ff1a;
   transform: translateY(-1px);
-  box-shadow: 0 8px 32px #CCFF0044;
+  box-shadow: 0 8px 32px #ffffff44;
 }
 
 .chp-bottom-btn.disabled {

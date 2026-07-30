@@ -1,0 +1,68 @@
+.start-session-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(168, 129, 255, 0.15), rgba(196, 251, 49, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-xl, 24px);
+  position: relative;
+  overflow: hidden;
+  gap: 24px;
+  width: 100%;
+}
+
+.ssc-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ssc-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.ssc-subtitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.ssc-duration {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.ssc-start-btn {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.ssc-start-btn:hover {
+  background: #f0f0f0;
+  transform: scale(1.02);
+}
+
+.ssc-play-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

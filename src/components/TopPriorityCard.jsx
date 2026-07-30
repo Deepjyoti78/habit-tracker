@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Clock, Calendar } from 'lucide-react';
+import { ChevronDown, Clock, Calendar, Sparkles, Plus } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 import GrainOverlay from './GrainOverlay';
 import './TopPriorityCard.css';
 
@@ -10,29 +11,33 @@ const priorityColors = {
   Low: '#6c63ff',
 };
 
-const topTasks = [
-  {
-    id: 1,
-    priority: 'High',
-    label: 'zoom meet',
-    title: 'Design Planning: Zoom Sync',
-    time: '9:30 - 10:30 am',
-    due: 'due: dec 20',
-    dotColor: '#c4fb31',
-  },
-  {
-    id: 2,
-    priority: 'Low',
-    label: 'google meet',
-    title: 'Design Planning: Google Sync',
-    time: '9:30 - 10:30 am',
-    due: 'due: dec 20',
-    dotColor: '#6c63ff',
-  }
-];
+function TaskRow({ task }) {
+  return (
+    <div className="tp-task-row">
+      <div className="tp-task-left">
+        <div className="tp-task-status" style={{ background: priorityColors[task.priority] }} />
+        <div className="tp-task-info">
+          <span className="tp-task-name">{task.title}</span>
+          <span className="tp-task-time">{task.time}</span>
+        </div>
+      </div>
+      <div className="tp-task-badge" style={{ color: priorityColors[task.priority], borderColor: `${priorityColors[task.priority]}33` }}>
+        {task.priority.toLowerCase()}
+      </div>
+    </div>
+  );
+}
 
 export default function TopPriorityCard() {
   const [isOpen, setIsOpen] = useState(true);
+  const { state, dispatch } = useApp();
+  
+  // Filter for high priority tasks only for the home page "Top Priority" card
+  const topTasks = state.tasks.filter(t => t.priority === 'High');
+
+  const handleAddTask = () => {
+    dispatch({ type: 'SET_ADD_TASK_MODAL', payload: true });
+  };
 
   return (
     <div className="nebula-card nebula-purple top-priority-nebula">
@@ -57,38 +62,41 @@ export default function TopPriorityCard() {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            {topTasks.map((task) => (
-              <div key={task.id} className="tp-nebula-task">
-                <div className="tp-task-main">
-                  <div className="tp-task-tags">
-                    <span 
-                      className="tp-tag-priority"
-                      style={{ 
-                        color: priorityColors[task.priority], 
-                        background: `${priorityColors[task.priority]}15` 
-                      }}
-                    >
-                      {task.priority.toLowerCase()}
-                    </span>
-                    <span className="tp-tag-label">
-                      <span className="dot" style={{ background: task.dotColor }}></span>
-                      {task.label}
-                    </span>
-                  </div>
-                  <h4 className="tp-task-title">{task.title}</h4>
-                  <div className="tp-task-info">
-                    <span className="info-item"><Clock size={12} /> {task.time}</span>
-                    <span className="info-item"><Calendar size={12} /> {task.due}</span>
-                  </div>
-                </div>
-                
-                <div className="tp-task-action">
-                  <div className="tp-nebula-switch">
-                    <div className="switch-thumb"></div>
-                  </div>
-                </div>
+            {topTasks.length > 0 ? (
+              <div className="tp-tasks-list">
+                {topTasks.map(task => (
+                  <TaskRow key={task.id} task={task} />
+                ))}
               </div>
-            ))}
+            ) : (
+              <div className="tp-empty-state">
+                <div className="tp-empty-icon-box">
+                  <motion.div
+                    animate={{ 
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 5, -5, 0]
+                    }}
+                    transition={{ 
+                      duration: 4, 
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    <Sparkles size={22} color="#c4fb31" strokeWidth={1.5} />
+                  </motion.div>
+                  <div className="tp-icon-glow"></div>
+                </div>
+                <h4 className="tp-empty-title">no priorities set</h4>
+                <p className="tp-empty-desc">your most important tasks will appear here for quick access</p>
+                <button 
+                  className="tp-add-btn" 
+                  onClick={handleAddTask}
+                >
+                  <Plus size={16} strokeWidth={3} />
+                  add new task
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

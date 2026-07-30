@@ -8,7 +8,12 @@ const AppContext = createContext();
 
 const initialState = {
   habits: [],
-  tasks: [],
+  tasks: [
+    { id: 't1', title: 'Complete the DSA question', done: false, color: '#ef4444' },
+    { id: 't2', title: 'Practice communication', done: false, color: '#22c55e' },
+    { id: 't3', title: 'Face exercise', done: false, color: '#a855f7' },
+    { id: 't4', title: 'Cardio', done: false, color: '#f59e0b' }
+  ],
   user: null,
   stats: { score: 0, done: 0, missed: 0, streak: 0 },
   currentPage: 'home',
@@ -16,12 +21,14 @@ const initialState = {
   dayStarted: false,
   isLoading: false,
   selectedHabitId: null,
+  isAddHabitModalOpen: false,
+  isAddTaskModalOpen: false,
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case 'SET_HABITS': return { ...state, habits: action.payload };
-    case 'SET_TASKS': return { ...state, tasks: action.payload };
+    case 'SET_TASKS': return { ...state, tasks: action.payload?.length > 0 ? action.payload : initialState.tasks };
     case 'SET_USER': return { ...state, user: action.payload };
     case 'SET_STATS': return { ...state, stats: action.payload };
     case 'SET_PAGE': return { ...state, currentPage: action.payload };
@@ -29,6 +36,8 @@ function reducer(state, action) {
     case 'SET_LOADING': return { ...state, isLoading: action.payload };
     case 'SET_DAY_STARTED': return { ...state, dayStarted: action.payload };
     case 'SET_SELECTED_HABIT': return { ...state, selectedHabitId: action.payload };
+    case 'SET_ADD_HABIT_MODAL': return { ...state, isAddHabitModalOpen: action.payload };
+    case 'SET_ADD_TASK_MODAL': return { ...state, isAddTaskModalOpen: action.payload };
     case 'ADD_HABIT': return { ...state, habits: [...state.habits, action.payload] };
     case 'UPDATE_HABIT': return {
       ...state,
@@ -46,6 +55,10 @@ function reducer(state, action) {
     case 'UPDATE_TASK': return {
       ...state,
       tasks: state.tasks.map(t => t.id === action.payload.id ? action.payload : t)
+    };
+    case 'TOGGLE_TASK': return {
+      ...state,
+      tasks: state.tasks.map(t => t.id === action.payload ? { ...t, done: !t.done } : t)
     };
     case 'DELETE_TASK': return {
       ...state,
