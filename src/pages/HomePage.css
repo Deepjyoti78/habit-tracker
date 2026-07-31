@@ -1,9 +1,9 @@
 .home-page {
-  padding: 24px 28px 16px;
+  padding: 24px 20px 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 900px;
+  gap: 16px;
+  max-width: 600px;
   margin: 0 auto;
   width: 100%;
 }
@@ -13,7 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0 24px;
+  padding: 4px 0 8px;
   width: 100%;
   gap: 16px;
 }
@@ -38,9 +38,9 @@
 .hero-notification-btn:hover,
 .hero-profile-btn:hover {
   background: var(--surface2);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   color: var(--text);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--border2);
 }
 
 .notification-dot {
@@ -49,10 +49,9 @@
   right: 10px;
   width: 8px;
   height: 8px;
-  background: #ffffff;
+  background: var(--accent, #C7FF2A);
   border-radius: 50%;
   border: 2px solid var(--surface);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
 }
 
 .hero-text-block {
@@ -65,7 +64,7 @@
 }
 
 .hero-heading {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
   letter-spacing: -0.5px;
   line-height: 1.2;
@@ -73,85 +72,33 @@
 }
 
 .hero-subtitle {
-  font-size: 14px;
-  color: var(--text2);
-  font-weight: 500;
+  font-size: 13px;
+  color: var(--text3);
+  font-weight: 400;
 }
 
-/* ── MOBILE BENTO GRID (default) ── */
-.home-bento-grid {
+.home-workspaces {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 100%;
+  margin-top: 8px;
 }
 
-.home-cal-col {
-  order: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+.home-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-left: 4px;
 }
 
-.home-right-col {
-  order: 2; /* My Disciplines */
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.home-left-col {
-  order: 3; /* Project Progress */
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-/* ── DESKTOP BENTO GRID (≥ 768px) ── */
-@media (min-width: 768px) {
-  .home-bento-grid {
-    display: grid;
-    grid-template-columns: 240px 1.25fr 1fr;
-    gap: 14px;
-    align-items: stretch; /* all three columns share the same row height */
-  }
-
-  .home-cal-col,
-  .home-left-col,
-  .home-right-col {
-    order: initial; /* Reset mobile order */
-    height: 100%;
-  }
-
-  .home-left-col > *,
-  .home-right-col > * {
-    height: 100%; /* let the card itself stretch */
-  }
-}
-
-@media (max-width: 900px) {
-  .hero-heading {
-    font-size: 26px;
-  }
-
+@media (max-width: 480px) {
   .home-page {
-    padding: 24px 16px 40px;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero-section {
-    padding-top: 6px;
-    align-items: center;
+    padding: 16px 16px 40px;
   }
 
   .hero-heading {
-    font-size: 22px;
-    line-height: 1.2;
-    letter-spacing: -0.5px;
+    font-size: 20px;
   }
-}
-
-.home-session-wrapper {
-  margin-top: 12px;
 }

@@ -1,0 +1,73 @@
+/* ── Today's Plan Card ── */
+.tpc-card {
+  width: 100%;
+  background: #c4fb31;
+  border-radius: 20px;
+  padding: 20px 20px 22px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(196, 251, 49, 0.25);
+}
+
+/* subtle texture grain */
+.tpc-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(0,0,0,0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ── Left side ── */
+.tpc-left {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 1;
+}
+
+.tpc-label {
+  font-size: 22px;
+  font-weight: 800;
+  color: #000;
+  letter-spacing: -0.6px;
+  line-height: 1.1;
+}
+
+.tpc-sub {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.55);
+  letter-spacing: -0.2px;
+}
+
+/* ── Right side — ring ── */
+.tpc-ring-wrap {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.tpc-ring-svg {
+  display: block;
+}
+
+.tpc-pct-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: #000;
+  letter-spacing: -0.5px;
+}

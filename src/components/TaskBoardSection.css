@@ -1,0 +1,227 @@
+/* ════════════════════════════════════════════
+   TaskBoardSection  –  squared pills + rows
+   ════════════════════════════════════════════ */
+
+.tbs-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ══════════════════════════════════════════
+   FILTER BUTTON BAR
+   ══════════════════════════════════════════ */
+.tbs-pill-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.tbs-pill-bar::-webkit-scrollbar { display: none; }
+
+/* base button */
+.tbs-pill {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tbs-pill:hover {
+  background: rgba(255,255,255,0.05);
+  color: #ffffff;
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.tbs-pill.active {
+  background: #c4fb31;
+  border-color: #c4fb31;
+  color: #000000;
+  box-shadow: 0 2px 14px rgba(196, 251, 49, 0.2);
+}
+
+.tbs-pill-label {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.15px;
+  line-height: 1;
+}
+
+/* small count badge */
+.tbs-pill-count {
+  font-size: 11px;
+  font-weight: 800;
+  background: rgba(255,255,255,0.15);
+  border-radius: 6px;
+  padding: 2px 7px;
+  line-height: 1.5;
+  color: inherit;
+}
+
+.tbs-pill.active .tbs-pill-count {
+  background: rgba(0,0,0,0.15);
+}
+
+/* ══════════════════════════════════════════
+   TASK LIST
+   ══════════════════════════════════════════ */
+.tbs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ── single row ── */
+.tbs-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.tbs-row:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.12);
+}
+
+/* left colour strip */
+.tbs-row-bar {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent, #c4fb31);
+  border-radius: 0 2px 2px 0;
+  opacity: 0.75;
+}
+
+/* check circle */
+.tbs-row-check {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: rgba(255,255,255,0.28);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color 0.17s ease, transform 0.14s ease;
+}
+.tbs-row-check:hover   { color: #c4fb31; transform: scale(1.12); }
+.tbs-row-check.checked { color: #a89bff; }
+
+/* title */
+.tbs-row-title {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.88);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.15px;
+}
+.tbs-row-title.done {
+  text-decoration: line-through;
+  color: rgba(255,255,255,0.28);
+}
+
+/* status variants */
+.tbs-row-done       { opacity: 0.55; }
+.tbs-row-inprogress { border-color: rgba(245,158,11,0.22); }
+
+/* timer button */
+.tbs-row-timer {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 7px;
+  color: rgba(255,255,255,0.28);
+  padding: 4px 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: all 0.17s ease;
+}
+.tbs-row-timer:hover {
+  color: #fbbf24;
+  border-color: rgba(245,158,11,0.4);
+  background: rgba(245,158,11,0.08);
+}
+.tbs-row-timer.active {
+  color: #fbbf24;
+  border-color: rgba(245,158,11,0.55);
+  background: rgba(245,158,11,0.14);
+  box-shadow: 0 0 8px rgba(245,158,11,0.15);
+}
+
+/* ══════════════════════════════════════════
+   EMPTY STATE
+   ══════════════════════════════════════════ */
+.tbs-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 28px 12px;
+  text-align: center;
+}
+
+.tbs-empty-icon {
+  width: 38px;
+  height: 38px;
+  background: rgba(196,251,49,0.07);
+  border-radius: 10px;
+  border: 1px solid rgba(196,251,49,0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tbs-empty-text {
+  font-size: 12px;
+  color: rgba(255,255,255,0.32);
+  font-weight: 500;
+  margin: 0;
+}
+
+.tbs-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(196,251,49,0.10);
+  border: 1px solid rgba(196,251,49,0.25);
+  color: #c4fb31;
+  font-size: 11.5px;
+  font-weight: 700;
+  font-family: inherit;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.18s ease;
+}
+.tbs-add-btn:hover {
+  background: rgba(196,251,49,0.17);
+  transform: translateY(-1px);
+}

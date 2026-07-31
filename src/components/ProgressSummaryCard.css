@@ -1,0 +1,77 @@
+/* ── Progress Summary Card ── */
+
+.psc-card {
+  padding: var(--space-5) var(--space-6);
+}
+
+.psc-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.psc-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+.psc-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text2);
+  letter-spacing: -0.01em;
+}
+
+/* ── Stats row ── */
+.psc-stats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.psc-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.psc-stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.psc-stat-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text3);
+}
+
+.psc-stat-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border2);
+  flex-shrink: 0;
+}
+
+/* ── Ring ── */
+.psc-ring-wrap {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.psc-ring-label {
+  position: absolute;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}

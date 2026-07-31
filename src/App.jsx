@@ -16,6 +16,7 @@ import AddHabitModal from './components/AddHabitModal';
 import AddTaskModal from './components/AddTaskModal';
 import CreateHabitPage from './pages/CreateHabitPage';
 import HabitTrackerPage from './pages/HabitTrackerPage';
+import WorkspacePage from './pages/WorkspacePage';
 import './App.css';
 import './components/NebulaTheme.css';
 
@@ -29,6 +30,7 @@ const pages = {
   'edit-profile': EditProfilePage,
   'create-habit': CreateHabitPage,
   tracker: HabitTrackerPage,
+  workspace: WorkspacePage,
 };
 
 function AppContent() {

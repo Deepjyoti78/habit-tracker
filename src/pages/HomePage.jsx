@@ -3,13 +3,10 @@ import { motion } from 'framer-motion';
 import { useApp } from '../context/AppContext';
 import { Bell, User } from 'lucide-react';
 import CalendarStrip from '../components/CalendarStrip';
-import DailyCheckin from '../components/DailyCheckin';
+import ProgressSummaryCard from '../components/ProgressSummaryCard';
+import CurrentFocusCard from '../components/CurrentFocusCard';
 import HabitCard from '../components/HabitCard';
-import ProjectProgressCard from '../components/ProjectProgressCard';
-import StartSessionCard from '../components/StartSessionCard';
-import RemainingTasksCard from '../components/RemainingTasksCard';
-import TaskRemainingCard from '../components/TaskRemainingCard';
-import TopPriorityCard from '../components/TopPriorityCard';
+import CategoryGrid from '../components/CategoryGrid';
 import './HomePage.css';
 
 export default function HomePage() {
@@ -28,7 +25,7 @@ export default function HomePage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.2 }}
     >
       {/* Hero */}
       <section className="hero-section">
@@ -45,30 +42,29 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Bento Grid */}
-      <div className="home-bento-grid">
-        <div className="home-cal-col">
-          <CalendarStrip 
-            variant="home-desktop"
-            selectedDate={selectedDate} 
-            onDateSelect={setSelectedDate} 
-          />
-          <div className="home-session-wrapper">
-            <StartSessionCard />
-          </div>
-        </div>
+      {/* Calendar */}
+      <CalendarStrip
+        variant="home-desktop"
+        selectedDate={selectedDate}
+        onDateSelect={setSelectedDate}
+      />
 
-        <div className="home-left-col">
-          <ProjectProgressCard />
-        </div>
-
-        <div className="home-right-col">
-          <HabitCard />
-        </div>
+      {/* Summary cards */}
+      <div className="home-summary-row">
+        <ProgressSummaryCard />
       </div>
 
-      <TopPriorityCard selectedDate={selectedDate} />
-      <DailyCheckin selectedDate={selectedDate} />
+      {/* Current Focus */}
+      <CurrentFocusCard />
+
+      {/* Task list with filters */}
+      <HabitCard />
+
+      {/* Category Workspaces */}
+      <div className="home-workspaces">
+        <div className="home-section-title">Workspaces</div>
+        <CategoryGrid />
+      </div>
     </motion.div>
   );
 }
