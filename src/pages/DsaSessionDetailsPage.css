@@ -1,0 +1,533 @@
+/* ═══════════════════════════════════════════
+   DSA Session Details Page - Bento Redesign
+   ═══════════════════════════════════════════ */
+
+.dsa-detail-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 32px 24px 64px;
+  display: flex;
+  justify-content: center;
+}
+
+.dsa-detail-container {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Top Nav ── */
+.dsa-detail-nav {
+  margin-bottom: 24px;
+}
+
+.dsa-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+
+.dsa-back-btn:hover {
+  color: var(--text);
+}
+
+/* ── Header Styles ── */
+.bento-prog-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dsa-det-badges {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dsa-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dsa-badge.diff {
+  background: var(--surface3);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.dsa-badge.topic {
+  background: var(--surface2);
+  color: var(--text2);
+}
+
+.dsa-badge.status {
+  background: var(--surface3);
+  color: var(--text);
+}
+
+.dsa-badge.status.in-progress {
+  color: #34d399; /* Green accent */
+  background: rgba(52, 211, 153, 0.1);
+}
+
+.dsa-det-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.dsa-det-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.dsa-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.dsa-action-btn:hover {
+  background: var(--surface2);
+  color: var(--text);
+  border-color: var(--border2);
+}
+
+.dsa-action-btn.primary {
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  font-weight: 600;
+}
+
+.dsa-action-btn.primary:hover {
+  background: var(--text2);
+  transform: translateY(-1px);
+}
+
+/* ── Bento Grid ── */
+.dsa-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.bento-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bento-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+/* Specific Grid Placements (assuming 800px width) */
+/* 
+Row 1: Hero (col 1-5), Progress (col 6-12)
+Row 2: Mistakes (col 1-7), Revision (col 8-12)
+Row 3: Stats (col 1-12)
+*/
+
+.bento-hero {
+  grid-column: span 5;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.bento-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  aspect-ratio: 16/9;
+}
+
+.bento-hero:hover .bento-hero-img {
+  transform: scale(1.03);
+}
+
+.bento-progress {
+  grid-column: span 7;
+}
+
+.bento-mistakes {
+  grid-column: span 7;
+}
+
+.bento-revision {
+  grid-column: span 5;
+}
+
+.bento-stats {
+  grid-column: span 12;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+}
+
+/* Progress Internal */
+.bento-prog-track {
+  height: 6px;
+  background: var(--surface3);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.bento-prog-fill {
+  height: 100%;
+  background: #34d399;
+  border-radius: 3px;
+}
+
+.bento-prog-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+
+.bento-stat-mini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+.bento-checklist-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bento-check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text2);
+}
+
+.bento-check-row.done {
+  color: var(--text3);
+  text-decoration: line-through;
+}
+
+.icon-todo { color: var(--border2); }
+.icon-done { color: #34d399; }
+
+/* Mistakes Internal */
+.bento-mistakes-list {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 0 0 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text2);
+  font-size: 13px;
+  line-height: 1.5;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.bento-empty {
+  font-size: 13px;
+  color: var(--text3);
+  font-style: italic;
+  margin: 0 0 16px 0;
+}
+
+.bento-add-btn {
+  margin-top: auto;
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.bento-add-btn:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+/* Revision Internal */
+.bento-rev-segmented {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.bento-rev-opt {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.bento-rev-opt:hover {
+  background: var(--surface3);
+  color: var(--text);
+}
+
+.bento-rev-opt.active {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+/* Quick Stats Internal */
+.bento-stat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bento-stat-lbl {
+  font-size: 11px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.bento-stat-val {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ── Full Width Sections ── */
+.dsa-fw-section {
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dsa-fw-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Notes Editor */
+.dsa-notes-editor {
+  width: 100%;
+  min-height: 200px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  color: var(--text2);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.dsa-notes-editor:focus {
+  outline: none;
+  border-color: var(--border2);
+}
+
+/* Timeline */
+.dsa-fw-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  padding-left: 12px;
+}
+
+.dsa-fw-timeline::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 14.5px;
+  width: 1px;
+  background: var(--border);
+}
+
+.fw-timeline-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+}
+
+.fw-timeline-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text3);
+  margin-top: 6px;
+  z-index: 1;
+}
+
+.fw-timeline-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fw-timeline-date {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+.fw-timeline-text {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Attachments */
+.dsa-fw-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.fw-attachment-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 8px 12px 8px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fw-attachment-card:hover {
+  background: var(--surface2);
+  border-color: var(--border2);
+}
+
+.fw-att-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.fw-att-link-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background: var(--surface3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text2);
+}
+
+.fw-att-name {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.fw-add-att-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px dashed var(--border2);
+  color: var(--text2);
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fw-add-att-btn:hover {
+  background: var(--surface);
+  color: var(--text);
+  border-style: solid;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .bento-hero, .bento-progress, .bento-mistakes, .bento-revision, .bento-stats {
+    grid-column: span 12;
+  }
+  
+  .bento-stats {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .bento-stat-col {
+    width: 30%;
+  }
+}

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AppProvider, useApp } from './context/AppContext';
 import Sidebar from './components/Sidebar';
@@ -17,6 +18,7 @@ import AddTaskModal from './components/AddTaskModal';
 import CreateHabitPage from './pages/CreateHabitPage';
 import HabitTrackerPage from './pages/HabitTrackerPage';
 import WorkspacePage from './pages/WorkspacePage';
+import DsaSessionDetailsPage from './pages/DsaSessionDetailsPage';
 import './App.css';
 import './components/NebulaTheme.css';
 
@@ -31,10 +33,19 @@ const pages = {
   'create-habit': CreateHabitPage,
   tracker: HabitTrackerPage,
   workspace: WorkspacePage,
+  'dsa-session': DsaSessionDetailsPage,
 };
 
 function AppContent() {
   const { state, token } = useApp();
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }, [state.currentPage, state.selectedWorkspace]);
+
   if (!token) return <LoginPage />;
   const PageComponent = pages[state.currentPage] || HomePage;
 
@@ -42,14 +53,14 @@ function AppContent() {
     <div className={`app-shell ${state.currentPage === 'tracker' ? 'is-tracker' : ''}`}>
       <Sidebar />
       <main className="app-main" id="main-content">
-        <div className="app-content-area">
+        <div className="app-content-area" ref={contentRef}>
           <AnimatePresence mode="wait">
             <motion.div
               key={state.currentPage}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, y: 12, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -12, scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 350, damping: 30, mass: 0.8 }}
             >
               <PageComponent />
             </motion.div>

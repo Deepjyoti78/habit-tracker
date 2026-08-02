@@ -126,7 +126,12 @@ export default function HabitCard() {
                 <motion.div
                   key={task.id || idx}
                   className={`hc-row ${isDone ? 'hc-row--done' : ''}`}
-                  onClick={() => dispatch({ type: 'TOGGLE_TASK', payload: task.id })}
+                  onClick={() => {
+                    if (task.category) {
+                      dispatch({ type: 'SET_WORKSPACE', payload: task.category });
+                      dispatch({ type: 'SET_PAGE', payload: 'workspace' });
+                    }
+                  }}
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}

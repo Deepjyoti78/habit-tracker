@@ -58,8 +58,10 @@ export default function CurrentFocusCard() {
     <motion.div
       className="cfc-card os-card os-card-interactive"
       onClick={() => {
-        dispatch({ type: 'SET_SELECTED_TASK', payload: nextTask.id });
-        dispatch({ type: 'SET_PAGE', payload: 'workspace' });
+        if (nextTask.category) {
+          dispatch({ type: 'SET_WORKSPACE', payload: nextTask.category });
+          dispatch({ type: 'SET_PAGE', payload: 'workspace' });
+        }
       }}
       whileTap={{ scale: 0.98 }}
     >

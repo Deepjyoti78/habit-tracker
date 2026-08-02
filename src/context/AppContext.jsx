@@ -42,8 +42,8 @@ const initialState = {
   tasks: [
     createTask({ id: 't1', title: 'Complete the DSA question', priority: 'high', category: 'dsa',           color: '#f87171', estimatedTime: 45 }),
     createTask({ id: 't2', title: 'Practice communication',    priority: 'medium', category: 'communication', color: '#34d399', estimatedTime: 30 }),
-    createTask({ id: 't3', title: 'Face exercise',             priority: 'low',    category: 'fitness',       color: '#a78bfa', estimatedTime: 15 }),
-    createTask({ id: 't4', title: 'Cardio',                    priority: 'medium', category: 'fitness',       color: '#fbbf24', estimatedTime: 40 }),
+    createTask({ id: 't3', title: 'Face exercise',             priority: 'low',    category: 'face-exercise', color: '#a78bfa', estimatedTime: 15 }),
+    createTask({ id: 't4', title: 'Cardio',                    priority: 'medium', category: 'cardio',        color: '#fbbf24', estimatedTime: 40 }),
   ],
   user: null,
   stats: { score: 0, done: 0, missed: 0, streak: 0 },
@@ -58,6 +58,7 @@ const initialState = {
   taskFilter: 'all',         // category filter for dashboard
   activeTimer: null,          // { taskId, startTime } or null
   selectedWorkspace: 'dsa',
+  selectedDsaSessionId: null,
 };
 
 /* ── Reducer ── */
@@ -97,6 +98,7 @@ function reducer(state, action) {
     case 'SET_SELECTED_TASK': return { ...state, selectedTaskId: action.payload };
     case 'SET_TASK_FILTER':   return { ...state, taskFilter: action.payload };
     case 'SET_WORKSPACE':     return { ...state, selectedWorkspace: action.payload };
+    case 'SET_DSA_SESSION':   return { ...state, selectedDsaSessionId: action.payload };
 
     case 'ADD_CHECKLIST_ITEM': {
       const { taskId, text } = action.payload;
